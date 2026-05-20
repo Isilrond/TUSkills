@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tyrant Unleashed – Skills Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Exo+2:wght@300;400;600&display=swap');
+  :root{--bg:#0d0f14;--surface:#141720;--surface2:#1c2030;--border:#2a2f42;--text:#d0d8f0;--muted:#6b7494;--accent:#5b8fff;--glow:rgba(91,143,255,0.15);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-weight:300;min-height:100vh;
+    background-image:radial-gradient(ellipse at 20% 10%,rgba(40,60,120,.25) 0%,transparent 60%),radial-gradient(ellipse at 80% 90%,rgba(80,30,120,.15) 0%,transparent 60%);}
+  header{text-align:center;padding:48px 24px 28px;}
+  header::after{content:'';display:block;width:200px;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:18px auto 0;}
+  .title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(26px,5vw,50px);letter-spacing:6px;text-transform:uppercase;
+    background:linear-gradient(135deg,#a0b8ff 0%,#d080ff 50%,#ff8080 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{font-size:12px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:6px;}
+  .complete-badge{display:inline-block;font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:2px;
+    padding:4px 12px;border-radius:20px;background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);
+    color:#4dff91;text-transform:uppercase;margin-top:8px;}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:0 24px 28px;max-width:1200px;margin:0 auto;}
+  .search-wrap{position:relative;flex:1;min-width:200px;max-width:400px;}
+  .search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px 10px 40px;
+    color:var(--text);font-family:'Exo 2',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+  .search-wrap input:focus{border-color:var(--accent);}
+  .search-wrap::before{content:'⌕';position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:18px;pointer-events:none;}
+  .filter-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;color:var(--muted);
+    font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+  .filter-btn:hover,.filter-btn.active{color:var(--text);border-color:var(--accent);background:var(--glow);}
+  .filter-btn[data-cat="attack"].active{border-color:#ff4d4d;color:#ff4d4d;background:rgba(255,77,77,.1);}
+  .filter-btn[data-cat="defense"].active{border-color:#4d9fff;color:#4d9fff;background:rgba(77,159,255,.1);}
+  .filter-btn[data-cat="support"].active{border-color:#4dff91;color:#4dff91;background:rgba(77,255,145,.1);}
+  .filter-btn[data-cat="passive"].active{border-color:#ffb84d;color:#ffb84d;background:rgba(255,184,77,.1);}
+  .filter-btn[data-cat="special"].active{border-color:#cc88ff;color:#cc88ff;background:rgba(204,136,255,.1);}
+  .stat-bar{display:flex;gap:24px;justify-content:center;padding:0 24px 24px;flex-wrap:wrap;}
+  .stat{text-align:center;font-family:'Rajdhani',sans-serif;}
+  .stat-num{font-size:28px;font-weight:700;line-height:1;}
+  .stat-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+  .stat.attack .stat-num{color:#ff4d4d;}.stat.defense .stat-num{color:#4d9fff;}
+  .stat.support .stat-num{color:#4dff91;}.stat.passive .stat-num{color:#ffb84d;}
+  .stat.special .stat-num{color:#cc88ff;}
+  .counter{font-size:12px;color:var(--muted);text-align:center;margin-bottom:18px;letter-spacing:1px;}
+  .section-divider{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:20px 0 8px;}
+  .section-divider span{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;}
+  .section-divider.restrict-div span{color:#ffaa44;}
+  .section-divider.unavail-div span{color:#ff6666;}
+  .section-divider::before,.section-divider::after{content:'';flex:1;height:1px;}
+  .section-divider.restrict-div::before,.section-divider.restrict-div::after{background:linear-gradient(90deg,transparent,#ffaa4455,transparent);}
+  .section-divider.unavail-div::before,.section-divider.unavail-div::after{background:linear-gradient(90deg,transparent,#ff444455,transparent);}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;padding:0 24px 60px;max-width:1400px;margin:0 auto;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;
+    transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);opacity:0;transition:opacity .2s;}
+  .card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.4);border-color:var(--accent);}
+  .card:hover::before{opacity:1;}
+  .card.unavailable{opacity:.55;border-color:#3a2020;}
+  .card.unavailable .card-header{background:#1a1515;}
+  .card.unavailable:hover{opacity:.8;border-color:#ff4d4d66;}
+  .card.restricted{opacity:.7;border-color:#3a2e10;}
+  .card.restricted .card-header{background:#1a1a10;}
+  .card.restricted:hover{opacity:.9;border-color:#ffaa4466;}
+  .card-header{display:flex;align-items:center;gap:12px;padding:14px 16px 12px;background:var(--surface2);border-bottom:1px solid var(--border);}
+  .icon-wrap{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);
+    border-radius:8px;border:1px solid var(--border);flex-shrink:0;}
+  .skill-icon{width:28px;height:28px;object-fit:contain;filter:invert(1) drop-shadow(0 0 4px rgba(255,255,255,.3));}
+  .no-icon{width:28px;height:28px;display:block;background:var(--border);border-radius:4px;opacity:.3;}
+  .name-wrap{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0;}
+  .skill-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;letter-spacing:1px;color:#fff;}
+  .badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .avail-badge{font-size:10px;letter-spacing:1px;padding:2px 8px;border-radius:4px;font-family:'Rajdhani',sans-serif;font-weight:700;text-transform:uppercase;}
+  .unavail-badge{background:rgba(255,77,77,.15);border:1px solid rgba(255,77,77,.4);color:#ff7777;}
+  .restrict-badge{background:rgba(255,170,68,.15);border:1px solid rgba(255,170,68,.4);color:#ffbb55;}
+  .cat-badge{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:10px;letter-spacing:1px;padding:3px 9px;border-radius:20px;text-transform:uppercase;flex-shrink:0;}
+  .card-body{padding:14px 16px 16px;}
+  .desc{font-size:13.5px;line-height:1.6;color:var(--text);margin-bottom:8px;}
+  ul{list-style:none;display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+  li{font-size:12px;color:var(--muted);line-height:1.5;padding-left:14px;position:relative;}
+  li::before{content:'›';position:absolute;left:2px;color:var(--accent);}
+  .counter-box{background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:10px;display:flex;flex-direction:column;gap:7px;}
+  .counter-row{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+  .counter-label{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;padding-top:3px;min-width:80px;flex-shrink:0;}
+  .counter-row:first-child .counter-label{color:#4dff91;}
+  .counter-row:last-child .counter-label{color:#ff7777;}
+  .chips{display:flex;flex-wrap:wrap;gap:4px;}
+  .chip{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:11px;letter-spacing:.5px;padding:2px 8px;border-radius:4px;cursor:default;}
+  .chip-counters{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.25);color:#7dffa8;}
+  .chip-countered{background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.25);color:#ff9999;}
+  .hidden{display:none!important;}
+</style>
+</head>
+<body>
+<header>
+  <div class="title">Tyrant Unleashed</div>
+  <div class="subtitle">Skills Reference · 61 Skills</div>
+  <div><span class="complete-badge">✓ All Icons Complete</span></div>
+</header>
+<div class="stat-bar">
+  <div class="stat attack"><div class="stat-num" id="cnt-attack">0</div><div class="stat-lbl">Attack</div></div>
+  <div class="stat defense"><div class="stat-num" id="cnt-defense">0</div><div class="stat-lbl">Defense</div></div>
+  <div class="stat support"><div class="stat-num" id="cnt-support">0</div><div class="stat-lbl">Support</div></div>
+  <div class="stat passive"><div class="stat-num" id="cnt-passive">0</div><div class="stat-lbl">Passive</div></div>
+  <div class="stat special"><div class="stat-num" id="cnt-special">0</div><div class="stat-lbl">Special</div></div>
+</div>
+<div class="controls">
+  <div class="search-wrap"><input type="text" id="search" placeholder="Search skills…"></div>
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="attack">Attack</button>
+  <button class="filter-btn" data-cat="defense">Defense</button>
+  <button class="filter-btn" data-cat="support">Support</button>
+  <button class="filter-btn" data-cat="passive">Passive</button>
+  <button class="filter-btn" data-cat="special">Special</button>
+</div>
+<div class="counter" id="counter"></div>
+<div class="grid" id="grid">
+  <div class="card cat-defense" data-name="absorb" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAaCAYAAABGiCfwAAABgElEQVR4nL2WX0rEMBDGf+1WV10RBfFNRBDxCN7A23kBvY2vXkARfFDYN/+wi7rqNjJLWkI202TbdT8otEk6X+abyUwyYwwWBfABrDGPDB0bwKcyN7A2Z8idiXuFqAvGwHn1kRljhPAOOGn4qcmzHvAbIT0TDiGrdWxJJojZENUuXBldPALbVtYYEXad2DoGbpnHKfAd8uwVOAJGtMMe8BIYz0JkWw3ZlYIMOACevIQLkmmy9W0iTK1kpiFWud3wums3V7LLJ78CvkR3SyCEpX1/ADa9f8rQMRLPiOAd2ImseQYOY4ZSyFKOBo60KrTUT513kdHRWLFKsilLRL5EMtOVbBGUqyKbpCxyK0H1SDP0G+AkIvUgUG18u7NzZhY9L4mZWfpjIRllV13RDw2GyIYdrwcF8JZKtmuL7r6t2n48UIp3z7anoeaZxGycYLDrtaCOmXTWG/4HJXBd9zVJRmOMeDiSzFRQrdMeDZfuOrfFSGB/lB22kVGuBXKXqef+ABYzxWY8CS54AAAAAElFTkSuQmCC" alt="absorb" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Absorb</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Absorbs damage dealt by enemy skills each turn.</p>
+      <ul><li>Refreshes at the start of the card's turn, at the same time as Valor, before BGEs, commander skills, and On Play skills.</li><li>Refreshes back to its starting value.</li><li>Evade triggers first.</li><li>Can absorb damage from Overloaded skills.</li></ul>
+        </div>
+  </div>
+  <div class="card cat-passive" data-name="allegiance" data-cat="passive" data-avail="normal">
+    <div class="card-header" style="--accent:#ffb84d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAfCAYAAAD0ma06AAAFVklEQVR4nKWXf0iVZxTHP141u3fltObFpZaz2Q+bJYpwbbHl+qFZZrpWf0RDHOyPmILSaDGDkSQUhEb9Z/iPSSsyJGK4WkhaMhgIadSQsVXq9oc07vWPm3mv9xnn8X3q3u59K9gX3vd97vOc93yfc95zznNuHC+xB/gEGAa6AUU03gMqgS+BZcDPQJf1zlwM+VygFvBbck/irIXPgSthgj8CnYAXcAHZ1mYqgHSHw0F8fDyBQACL6FfgJ2AEmLJ0FAHfAVnW70Gg1BDIglq1apXKzs4Wy+QKAUHrqecSExNVaWmpunTpkrp3755qampSGRkZRt5cQWsTKiEhQRUXF6uFCxfK/D/Au8bCD4Hf3G53Snd3N0NDQwwODuLz+XC5XGRnZ1NQUMDWrVvJy8tDLDTwer3cvn2bu3fv8vDhQ6ampvS6vHPw4EFu3LhBe3u7iMqtMdzf4mN16tQpJQiFQioQCOjnq5ienlYPHjxQsRAMBvUl8Hq9KjMzU6ybtVwcgXIh9Hg8L16ww/Hjx9WKFSvUxMTEa+UuXrxo3NwXI6BIBsadTqcaGxuzVTI0NKRcLpdWdODAgdcSHjp0yBB+iw10OnR1dcVU4PP5VFFRUUSQnD9/Pqbs7OyskZVQLrYjbBYlzc3NMZU0NDS8GpEqLS1N3b9/P0p2ampKpaSkKCtNUuwIvxIldXV1UQquXr0aRWYuSRUJsHCMjo6qpKQkWR8FkgzBy/ieh09u09PTEZOPHz+mqanJbpP09/fT2toaqcjnM4VBdAbsCGPi8OHDPHr0KGIuLs6k8DxOnDih8/FNcMSIVJKT9UPj3LlzXLkSXvUgKyuLLVu2RMzNzs7S0NDA06dP5xUlJ5OYmGh0JtoRZsht2TKpyzA8PMyxY8ciBERJeXk527ZtY/369RFrIyMjHD16FKPD6XTK8H3AaUeYr2/5+sGRI0d06QqHlLecnBxt0Y4dO0hLS4tY7+jooK+vj6VLl7J69WqZSgXyYhHKTj5dtGgRHo9HT2zatClC2bp16ygpKeH58+cEg0Httl27dpGQkPBCJicnhzVr1ujxxo0b5RFvVbEoQjnn3Js3b2b58uV6Qty5fft2PV6yZIm2SIJFqfmjUqzMzc1F3jE4c+aMLtyCnTt3mulq4J1wQvmw38hAKvyL3TgctLW1kZ6eromFVCwLh4S+eCIzM5P6+nptsYFsRDwCfCSqZSCxLf74HvhBFgcGBiJcJLh27Rp37tzRR1UsiMViuUSpbCocly9fZv/+/TL8C/hMLKwBmiT6WlpaosgEFRUVrFy5UrswFplYWV1dHUUm2LdvH1VVVTL8AKgXwo/FpfJ9Xs0tA9mEfI+kpCTm5iJbl5mZGQoLC9mwYQN2EMsteITwD2kLbt68SW9vr+1L8o3KyspMudKQseRbWHBEwe/36ziw8EQIO4DWZ8+eUVtbq3PIDpIukqNiVSgU0kFVWVlpEjwKMzMz1NXVcf36dfn5pwR++Lr0HGrx4sWqp6fH9lCVM/HkyZOqsbFR3bp1y1bO6/Wqqqoqc6JMAgWxNqVJFyxYoE6fPm2rTDq2zs5ONTc3F3N9bGxMlZSUGLJxoNDWbUCLOef27t2rxsfHoxSaBisWLly4oNxutyH7XQoUb4EvgAl5KT09XZ09e1b5/X5bi43Vu3fvDj+Yu6xy+dbIAXqNgrVr16r29nY1OTkZ0bf09/frZspqdhXwN/A1/wN7rFZeK0xNTVU1NTW6v8nPz1cOh8MQybHSJhn0f8gMpPxIAe4B/g1zm1QB+T8h31088kZE9glvhnRfcuaUWf+eBoBfgDGbf09R+A8SFNOQKaEGYgAAAABJRU5ErkJggg==" alt="allegiance" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Allegiance</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ffb84d;color:#2a1a00">Passive</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">When you play another card of this Faction, permanently gain attack and max health.</p>
+      <ul><li>For Assaults only.</li><li>Sundered cards will only gain health.</li><li>Increasing max health also increases current health.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Disease</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="armor" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAgCAYAAAABtRhCAAACJElEQVR4nN2X0aciURzHv3t3xRJDGWKf9qmnuK+9LkPsa089RUQsERFDDMM+RcQQPUUPWXraFb22pP6JlBJRpNzVQ876jc65p9ldt+me6WE/1Pmdafw+/c6ZaX4B/vkE4BsAB0ACAfMFAPO8skGIHgE0uaRcLrNisShLGwA+qhC9BWDxxMlkkrXbbcZxHMdbrXmriPbGlpNVKhX2N/b7vVuxdO4CQBVA/JolGwDYyKJsNsvG4zF7ieFwyDKZjLfiNYD+OfejLLs4MZFIMNu22Wq1Yn5ZLBasWq2yeDzulTNedZ4m+XyeDQYDttlsmCrW6zXr9/ssnU5zYfoBgE5WXddhGAYikQhUoes6UqkUYrEYPxQjoUaRprlDIITDYRGSMOw5qBztuRiNhHfl4b8Unk4nEZJwR9Fu5w6BcDgcRHgX4Xa7FSEJ5xTN5+4QCMvlUoR3EU6nUxG+AfAewBPNjscjQqGQ8uWMRqN8+o4q/AXgJ80mkwlUMxqNePiDX6VE133ruoNSus85L5LTOrq/6LVaTdnTwrZt+dFE3cMFRf5ho9F4taxer8uy3L9WwOQnNZvNm2WtVstXn2O9Znmdy8aKcl2FaKCoQboWy7Jk2Vf4ROxpoVB4sfUolUqyrIIb+QzgOyUxDIP1er0/RLPZzP1CKjvxD+f/EW5C0zSFrNPpyKIeAAMKEVdwLpdzW0FPqx9IU2ScK1HS3vuBbmTaW9pjX/wG6t4QTW1ruZ0AAAAASUVORK5CYII=" alt="armored" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Armor</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Reduces damage taken from each attack.</p>
+      <ul><li>For Assaults only.</li><li>Does not affect Swipe.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-passive" data-name="avenge" data-cat="passive" data-avail="normal">
+    <div class="card-header" style="--accent:#ffb84d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAED0lEQVR4nL1XX0Q0axj/TftZYlkmy7LEsizLMiyxxF5FLIc4xCa6ijhXsSzRJ+K7OCLiS3QVJboqUpel1E2psykl9qJTytIqpUR5jt98s3NmZ2emOc7qx2tm333//N7nfZ7n9wwAjAK47OzslP7+fgHwU0TQ6gYgBKC9qT+dTsvl5aXUkUqlOFoDMA5gA0AFgFjaNYADAAsAigB6AEQ+2bwYCoWkvb1d7CSgqqq8v7+bBObm5iSZTMr4+LhsbGxIpVIRK66vr+Xg4EAWFhakWCxKT0+PRCIRLlwFsAVgBsAwgF7Dunu5XE5fJ5vNclzWRg47Ozs78n9RrVZla2tLZmZmZHh4WHp7e2V0dFT29vbMMYODg9xx0ErgG4D19fX17u7ubvjB2dkZlpaWcHh4iOPjY8RiMSQSCeTzeRQKBeRyOde5qVRKf9j7NU3TfJ1yeXlZgsEgT/Fm8wu90cQPDw+u81dXVzlu1X4FgUAgIPf3956bPz09CR3JaWNro0+4gc7OiGsgIL9YLC4uLnoSMNj7arSUE+js9khoM66BfuB594+Pj/CL2dlZx/5AINDkB23Gc3NzcxMfHx+ui9LZ/CAYDOqO6gZHAiJSq9Vqu/v7+64T6d3RaBSRSMRzcyKTyeDu7s5xTDqd1h8NBPxcA83HMOMCk5OTGBoaavg/Ho+jUqng/PwcoVAIr6+vjuuQHB9mh/wbDmmmZS/Qi/v6+sxQK5fLetbkMkdHR+a4RCIh8/Pzjmu8vLzUQzloRoGFxP1n4cjUPTY2pr/f3t5KOByWUqkk8XhcVlZWZGpqShjW3MQN1pQMGwHPcHx7e5NoNKqfOBaL6WT4m+DG9nB0AwkDKDkRKBQKBU8LUISsm/C0+XxeMpmM2Udxopi5gdpDDXIioNrV0QlUSaomxzolIvqGF7i+MVd10m7f6jgxMWHf/Jl+ZHVIN9DStLgTgRLvyA8YDaykmCgB/AXgb14FnfMz1IVJqStSHYqiMBzL5XK5KYafn5+xu7uLq6sr/XcymURXV5ee+SjPTFbs8wPmiY6OjkYfsFihygLDipGRkXr8skybMxoroBdWPNPT075ObgXnuRFoCkfD1J0u41mFTAO4pRyzKvIiQ2lntcQCuOkKjGtgOJKE2TcwMMBKaEBElrxMqygKi9TfAPyuaVpU0zT9WlRVRa1Ww8XFBdbW1vj+J4DvbhZoCkeeigXnfyzFWV1TNH4YV/bD+K02FCTiPLkhHBlaAI5a/b3Q5mHNBnWkCobDYU1RlDBaiDa/BCjH2WyWr9kvISAiJycnJzc3Nzdm35cSMLC9vb1df4fx7eDvA8IvxNuLG9SRxQQTTyudEJ8Q0MPx9PRU13CjFpj6MgIGiT8AnFKkALD6aGkY/gNN0rrWybRUcwAAAABJRU5ErkJggg==" alt="avenge" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Avenge</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ffb84d;color:#2a1a00">Passive</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">When a friendly Assault dies, permanently increases attack and max health. Half effect for non-adjacents.</p>
+      <ul><li>Only available on Assaults.</li><li>Triggers before Swipe.</li><li>Stacks with itself and other similar effects.</li><li>Increasing max health also increases current health.</li><li>Will not trigger if wielder killed during "all" attack.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Disease</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="barrier" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAcCAYAAABsxO8nAAABdUlEQVR4nO2VvUoDQRSFT0IIiIUS0BAs0qSKpLNI598LxDcQS19AwVdQexsVQUvBygewsAhYKKbRxjr4A2JhxHwycE3GdWZNrCw8cGC599yzO3MurAClsAycGMtp2lgjD6wDL/TxYrX8oEazQIs4WsBcmlEROAC6icE3o4+uaYu+URZYBR4Dbz8Dakb3nMSjzWadUTMgaAPLQMb74ozVXC+JphP4eAd2gEJKQgXTOG0PSaPGEPE30oxqQ8RfSxr9x8/fiL8KnBqrv4l/HNgEOl6vY7XxQeLP2eWF7uETbdPkYvEvANd8x50xCaed940qwHFA+AxsACPGDasl4WYrzug1sGx7QClw9BKwH1ja1+RlnwN1b3AUWDSOevW6aX9MzXEJuPd6D1ZTKDW3rWvqY1dSW9K0pAtJeX1FR9KMpCtJE5JWep3I9m4Rx3ZoJqswJiN1xXoxI/fpMVwGq5GjjQE3gWPdWm/gP63jFHAIPBmPrBbUfwD2bDRRU8lRowAAAABJRU5ErkJggg==" alt="barrier" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Barrier</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">At turn start and after taking damage, Protect self.</p>
+      <ul><li>Not triggered by Poison damage.</li><li>Counter and Paybacked Strike do trigger Barrier, and it lasts until the end of the opponent's next turn.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="berserk" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAED0lEQVR4nKVXQUgkRxR95SyIMusQxRxmTu4OTDJmRQkIyqrgwYPiYYR4kJiDDpKTlyAIC4IHDwayl2BgwYsmAc1ATrI6exDPMjAMRLMajQiOIkEyqAgatcKr7W6qe7tnpvXBn+6q///7VfWrf9UIKSX8QgjxFMB5MBhU7cvLSz5qpJQXfrkq8DA85080GlWi9z16AEKIJ2X4xdRPLKZE7ysGN+4KIQQ0eQPgPz6FEDGHzhJOXv1Eo7YBeNkbXDq3zmWBo5OBQICbwpRf4Y6fqV9cXJRLS0um7bKHLTmkg9tzld/QYHR0VIZCIdM4C+Clwy5DXSaTkdlsVrfT8dLoU1zkNOwYwxMxGtXW1sqNjQ3Z1tamr8akZsfdLi8uLpQYev0LoK3qJwe5yGn0ldwrS6YjyScnJ/VBpABE+B6JRKQJvhv6iGGj2vQlhzYRcpeFLB0mJiZUgJWVFVlfX2+SbPHZ0tIih4eHZSKRkE1NTTYdbelDkMMjRUXRZs5idXVVER0dHcmuri59NVyFNrQl6KvpyOkLr8zZnJycKMLb21vZ0dHhGby9vV3ZEPTRVo1cD0KKBN3d3bJQKMhkMmkFq6lh5f2AcDhs9Y+MjMjDw0Plo+2bB+NTAO9JFIvFrCBDQ0PSifHxcUsfjUbN9/cGhycEgGoAnwOIA2gA8AzAF8bn8uG00ZBOp9HT0+NKtru7q1dGHTytdgD8AeBvAAcAtgH8SaVnTqurq23tcqH7VFVVFd20ggbxeByUhoYGJeFwGKlUCvPz82r4bOfzeV+5a2xsxPY2Jwkkk0n09fWhUCjg4OBACXWUikAgoIz4pORyOUxPT1vBx8bGfAcntra2MDMzo97JlUgkkMlkrDhmTBRbnlwuJx+L09PTUrUDvN18CeCt33zv7++XPUhH0HdGzKcwdv5PpjIej5dFqH/7ek0ohs7OTn0QPBWbbSmYmpp6yGx8rdrc3NxHKZCUfD5f0jmdTtuc6+rq9HKrZGFhwe8koHJZCoODg7ZA/f39lm5gYMCmYxkuhevra2X7BGUgFArh/PzcbP4L4BOtjbOzM5tufX1dfWJ3d3ePv5YLIfTgLJ0v+LK3t2fZaO8vjDsB7u/vle/V1VXJQUi3FCwvLzs3y+8+rmS/6b6zs7OeKYDbAHp7e/XAXN9v3W5MvJAWuZR+DeAfk6e1tbW8PVBZWYmbmxuzyROsEYAzmbv8hnd2dpx9On4xhGn7bHNzU6XE+VewQm/QQAv+Ix1dgsPMMw8TLf9/wR086l/rMY6Pj+0DWFtbc/5L+QbAOLyhps4V0FbBthwOfAfgK7MRiUSsgwqOjcaSrHZ5CbCEyubmZiWGryqrJWAr+7ZKCOCHMghM8BCRwWBQieGvDpYy8b0Z93+ZGJq9aG0kMQAAAABJRU5ErkJggg==" alt="berserk" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Berserk</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">After dealing attack damage, permanently increase attack.</p>
+      
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Corrosive</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-passive" data-name="bravery" data-cat="passive" data-avail="normal">
+    <div class="card-header" style="--accent:#ffb84d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAaCAYAAACgoey0AAACn0lEQVR4nK2WXWhPcRjHP9t/azatlkKZFC7kBilsN6SRSzK1iy0lypWLhaLdeW0llLeEaxfcSKEleU9tiaWlLC4Y07xsWpZse/TL9/Ds7Pz+e33q6Zzf9/d93s55fs85BWZGhpwCdgI/gUJgmPFLgTRIKdAMHBlFygg8D+hi+mQAmAP0e7Aog9ik61fgNNAD1AHrhbcB3UCJ1oNAGbBO61bgAlABHARmA3uA4yOihIqdzjKz3/ZXqh3eKuxtiu/1gTjvHFYn7LuZFXl+2vioiI8dttf+S22ewKsd74zDbwvbHQtcYmY/RKoXVmZmfcJe5Ama6B1xh8ysUtgWYe9jgRtF6FMSATvkqqgZR+Cljn9VWM7MvqSfmDf6oM3zWi9yTm6NI2iiF53dWmHNWr9MeOGMBmkAKnV/SdfkLE5U/PnM6XpZ12VAje/qDmXUlsp+Oh51oveEP0ke9WZHHtF5aq7eSTTXsJnNT+1tc3GqAtCpRU/6rEn3OYOteYKuihwnr51J1WHxSotvZlaRQQ7JfBrHAHkozi8NovR+sWvgu+lMr0Wc7nKcMMVumlmLNHT8fbd/LOLjpOMsTMBgnMjyiGGodizpN7OZGbaVeu9BzvpzvNgZP40ErtXMDb3QndLPmnqNEdvr6dfgN6+44JsiDkI1pZpsXmeYWXnEZoXzezhrcs01s0EROiYwqcbSR/LZq6RHBQ56wmW3fRqCbnD+Gv1emliuBjG9t9wUA7fLV5eZFeYLHPSAy7JpCkEbnJ+G9H6WQU6dGmQgMlTG0jB0PspHexYnZrjDZXtuEoH3O/uNWZysv8xEXgNLdL8SeKNPZdRAEn4CnwMLgGdAdfbHM5518ssyFVkT85+v4iAtQJUqLR6j0n+1AEPADaA+xvoD4kPsN8EQPu4AAAAASUVORK5CYII=" alt="bravery" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Bravery</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ffb84d;color:#2a1a00">Passive</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">At turn start, if the opposing Assault has higher attack, permanently gain attack.</p>
+      <ul><li>Triggers after "On Play" skills.</li><li>Compares only current attack value.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="coalition" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAgCAYAAAABtRhCAAAES0lEQVR4nK1XW0hrRxRdCc29CEWtFEEUER+o+AClIuIzAUG/7C36ox+ilTpGqm0s1Y+W0vZSsJYi+OhBBQV/1I9eEUFQ1IuIqKmUK9Rnf1TUiAaNRmJizS5zSMI5SU5i4C4IGWbvmTXDfsw6qubmZoQCQRCSAfwK4CMArYyxnVDWq55LKAhCJIDvAHwJ4IVr+j8AQwB+YIxdvRdCQRDUAL4A8DOAjxXcbgC8BtDHGHME2k8dhKwMwF8A/ghAxsFv/xuAfwRBeBXyDSVx8iy22+1YX19HaWmpzHdtbQ05OTkICwuTTr8F8BVj7F1AQkEQPgTwPXeWxAkrKyvo6+sTSWdmZmQb1NbW4v7+Hq2trSgvL4dKpULA+HJCIlITUSMRnZEER0dHZDAYqLCw0PO7vLz02O/u7qi4uNhja2lpof39ffLCNRF1ENELzqUiIh6n3wHkuA9hs9kwNjaGqakpPD4+ym7U09ODgoICcby1tYX29naZXa1Wo6qqCk1NTYiIiJCa/gXwLU+aaSkZx9nZGebm5nzIOA4ODjzj3d1dH7vT6cTq6iqur6+9TTwv/vSbpUlJSejv70d0dLSP7fDwMCBhXFwcBgcHkZCQoFgWL/0Z4uPjMTAwgNjYWNn8zc2N37F4heRkkSwmJgaKoCC4urqiuro6Kisro6GhIXp4ePDY+Hh0dJR0Oh0xxuj29jbYdiQj7OrqoqWlJXI4HDInq9VKFxcXipuYzWay2+2yOYvFQtPT06TX62XzPEvJfduioiLxPzw8HFqtFpWVlcjIyJDWVkDwOuWNYH5+XmwS7qTjSeSGX0IpeAwnJyefRVhRUQGr1eozLyUM2Es5Tk9P8Vz4I/NGUML3DXUwB69uERC8BoPhAyUS/irodDrk5uY+m3BiYgJ7e3tYXFzE8vIyTCaTr5M0Zbu7u8loNNLT05MslXm98dRXgslkEstACqfTSdvb29Tb26tch0o11tDQIBY3L3JpvfGDDA8Pk1arperqajo+Pg62nV1WFt44OTmBwWDA+fm5Z473yPHxcbE2GxsbZc08MjJSfE3S09OVtrQoJs3Ozg4YYzIyDo1G42kEUVFRMhvvrW1tbdjc3AwtSzc2NsSFFovFx5aSkuIZ8y7kDZvNhs7OTlElKBF+5nocPUhLSxPbGn9MvZGYmOgZZ2Zm+tg1Gg1qamqQl5fnbfobwKdqxtgbflgA37jknlgWHR0dGBkZQVZWluINU1NTZX02Pz9fVAp6vV4qqnhMPgfwCWPsrbeI4lLwF5eDeD2eUwsLC+LbaDabMTs7KyaHVEQ5HA4xBCUlJdKzcX3aB+AnxthtMJmY49I5XO94YsM1Tn19vczXaDQiOzsbL1/K3vE3XL8wxmShUiSUEL9y6VOuR56Ddy49ynVp6L3UX3wVwHVnqztOgfYM5WOGx/dH13eGuwe74/SaMRboQKETSojd8eWP39f+4hQI/wM+pz2H1CtkPAAAAABJRU5ErkJggg==" alt="coalition" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Coalition</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Deals extra attack damage for each different faction among allied Assaults.</p>
+      <ul><li>User's faction is included.</li><li>Extra damage cannot increase attack from 0, but can help penetrate Armor and Protect.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="corrosive" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADlUlEQVR4nO1XS0sjQRD+MokvRARfIIJeIgExImZdPAxEg4IQCOYUzF4WImJEEIT1GPAkLAiCsIg/YAk+Ll48hMVgTissSNSgIogS8YEHH4EomvRSTXo2Ma+JuiwLftAzPV01XV9VV1fPAOqgBcAKbC41E2tUErAA+GGxWKDX6/MqLyws0O0XgA94I1jJK6vVyvIhGAyKCATVTCzhH0N6J4B3Av8JAT1dGhsb8ypWVVWJrjFRwF4NrahutMfVwOFwiFrgfgsCbprM6XQytfD7/QUVo3ygSVggEEgzFI/H2cPDA4tEIiwWi6XIbDabIPEZr8BnmsRut2f0NBqNMq/Xy+bm5lgoFOKEBNbW1gSBn69JQje/uDMv5e3tLXZ2dnB2dobt7e0UWX9/P/r6+qj7EYDjJQQc9DJN0tvbC8aY0gQqKyvR2tqK+vp6GI3GdPZ/iL8oGf0UwpWVFRYOh9n6+jpvp6enynrnygEBWZbFUtgLiYAdgFmWZXR1dWF5eRk+n4+3paUlnJ+fcyWNRoPi4mKUl5dDkqS0CKmJgpSFAFceGRnB/v4+Li8vFQH1Dw4OFEN0j0ajOD4+xtbWFs+Ji4sLPD09cbnT6YTJZKIuJQRPimToMhjnivTS4OAgNjY20hSSjZ+cnPDI0D0Wi/Hx0tJStLW1oaenBxUVFTwKQ0NDwjFfvgi4RegorM3Nzairq1OE1DcYDDz84XAYi4uLODo6UowT7u/vsbm5idXVVR4dl8slkpSWVs71TSgDCLS0tGB3d5cPxONxvs0o7GSUCFHWk0Gv14u9vb0MPiQm12hgs9nQ2dmJ+fl5jI6O0vB3AJ+yRcAtvFcUJAkNDQ3o7u6G2WzmfRq7ubnh654LtEShUIjnw/DwsBh2JmpDGgFTQpix8JA31ATu7u6URMuFSCTC9bRaLWZnZ1McfU6AD87MzHDlfCgpKUkhlA20TSlizxyjEm9MJmAQPxJjY2NQAzr3q6ur8+o1NTWhqKhIITM9PS1E7mQC/IGEpKQGFAEqUmLybCQ7OjqUCBAmJiaSCehJQp854zQyPs5vqkDhb29v58lZVlaWshxksLa2FgMDA6ipqUl5jxycmppSSGgAfAXwhQY9Hg8KBW1TqgeU7VdXV9DpdHyn0L6nwypTnlBiUoES4IfF9fU1ew3oMHp8fOQt+bsgGzweD7erIwZ06ExOToqa/ddBh9nh4aHy/O0Fv95v1n4DNVDNX9fYgkYAAAAASUVORK5CYII=" alt="corrosive" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Corrosive</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">When attacked, Corrode the attacker, removing attack after attacking and reducing protection from attacks. Removed after failure to attack.</p>
+      <ul><li>After effect is gone attack is restored to its original amount along with permanent attack bonuses.</li><li>Protection reduction works the same as Pierce.</li><li>Berserk is applied before Corroded.</li><li>Does not stack, but can be overridden by a stronger effect.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Berserk</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="counter" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAE00lEQVR4nL2Xf0RsaRjHH42GFKM0DDGaFaVEiYiIGFLE/BUpYmxEiklE9IMY4tIYO0SrP1ZERESUiBJRYolSN1uGWRER2Sjv+rz3nPHOuTNNt/bul6PmPec8P77P93ne94h8EkopfYnIkIjU27/fe/1XmB8aGlL19fVYrJf/Gf1VVVXq8fFRTUxMEMDEZw3W/sCzXpfLpQ4PDxU4Pj4mgONPOa+trcXItoiEcjwTsLJcFJGrqakpZcLv9/O+/6MBTGFwe3tbNTc3Y2hDRDqse2GyCwQCmmqeo+bPz88ZAaAFEfnjowF4PR6Pur+/18Y2NjZUQ0MDBm8bGxs1xTaWlpZUOBzOcG6/U15ezjurItLmsO8Skep8Qcw5aV1bW1OUhuxsXF9fK9hIpVLptZeXF9XT06NWV1f1VVRURCADIlKBXfRSXV2t8gXhLSkpSbNgoq2tTe3t7aV/z87OKhjjbzQaVa2trWp4eDh9f2FhQRUWFiqfz6fm5uZ0sE1NTQTQlMt5iXXzt8nJye8CgHKoN4FRGEMX+/v7eu3u7k6z1dHRodbX19PPrqys4Hwlm2OPiCTInAi9Xq8qLi7OYAFHZGJSngsw4iwjYmVeiEhrtgAmyMAG6h4YGNBZQPng4KCuJ4ZNXbS3t+u/TlB/tGAiHo/j/Pdc1HtEZAl6oZFeBolEQtd9cXFRPT09pY2dnp4qt9utdnd3dd2d2QKCZ/3h4UFPSViF5bfE14RRSjAzM/MmxTBCUHa9oZbZYYJ1WEWklBZGReRPyYNfCIKXRkdH1fn5+XfOWScAEwgtFAqpfCgrKyOIMtNhgfF/xO12f41EIpJMJiUQCEgsFsuI7uDgQE5OTiQej2esu1wueX19zZeclJaW8mdMRNzmelBE1mmZy8vLjIjRws3NTfr31taWbi1qamJ8fFzNz89nzZqNinIwIbu7uzV7sCwikzoQppnZq2YNUb4pPtsZXUJPI0aEy3POoLiPQFtaWrQA+/r69P4CksmkGYgE6W8yQzS0EIZRfzZ1Azqlt7dX7xMMJ3OPsHse4/ZgIri6ujo9zu2RjYitnVPDZ+16bLMPNTU1aZV/BLzrFCotTQmWl5f1HmJt5w3ZtDJrDhyysDN5L7KNbDAyMoLjSxFpfkusPkoCjQRCHbkYLAyVbFrB2dnZWXqNmRAMBnU5naObCcm5I1/HLExPT2tx2QbQBzPARCQS0QIjY+qLLmy2CAJnJINoEe/m5qa2Z5WAk1VOVBQUFGQ4hBEGib1BkR17gdklKB/x2ack7sViMYUtzgMissmZgKAs3eWEG0O0i5M+HGc7G9iAerLHOQxSPhh1nIp82SahifFwOCwVFRxkvuHi4kJub2/F7/923gwGg7KzsyNOXF1d6Q+OUCikr2g0Ko4DCCPzb3lv9qlUSgsQ6sbGxrTgyJxSsGZ2CNSzhh7Yfm3RwlaW82FODOGQ4cEgYiezVPuriPyF4DBYWVmpOjs79TCxHdEJIvIPoqNcHMMYwcyAfFuxDRcZoHhr/57njJi+K5LAGDg6OuL+g4h8tQ8fOLOO8nye9VjC27Ccv/uTzWNNRNOxja6uri4tMOsDhhMvWGbCsSFZQf80FKHs/v5+HH0x1pspFW0pIu0/MwAdBB+kWdY5Uf+w838B4OCQWLKeXNMAAAAASUVORK5CYII=" alt="counter" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Counter</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">After being attacked, deal damage to attacker.</p>
+      <ul><li>Deals damage even if no damage was taken from the attack.</li><li>Triggers before Leech.</li></ul>
+      
+    </div>
+  </div>
+  <div class="card cat-support" data-name="disease" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAAD+UlEQVR4nJWWfcyXYxTHP/X0JkpRNImF2pI21GJGKMzEvKy1JtbMxtjY2Bg2syZjmuIfb/mjeU0SxrDmpazlNbX6R6MSPWWh0MsWvuex8/j+tsvdfT/P49w7u+/rOtd9nZfrnO+5einE/6QTgOOBo837gV+BTUB7dz/36YGCQcDVwJXAFGAY8CfQr2btFmAZ8DSwtW6z3l0oGgI8Amy0oiXAWcDQwpN7gNOA64HngCOBu+3tQmDgIbtmSGv4GoW+V+hehQZVZKMUnU+HQksqsv4K3aTQDsvXK3RcuaZO2YMKbVRoTIMxeNPFCp3s8RCFzldorMeDFXrZSjdZXqtwnkJflgsUGqnQdIUuqcy3eIZCv3vzUGihQr3MCzz/Zp3CqxT6UaFjPB6m0NIifMkHvUl/rxmq0P5C3mG+wvJU+qrnLi8VHqHQTnuR48MU2lCzUYuXe92UBvlDhSNDvPfnOW5l6c3AZ8AKj+8AJnSRwVkm0536USP/tvj+DXgYmAyMTwv6KbRdoTMKq77uwrsWL/baByphX1mEvIzgPoXuysK/APgZWFdYlUjSHY30ey7wHnAusANYCnQA11r+CrDP0ZucCqcBr1c22w4M70ZhCWNfmFs0E3jJ33/biDXArDzDScBK/ksJT93Ra35f5jO6FRjgucRXKt+bO2FRoW0KjVfoUYWmOeYDu8nSN7xufmV+nc8rZVPNrXNMYNiaH1sU+sA/HCgOPOtwWU0dPu41IxRSjTG3N6BT1uHaPMODBbLvBP7y9y/ADCfQ6Z7Pc9pj+YkN4D+q4QiOBbalwj+AW4AXgQ01dbXdXKXsIruBoyrzqxoUjgbWp4UHnEmrCuvTygXA237XlUn+N9tKk+TkeadBYZbNRxnbFca8VqzHKbS7ci67FDqp4WwywSYZ5GngxOd2hdrSw2+AsYUl89xkSxrueRo8/aqb68WNwPMZhd4O5dmFcGLDT1mvLUoDlwOfALcV84f7ZpBHMaK4oiRWP9E5ckd/oXB/TUPtfWx5H5dSKZtt2cxi7j7PPabQ3Nb+6eFeX4ryBobvIlXqcPIkneKMK2mq358aT7NDvA9cDFzkZPqXrHmiQvcXXs4xAqWlmxWaVciyV+6peHhnIW9TqK9CExT6TqFTm+40ixQaXcmuPg1Zd6EN2avQs25xpfzMhLEKtB2iMFP3LYUGdJHePeEb3F8PUVZ2/KRdwHz3r8yskvoa7RONmmic++Ic4JzOIq+hKhauBp4EPnSfLJOm3Y26pDbgUvfT1VaSCfRDk1WdCFNDY4BngMHeLAs7I5CeJgikN1m7aVRm+SLgqQLmGqlJYYvOA64zDia+ZoP9ySCfneNdYK0j0CP6B8z+Sk4k67sxAAAAAElFTkSuQmCC" alt="disease" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Disease</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">At turn start, permanently inflict Disease on opposing Assault, negating healing and max health increases received.</p>
+      <ul><li>Permanent and stacks.</li><li>Removes an equal amount of itself when negating a heal or max HP increase.</li><li>No effect on pre-existing max health increases.</li><li>Negation happens before Subdue's effect.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Heal</span><span class="chip chip-counters">Mend</span><span class="chip chip-counters">Refresh</span><span class="chip chip-counters">Drain</span><span class="chip chip-counters">Leech</span><span class="chip chip-counters">Scavenge</span><span class="chip chip-counters">Fortify</span><span class="chip chip-counters">Avenge</span><span class="chip chip-counters">Allegiance</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="drain" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEFklEQVR4nO1XS0ujVxh+vphkzNRbbIxBRYYpNIa4ipTKLIqVbgTHLCqK4hRm6k9QjOLGRShFJMWS0kUEiwZBaLvowlqCSGoFC4UiXmjRmJgLLqowWhLjJac8X5PU6herGbGbeeDA+d7zvs/7nNt7EglX8QTACwAFCmMBALMAJCijCMAzACUKY0cAPgUQvWhUKzg+t1gsH5eVleH8/Fw2SJIElUqF9fX1+OHh4XsAVDkEPKysrGx8/PhxNlZOolYjFAohGo3+AuCr/xJgHhoaQnNzM+LxeFaAVquF3W5/2Nra+kFTU5Ni9sXFRfj9fni9XiQSiay9pKQETqcT4+Pjb1+OUSvwnJ6cnCCZTMotI0AIgdPTUzQ0NMjilHB0dIS5uTk5eSaWYP/s7EzmvokAGUzIlkGmf3x8jFzgGMVe9L/cvwwV/meoXgvAawFX8U8FuXsoXsMqADW8LWmbPpVK3WlWXs10HXgE4J10KedEf1frdLqfzGbzo7SDjOLiYiiJYDnOB+SuqqqC1WrtlSSJTebf2Nj4QS1J0oPh4WHYbLZs6WXhYC3X6XRZksLCwn995wJF0i9TkAhW1vb2drllSrPH46EAoY7H4yOjo6NfTk1NycFUxscjEokgEODj9zf4Fuzt7V1b1ThGH5/PJyfNgI9TdXW1PCnyBINBuN3upBDCwTPgWVlZ+Wh2dvZJT0+PXE7D4TB6e3vlZbu4NSaTCTU1PC7K4Bh93G531sbJxGIxeca1tbXQaDRwuVzY39//HMCvGb93jUbj6fLystja2hJ+v1+YTCbB71cFOchFzt3dXTE5OSlUKlUQQNnlCXzR3d0tgsGg2NnZEf39/cJms4lUKpV3csaSo6+vT06+trYmrFYr97BTaQUr1Gp1bGZmRgQCAbG5uSnMZrNwuVx5C2AsOcgVDoeFw+Fg8u9z7iGAF1TMAK7C9PS0MBgMIhqN3jo5YxhLDiZfWFgQpaWl/JVSf50AFYAfR0ZGRCgUkrfDbreLjo6OWwvo7OyUY8nDFW1ra+PsP8EN0GAwGE6WlpbE9va2fIiMRqPw+Xw3Tk7fiooKOZazn5iYYPLtHD9WFfEZZ81tIMHAwICwWCwimeTVvR70qa+vF1zFSCQiVldXRV1dHQV8iFvgzYKCgrDX6xWxWEy0tLSQ4I+bHEj6sCYNDg6Kg4MD+QYA+A554FljY6MYGxsjwc8AGvV6/Z+8TrnAMb1e/xJAT3l5+aHH4+E3D15dPgIkAN9qNJp9AO+nbSNdXV05BXCMPmlfh1arpRgHXgEaAJUXvt8A8Nv8/PyV5LRxLO2TAZ/6O8dTVrNEIpFNzn66wj3FPeFrp9OZFcA+gG9wj3irqKjoJa8ZG/u04Z4xwFrBxv59JycepP+qs7GfF/4CbQbtY11rWEYAAAAASUVORK5CYII=" alt="drain" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Drain</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">After attacking, Swipe and then heal self for the total amount of damage dealt by Swipe plus Attack.</p>
+      <ul><li>Heal amount is based on actual damage, so it is affected by everything from Weaken, Rally, Protect, Enfeeble, Armor, Berserk etc.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="enfeeble" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAE5klEQVR4nLVXe0R0WxRfNZVSfIoYLsNlmJQoUSL6o2IokV5ED4ZhiIgYIuJquIroKhE9iFI+kgxXFFGiuKJE6aXc9EdF7+f6/JazT7vTfNPku/fHOWfPPuustfZvr7X2GqKvwU9EbFzpEcgnEZH9izYiMo7rG4WHU5P9ZSdsFuPLEXzTo8nj+19CKRSVlpYqhUOfyDdrxifCCUZH6ECt3GrlofY2HHza+J8Q7+OIqDBC24JtrGZ7e1vfhkODiQqLQzl4n5OTo+Q8Fl0BTUdhpAxIENntdpqYmKDCQnHeYSj/TkRXhjMwnoWXWVlZ77410GsEs8K3SBkYg8dNTU28urrKwOHhIQ8NDXFFRYXOCq4qPKuqqvQ5l+GwPvdvpMaBfP3j3Nxc7uvr49vbW3EGz9bWVvX+byXX1tam5vqIyI2x2+1Wc2dfcYCMVEJ0b+rObG5uskJBQYGa/wPPjo4OfcWIFWEsJSVFzaVEGgPACxH9RUQZRJRnjGlgYMAUqKoC+wIJypGREerv71dzcIDOz8/J7QYZAjf9F7VBYWlpSa1sCc+4uDje29tTc3uKjfHxcTU3/hUGrMiUW6Y8BE4nqq+gADev10s2m1kEMVjHwOVCTAryYz4xYjdo+p2ITojoiIi2DDqRz+TxvKU50jQYDMq2OBwO8vn0eiR4lNujPFRBCgmkDDaPw13t7e0m/a+vr/zy8sJWfLYFFALpyrjdbpfc7+zsZK/XKynkcDjY5XJxb2+vaXhmZoajoqI4Ojqa4+PjuaioiKenp/n5+ZkfHh5Mh+vr63l5eZk9Hs+7KplJRH8SUYlxhIpxn8/Hl5eXHA4wDsOoC8FgkK+urvju7o7n5+fFCZvNZjqhCpjukKqSH6iF8cXFRa6treVAIMDHx8chjXd1dXFxcTFvbW3xxcWFGAMeHx/54OCAq6urubm52ZwHwJxhZ1BRLud2SUmJUA66W1paPjgFRdaV5+Xl8dHREZ+cnIRkCIYbGxtNJgBsn6Ez60Pngv0uLy/XDdfrp9fU1JQoWVhY4IyMDF5fX+f9/X1Z8c8A57A4OHx/f6/rTtADT+q0pYmoUwXFykBNTQ1PTk7KfuMKFf06CyhQsbGx4qh2eEll1IFC0URE5UYhEcH8/HweGxt7pzQpKUkCDlsRCeCk+gbxZeiWIhFjqfUjxljy0+/3UyAg9cYEM9PNzY2Mo6Ki6DO8vEDtG7QiZA7slm9+U6sHfRsbG+I1aFQoKyvj2dnZsNTrq0cK4lxACiIeDP0l5qIsbVOHOkoHBwdDVr65uTk5ek9PT8Nuw9PTE5+fn0s6IgjxO1Rbz8bVb1RBKZlaCcXVpsYoOAgmBBXqBJoR3QmMVVmGHBaSkJAgcsPDw0rf93fbWvDWSJjpiHbLItyO30hTAMpjYmLkON7d3ZUUg1EYB+07OztSA0D92dmZFDPNhkk/qUl4mpqaavZ9WlerCyM9pf1SFHd3d3NaWhqPjo4K3dfX13IOZGdnC+3YdxjXoh/t2Tu0KidQCWHY6XTq26ID7bC8q6urMwNzZWWFGxoaODk5mRMTE7myslLOA3VQaX0g9KVYHVBO7FiKEYTNzkED6kRQyfn9fl5bW/sQgMignp4eq76QxkkDUhK9vdnahEGn9bxIT08XBrXt05vU/wVYEf5orP2kaZn5rPH8Acc/1fYg5t2xAAAAAElFTkSuQmCC" alt="enfeeble" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Enfeeble</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Inflicts Enfeeble on an enemy Assault, causing it to take extra damage from each instance of damage.</p>
+      <ul><li>Stacks with itself and Protected.</li><li>Lasts until the end of the player's turn.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="enhance" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,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" alt="enhance" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Enhance</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Increase power of skill on an allied Assault.</p>
+      <ul><li>Lasts until the end of the opponent's next turn.</li><li>If the Enhanced skill is Evolved, the Enhanced effect will continue to apply to the Evolved skill.</li><li>Only targets cards with the relevant skill.</li><li>For active skills, only targets active cards.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Sabotage</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="enrage" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,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" alt="enrage" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Enrage</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Give Berserk to another allied Assault.</p>
+      <ul><li>Stacks with itself and other similar effects.</li><li>The Enraged status is removed at the end of the Assault's turn.</li><li>Targets only cards that are able to attack.</li><li>Will fail on Sundered target.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="entrap" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEHklEQVR4nK2XW4iWZRDH/9+6polt5oHVQgvdECSiLK1IUuwiRGFhoYvSC7Mj2FU3SoVFJ7qJoIMRdCLrJulIBy2xMgmqi60EK91at0XXMg+L4aqt+4uReWma3vf7Pqo/vLzP+zwz88wzM8/MvDVATWKipKWSFkm6RNJ0SRMkDUk6IukHSd2Stkj6VNLJpqQCjZ4O4HngOM3jMPAkMLuRfNVZbAXWASf49xgGngMmVu1Tq3BBm6Q3JF1bsnZc0g5JO930oyVNkXSZpJkVht4v6XpJ25txwTSgu+Q0W4AuYFwdq10IPAwcLOE/4fx1XXA28G1i3A0sayJW4mMm31ChxOIqBUYBmxPDhgYnbvSs9DiIOAScX6bAmkT4NFBrEKTnAdOBM+vQLQdGkuyPsgIXAEOB4J2KzccCdwCfJPphj5v7gCklfHYlM067VU7wQlgYBNpLhCwEfqIxBt30WfHeRLe9UMAC71hYWFOy+YoSXzbC2iTjthKaObZwY5j4HWhLjEtKNh9wcy8AZgLzgXuAvkBjfr8u3bCcTdfKg63AS2lzU2ZfYnoNOAtoAa4CVgFL3cx2YzYG2h1OV8jblmS9b5MfhokVSQEzY8Rmv64WtF/53JC70E5/DTAG+D7wLAjyrKZE9NlkT5joCMS1tHbK19s8Of0GdPoJR/vtOOjK3R747g0yLUtGDLVKmhwyc18Yz5Y0K3x/LqlH0t2SOiR1Sep3OqsPL0u6SNINkjYFvqlhPJIqwdgWSeP8Y1DSH2FxXiK2Gi/vCY5KelvSDEnfSep13i8ktUs6HMtNGE9LMgdbvJoZxqRFq3ARv/i73U88kgSekjTfFTULFdgVxpcnmb+aAocKcyQlcp2e5O9eV+5S/17ubrjLLfKWpFVBxgc+nuwuithpCuwJE/FEBxLxXH+/7u9nJb0i6WdJy7w/sLhY7XEg7yksbgwrJY1KMrflPNAZInZOjljP83bfv/a5fuABT2arvWcgrJ3rssaX5BNLVB1FpivwTLqGexLTU6Fp+ZJqfAPMCrJeLKHZWtSC1lAoDqTSen+J1lZeC75bPDn1uFU2ujVawyEeqVByYayGN4eFO1NncyQxDnsdqNcD2DPDy3oZXs39QAvwmS9ahpsUBN1aIWSvZ7ZF7pJzvNPpdJNXtfG7Y5essJF1N/ud6M3UkKzn/8FASvfKZrsimNx8Fy30+H/cvNtL99/2VInv5rkbDI8mS3Q12RVFWKV8yK/vP/ZTnQAqrtmmpLlVvpuAjxt0SbuAB4Gp9YK1dlqLcpzh6XWdf6+X9JikgfQHNddT8Hj/Id3nf079nvkoqYJ/gfpXqQjOJ4CjwEngPe+CLJjKOmeL8KuBK4EJjeTXs0CGnXCJpMWSLvZewU5o/4c/Strred/G70o61ozUPwGfVFxscpx3WQAAAABJRU5ErkJggg==" alt="entrap" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Entrap</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Allied Assault gains Counter.</p>
+      <ul><li>Lasts until the end of opponent's turn.</li><li>Stackable with itself and similar effects.</li><li>Assaults with Entrap can target themselves.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="evade" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFKUlEQVR4nJ1Xf0S9Vxj/vN9rWWRxLcs3u5ZdssjuRNy5c4mIy7hEXEZERESUiBGXiPZPRIkmmqYpTURpSi0iRkTURokoTS1K6evM59zzvD293ep+vw/H+77nPOc5z8/PeV7PGINCyPO8KIA0gO8AxAF8GmA5AvAngHUAvwE4K0iwMebFASAFYImswVFZWWnKy8ufzLsxD6DmgxUA8NYJsQLLyspMS0uLmZ+fN6enpyZIh4eHZmpqyqTTaVNSUqIVmQDw8XspAKAOwD9cLi0tNQMDA+b6+toUSufn56a9vd0UFRWJEgzLFwUpgNzhdmNjY6MVJnRycmJGR0dNKpUytbW11lKGgO9NTU1mZmbGXFxc+Pz7+/umpqZGlKBBX72oAIBaObyrq8vc399bQXQ5LQqFQs/F2x/0WDabNVdXV3YvnzTEre+50D5VALmFfU51dnb6ViwuLppwOKwPmQHwg4TIDSZpJ4AFnaA7OztWBg2pr6/XvHkVmOdnQ0ODb/n4+Li2epZZ7XiZWNayaDQq671OZCOARc4xRKurq35eKN7RRwogV9/WUon5ysqKTqJRpWiCc1xjjBcWFoTnEECpsm1SZJKPtLW1pQ2KagWsxkNDQ762LDvHOB7IE8vb29vrh4lJqUpO0zTnY7GY71WWctALVZI8kjgdHR0+mAQOZ+xNRUWFzyvZrizT4MP63+T8yMiI5d3d3RW+XWHq4kRra6tvfXFxsTDFAgpYYSzFILFKFAJqykhSCtXV1QlvAxnm+DE7O2sXJyYmnrN+IOjOIPioauGhmjY4v76+bnn7+/uFr/8NgK/JEYvFLOfa2pps+l1ePM+LAGjn+/DwMEKhUEA+EA6Hkc1m5bMjsEwkxMYG9Xg4C8A3kIwWisfjol1cWW+TKZPJvAjB9Aw95PbTY0ItnGMCkogPjmfHKkDXCalajbrDG6Smj4+PzWtEN7v9FwDoOblRbbXIxSWl+4ar796981UtKiryX1WSoru7GxUVFT7f5eUlenp6MDfHFHqgRCKBTMamADFhUMtSsh+RYQnd3t5a7ZLJpGiXdHF/UnbT09OP+gAi4t7enr9OTykQI3C18b2trc2ub29vy9o2XD3a+iQRYFQMGSN7z0u9E6rVHbAgdwIP5F5RVMlZFJiX8qU8t/YLHCL5QKFiaEsnkUhY77B0FD7w0upwOVJCtBSl6C0eQEX4LvP0ssC8wox2HyjoRsnkSCTibxocHNSJKXBbrCrED7/ANAdD2dfX5++j50S+UqxGLLCHyaUxOTnpK6AOXmFF5GlggtQuYdX7GXcSWzo3t5rLQHW9Njc3+1oqPGD8vn+hd8xHIQmthnnKra6uFrndWgHW1zk/Nzc3/S5IuYpNxNv3UIBQ9xf3Evelwphnj6wnKUGDcmlIX8fKUPHnfZ99RYEybTm9KB00y1R1yw93hclz1zOBpAtm5qr7XhSZojKuvjl+ch2Tz8crXSwn8kliu0YFzynwuSQQu1luFGJrpfIi72DS8b9AMEW6IAVaxI2P9Ple0I2e530J4GeWVXl5OUZGRpBOs2PL0dHRkb0x+eQgVVVVIRKJIJlMoqyMUQDu7u4wNjZm4frm5oZTc+5S+u9ZD5gHT3yiXcpEWlpaMoUQQ0cgyoMdecl76efU87wulzD8X7DWpVIpxONxezHRQ6SDgwOcnZ1heXnZDmcx6Q8AYwB+/eCfU5NT8EfXVLyYA2qwbC3MvkZeIUyK2EoTcr912PGZm//b/Y5TyWUA/xYq8X8lXBuYSR+rawAAAABJRU5ErkJggg==" alt="evade" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Evade</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Avoids enemy skills each turn.</p>
+      <ul><li>X is how many times the card can nullify enemy skills each player's turn.</li><li>Only evades Activation skills.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Payback</span><span class="chip chip-counters">Revenge</span><span class="chip chip-counters">Strike</span><span class="chip chip-counters">Jam</span><span class="chip chip-counters">Enfeeble</span><span class="chip chip-counters">Weaken</span><span class="chip chip-counters">Sunder</span><span class="chip chip-counters">Inhibit</span></div></div><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-special" data-name="evolve" data-cat="special" data-avail="normal">
+    <div class="card-header" style="--accent:#cc88ff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAgCAYAAADud3N8AAAEJElEQVR4nJ1XYUS7Wxj//e0au0buiIjcuXPn7hr7GyN3f7FP4zK6xhgRY0T0IaUPGXGJPl1KKVGWy+USEVHKUi51+xSllChRSpSybJb3+p27M+/ec/a2/j/evWfneZ7ze85znvO853wCEAOwCXucAvgNgMtG59XpdO6Vy2X3O2N9/gZAlK1cLodEIqFoDA8PY2tryw/g6J3BUC6XkUqlMDQ0pMgWFxcxNTXFZpSkb2y9vb0hHA4rysFgkKQIBAJwuRpP9PX1FcfHxwiFQtpxZmZmaqr86QJgdHV1GTosLCwYlK+trRl22NzctNXz+/1CDsDPmf5L5v39fby8vMDtrl+SSCQi3nNzc7i6umo4093dXTgcjpq+GbQ7PWVagAOIBrFGL/L5vNZLr9crvbR9otGo1n58fFzq/Gl2JsvOWCymNRoZGRFGZ2dnWvnR0ZGQT05OKrJKpWIEAgFJ+quZ1AnghIKDgwPF8OLiwnA4HEZ/f7+QWx/2u91u4/HxUbFdWVmRhAXdsvxBYSKR0M4mlUrZhnZgYEA7y1AoJHXUfQTAA+CaCvTOCobW6XQqs00mk4bH4zEeHh4Um+npaUn4T8MMrHpjtLe3G8/Pz9qEYBgLhYIgXF9fF45wcCuur6+FM1XStB1pLZMZZobHGq7Ozs66sHKmVpRKJZHJ+F/nLzSB72WY+/r6lAGZLMFgUAzY1tZmFItFxbF0Oi0JDwF8hyYRNCeIdcZ3d3e1ChOPx8V/gg4wQlXbRwA/4oNgATVkiby5uakj5pr39vYKeWtrqyiXkUhEEjJSP32U0Ex8JJNrZ2dHCffy8rIgNa3zAYAfvpaQmJWDhcNhUSDGxsa0mcpqZiKm3VdhngOQSJa32dlZsUVIoNuX3FLUb3abWNFDQxKsrq7WDby3t2d0dHSISiMTqEFBMKy11g4BABUacWZWkIjrSzkzmKHVzdiUwR3NkK7TIJvNaje9tTjwP/utMO3VlfcIR6jo8/mUTU9kMpm6MsgazSXQFRGuuYxI9dOphUNuD+s6mo8tjIC14Deyyefztp+1WrHXnZVYCExeax9GxxrmSqUi+qs6vTrSQqPP2sTEhDBkGHUfcfY3Ou7Mz89LUuZKHXjgFl5Z66z5jHRycmLocHh4WEsqK4rFovkTx51RwzQ7c7mcYsR92cyhTD6Xl5fKGNlsVsp/JxmPoJCn/GQyqcR8e3tbvLu7uxGPx22PoEtLS9jY2EAmk6mTpdNpcYQF8EX2+egFq4wOPT09Hzps685KpVLJcLlccrbf1u4ysRiXVcXt7a14Dw4OYnR01PZaQdzf3ysyp9OJaDQqogDgF5J+Zot3EB14KSJ4T2kGvBPpwPtNlTT8iUsJ4G+fz4eWlhZF+fz8HE9PT2z+/N5VkcXF4/HA6/UqQkagei358h8QGuv9J7LGSwAAAABJRU5ErkJggg==" alt="evolve" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Evolve</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#cc88ff;color:#1a0a2a">Special</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Friendly Assault with S changes that skill to S2 until next turn.</p>
+      <ul><li>Lasts until the end of the opponent's next turn.</li><li>Targets only Assaults with S, but without S2.</li><li>Evolve can target inactive Assaults if S2 will trigger.</li><li>Enhance effect is carried over.</li><li>Only following Evolve combinations are available for player cards: Leech→Refresh, Weaken→Sunder, Siege→Mortar, Pierce→Rupture, Poison→Venom, Payback→Revenge, Swipe→Drain.</li></ul>
+      
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="flurry" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAErUlEQVR4nJ1XYUSsWRh+vp3diGFoRTZibO4wRAwxtH+GiIgYYhhiGaK/Ef2KiEu0Wl2TGErEEENkI2IydMWl3cgOESWiNfsnIs56zv3eue93+mam9uXcud/3vec8z3nP+z7vCcYYvHcASALYBWD8cfiGOSsATl1//A/wogB3dXWZeDwuJOIt/BcAfJE5yj/B79/hHeZ5XglAIRKJoFAooF6vIxqNyueo4zvleV7N3/lwOp1GtVpFJpMRl1H77zt2TnDT3d1tjo+PDa1arcpuTh3fvOx4eHjYHBwcWP9Go2Hn6wigDWAOwCcAv4eB03K5nCy2Ega+urpqtG1sbIj/QdscwFdwo4cLrhZrABhwwYvFonFtaGhI5uQ6EfhER4Ksr6/bxDk5OWkuVKlUTCQSCSwGYKYdeK1WE/9aAMuEE/iNzmtra2ZmZsacn583Fzo7O9PnWHwL+MvLixkfH5c5H99CoCRh397eDoBHo1F9NFUA8/K8tbVlwqxQKIj/NavlFQEAPwJI+QITSLj9/X1zdXVlLi4u7C4GBwcDudEJfGFhQXxeuH7IZrHXKeFWVlYsOMvo6ekpkAuxWMz+hhnzR6072iLaMD09PSaVSplkMmn6+voC4Le3tzYJGXqG8v7+PgB+eEhVfW27u7safLpNucPMzc3ZnTHhGG6xx8dHXTp2MBLlctmCHx0dhYJzA5Rpf85sCOiQX+oDlsD8/LwVlcvLy+YiJDQyMqKTLeknkX2no6SNkVFVsuUA/+qvpTUE9qG3t7dJ4Pn52eTzeb2Ln/zJ9nlsbMwmp2vUCgVeUsDsOfsyn1FVKoo0gLKQYLbzrFlyfPadmuClUsnWNQnq86dW8FhmZ2cDcqvBmV+cTxsdHf3qZ745WRJMNgnvwMBA4PxlskRpYmLC7rper1uyBGel+P7/AvhBg0uE+ev7XOrzSUiPZwQ4tOhocDGCMU/6+/ttSOWdIlBxwWnT09NNJYUPfhwmLu3ABUyqhLLtEDACritLCdMjgH6Cb/BFIpGwWsAdcfdUPJ7p3t5eKLhTJYFBMizhbDZrbm5uwjpoU5hoF3zB5NMiQnFiIoYZz181l3MAWV1e3MzU1FQAnD3F7aBC4IYvxZmO7cBZAaqEqAs/q8XKEvalpSXrS2PJuh1UE/iHHxgynjXBdft1TZVZw7+AbAJY1qXMhHt4eLA9hGrJklWJF5BlSKby3BgiXhxa2eLioj5DO08P0REx7pzvmJgqajmXQFYvMjk5ac/YNRJUYeRN15YfLyDLy8u2GnS2kwij6ZBsXt/c+0DWvwXd0pECo0kwKVkR+hbM33Q6bUPN8EqXpF1fX1tyooi+Jhy44K9uRAA+SFIyy0mCzYWCxKR0RMbumqWowUlIXVoqHa/75nWr/CBdL5PJ2J2LNDsEmmXHCDDj+Z3lRz3xv6XeTcB8I3HFRdj7tQmo6utUNJvpHAw/j9D3m+hE4HuEmDHmb8/z/mB/uLu7w+YmKy1gp77fn57n8U+szzs7O9FarYZ4PI5YLCZ+zf+0NNP6qhSoDmfkHd+PIT6vMj5seFKLYeZ5Hkn8AqBbva4aY3ZCfEmC0eD9ghHiVeyvThH4D9DeW8nrq8aJAAAAAElFTkSuQmCC" alt="flurry" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Flurry</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">After attacking, activate skills and attack again. Cools down between activations.</p>
+      <ul><li>Also triggers effects that occur when wielder starts and ends action.</li><li>Inability to attack does not prevent skill activation.</li><li>Each attack triggers damage-dependent and on-hit abilities.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Jam</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-special" data-name="flying" data-cat="special" data-avail="normal">
+    <div class="card-header" style="--accent:#cc88ff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADsklEQVR4nMVWf2RbURT+1lS2TC1WOtlCydZ/VguZzAghhDBCWY1SWiU0QsqUkOmUUvpvaHUSqdSq0xpjlM5opTqZEFIjf9VCKA2hViGlWnfO67vPzet7SdZf+7g8795zznfOPfecA5zhKwAmrBUA93FDsJJRq9XKAoEA6+zs5CQKAOw3QcBOBu12OyPs7e0xj8cjRsN3EyS2ydja2ppE4uTkhIVCIZHEwHUTiJIhCn+pVGIcU1NTIomh6zB8S/imxBtwuVxIp9MwGo3Sz7m5OYyNjfEz7wA81tH1DMCZUD0eAngE4AjADwAhAL+1FNwDkCdvx8fHmYh4PC5G4rKrCuCNVgQILwFk6SOVSmFkZAQcq6ur2NnZgc1mgxbsdrsSNREWiwVWqxVHR0cIBoNYWlriWwkAQS1dAWJqNBrZxsYGu2rEYjFmMBh4NNrbNAgs0Do+PkZ/fz8ODg5wVahUKjCbzejt7eW/njY6XyOWtVrtUh4Xi0U2MzOjri1Mfvq6oMxlFovlQkZzuRybnJyUipvKaAXAF/maG8JFAi6Xq2Wj6+vrLBwOSyVdZbQI4CMAPwADWsQgCQ8ODjY0StczNDQk9g++cgBiALzNDLXp/Jfemt6T4zCZTPB4PGKivgfwHMALAG8BbOKCWCBPksmkbmKpn9ZVN69NUqZXB3w+n3TfIlR9g3LoUiiSIrWnhHw+rxiamJio24tEIiIJh6yrHYBTXo3vVBCQqhW1ZTUo6cSEm56ertunyDTpBd8BPEED2OigzWY7Z5yGFSrRsqJXXOns7KwuSXLE6XRKi3QKRYianybo6TCv13uOgBBiat2QBxXpXyqVYs1Az1YoTp+1zcvNiOZDEdVqlZnNZq0kC3BPV1ZWmpKggaerq4vredDWag1IJBI4PDykz28AfqqebOL09BTDw8Mol8t6jmFrawuLi4tSQ5JxT+vcJ2K3vLyssKZk7O7u5qxfa8i4aa+np+ecx/Pz88zv97OOjg6tZNREhg5kMhlFCYVWFkpri2CG9qPRaJ3xbDbL0um0mLiUfNPNilWZDu/v7yuKHA4HVxDWkaFZj21vbysy9E2GKQLUU2R56jENcZcOmkwmRRF5IAtTZBrWDXF26OvrU4f8D4DuZgRu83GM2iuB7k9WQKHTA92nNHgQCoWCOHZ9kD1vapwjyT0S3n0JgJK6GvDzyO3u7rLR0VEuF8cFEVeFr5XmkqKzbrdbTDpl+LsIXAAi/9DZ7gD4JZCmSP4XUE2gXGoJfwFqBUaF6FncfQAAAABJRU5ErkJggg==" alt="flying" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Flying</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#cc88ff;color:#1a0a2a">Special</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Attacks are dodged 50% of the time, but never when you want it to.</p>
+      <ul><li>This is a joke skill, only available on April Fool's cards.</li><li>It is a reference to the Flying skill in the previous game, War Metal: Tyrant.</li><li>Gilian Shardkeeper has this skill and can be fused from [Vindicator Reactor, 2x Gil's Shard].</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Anti-Air</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="fortify" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAaCAYAAABLlle3AAAB6klEQVR4nL2Wv2tUQRDHP/ciB5fiBBt/QZoQi8NCMGhzjaJ/Qhobm+SOKwwIFjbiT9DCQizEIxbpg136iBzYpAmEC4gErouVIYWHnPEr83wPHsu+PQN794Vh38zsznffsrMzSCIg7/UPP7OxE5hrPsOBpDOhuAnlWARWsu9awT6b6XVgHrjorDsLvA7EpWw3FUlfFMafMb5bZX9aRnrXF6nT6cj2aVKr1VKpVCqpbj4H3yTN/u/x2rG9Ch4PMBwOU0l37sc88NTn8JE+Ac4RB/eBq+NILwP3iIcZ4ANwKkT61p0QAVeAB2WkS8ANJoPHwEKuWGrkubcHzJnSbre9K3u9Hv1+3+trNBo0m02vr9vt2vAJuJne/uwavyje9TwtYkkBK3meLkj6NSXSH5IumGWzaJ0wqeFj6O2dFJJpH+9hfrwmL6dE2rLw+UPwHLiTp0yr1YqaMhk+A2vpV+H1X9IYFKuMK54qU8RQ0iVfldkAtpgMngFfc8W9vavA78iEO24n4ZLuAu8iEh4Dy8AoRGp4BBxEIn0DbLtGXxk7Ah4C674oSZJQr9epVqvpOBqNGAwGvqn7WXWJ2piFmjOz3z5pY2ayKOnYCbYq6Zqk6/aySDov6bTT9xrWQ31viNRkLQtykmb7+7hm+y8MGNzic+wwIwAAAABJRU5ErkJggg==" alt="fortify" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Fortify</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Permanently increases the maximum health of adjacent Assaults.</p>
+      <ul><li>Stacks with itself and other maximum HP increases.</li><li>Only available on Assaults.</li><li>Can only be mimiced by Assaults.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span><span class="chip chip-countered">Subdue</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="heal" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAaUlEQVR4nO2WMQ6AUAhDW8L9r4yLrgrG5H+hnSE8OjQl8grUxMyQYbG8uhBxbwSZenwfB0wAEMB0AH+RcFnFLxzgRfqUcJ8fPhPTsFgmAAhgOgCrSdiuEXm2vbZtxSYACGA6AAuzPXPgACMCEEAmWmP7AAAAAElFTkSuQmCC" alt="heal" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Heal</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Restores health to an injured allied Assault.</p>
+      <ul><li>Targets only Assault units that are below their maximum health.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="hunt" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAaCAYAAACgoey0AAABbklEQVR4nL3WPUsdQRTG8d8OCpJOu4CkEySNCIKVryDY5AP4CSSFFrY2amGdJhYWsdDPYOkbgXSSys7Gyi5VQJCrsrCCWWbvzvXOzQPTHGbmmf+cM2e36Dx1ZNIl5muxKyzEJodcrtiJxMqDLA7a+LwirGt30MY9UYfMxsnUoYdNV7GZizokbPQBBzjFx1zUoWWTWfzGVxTS1UodGhYOYw8/MfEmPoLRhtETdRFpIJM4xozeVL+RJZxF5i3hItQWbuD6HaYxdaUuKuJx/MBKH0axGmikLjpPnTV8j+Qph3FjDw8YGkAjaVVRXfUnHGG5n70iscUq13Utv5LeVfndwoN8in0grsrDxJ7TZ5xguk/iRlqcx3J7U3WsfdRP9Q1jDSOZVpeiesQ25nD7Jl6m4U/DqNPWK/mfVtpWzb8whUM8S1dXWonP6C/W8QX3CfNbaUvFiuu//PSFzKZJtIMwbs2tSjmNk2lzGyfTlrNfAMtqXYU9Gk6dAAAAAElFTkSuQmCC" alt="hunt" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Hunt</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">After attacking, deal damage to the leftmost enemy Assault.</p>
+      <ul><li>Acts as a separate instance of damage.</li><li>Hunt is non-targeting skill damage and is not affected by Armor, Evade, or Revenge.</li><li>Activates only when attacking an Assault.</li><li>Activates after Swipe/Drain.</li></ul>
+      
+    </div>
+  </div>
+  <div class="card cat-support" data-name="inhibit" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACTUlEQVR4nMWXzYrCMBSFb9tBLAhFcVfoxqcQBFeCIOrGlSvBlYPgS8xqYEBmBmfrAyoIgkWpZjihlRiTpj8DcyHlmt6c82F+SIkxRkUaEX3NZjOGhrywDithHkURb2UgqIx5EmUgqKx5WQjKYf6tM1dAfP8pABG1Wq0Wu16vzBSoQS3GZNG2KVvsdrsd2ba5HDWoxZgswjb9c9hFB4ZheM8vl8vfAliW5ZkGjsdjDgHz6XRqNNJqsucF9+Z5HpI3oc9DnxgYOhgMeJPfxeO9NE3lLiCi9WQyYfv9nrXbbXS86wBc12WNRgMvB2kA0IAWNKENDyUAxebn85mLHI/HO4QKIDZvqN4lAIk5tBDQliFIZZ6ECKGaAt2/EwM8mCchQ2jNRYhOp8PyAqjMVRCUZi5CDIfDzAC9Xk9rLkPYvu9TpVKhtMB713Upa+A0dBzHqBkEAc83q9UqlVS11UxT0O122el00urCE94cBslyuVSaj0YjPlcFFuEHpkIFAa/YvJLsAkeGEM11B5EBANvwo9/vP6wxwdyRzwEOsVgsHszTTkIiahNR13AQrTGF0IS2aK68D2BAEASPh4UGAFsNc53hKF77vv90CmovJEQUSL+fAGB+OBz4HMtbVAaINfwyNyJPBhD3eRiGRoCyN6KnqNVq97xarVLRsOmfw85Y12w2m3S73YyFURRRvV5Hyh/GYDmv5aaYz+co/sysy/J9mGzSIGLzTS5NlqM4DSL+IMllXghABVHUHO0l4yKU182rZVlIF3hst9sf9BXR+gXzaAXo/RgKqQAAAABJRU5ErkJggg==" alt="inhibit" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Inhibit</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">At turn start, inflicts Inhibit on opposing Assault, causing it to avoid allied skills.</p>
+      <ul><li>X is the number of friendly skills avoided.</li><li>Lasts until the end of the opponent's next turn.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Tribute</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="jam" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAE4UlEQVR4nJ1XAUR0WRT+pnbHjh07Njtkx2bzZ7PZYRhibGuIJYahxCYiIiJKREREDDG0WvGvn1a0Zv3EpBVDKa0SS5SobZWI+ktpRW0pZ31v353ue/PeTLuHN/Peu+fec+453/3OeRARFLsAlAMYALACQF5wHQOYBRAvtTYvj2nEUTwezwiA7wDU8TkQCCAejyMUCiESiVh0NzY2sLq6iqOjI/31rwD6ReRPVyPivOvPASyqXcXjcZmbm5PHx0cpJcfHxzI8PCyBQEBF5JYRdI2wFBr/CsA5J1dXV0sul5P/I9fX19LZ2amnZrakAwC+BHDPCa2trXJzc1PUyP39fUlHGDktGtOuDgD41ASQdHV1OS62ubkpg4ODUltbawEeI9XY2CgTExPGzu2ytrYmPp9P6b9xcyBLhUQiUZDrvb09w4AD4h/s7yoqKuT09LTACabS6/UqvYTFAQBDHKisrJTLy8uCiZr3ewDSAGK21PGUPFJnfHzcNR2pVEqts2R34HcOLCwsWCZks1nd62kAXgfQfmY6Jt3d3Zb5t7e3FpzwvqamRq03piigly/q6+stkw8PD8Xv9zvmTTP+AYAcdZgiOyibm5ult7fX8m5lZUWtua4cMBbIZDIWRS3nM0VY8i11uCs7+IaGhvK4WF+nrWeJRCJ5LIA3zDHDpaNdy/mHLsbfUCcYDMrBwYHFwMzMjAWYBLYLFiYNB5qamiwKPT09SiHtYryL48TH0tJSQYg13HQDuOK9Du6trS01vmU4QOrURTvnYQfjDWpn09PklWdhJBgRHTfqeM/Okgj/FWKlvLxc6UGmpqbyg+QAbfA9m/FXAE44xhzrQgxojr/V5rCgycjIiEW/qqrK0C2jRjAYzBeni4sLPD098fYd/dEq48cAfgYQSiaTSKVS+TkPDw9oaWnB/v4+H5cBdGj1jinA1ZXxlxdWVkqZWsA+AOAjW+H8CUB9NBpFJpOxDPT392N5mXZBDzpF5G9t2Gv8eI2/vJibNEQmJyct4dHOf8AMI0lIQqGQnJycWHTT6bSOeCfMfM8x1gldSNl5DNjJgsfGHGwH8FodVaLXzpQaXppdTsxvHGdBUnJ+fq7mXBgOhMN0/FkISlPBaEpohMZ02d7e1iP12sV4k6oxeoHjWua8eSod8oHUq4R9gBYigzh0YbVjOl7AlMYGxsZI+8/Ccm/OHaTSjBMXMGdOvQEZk3XDXCBbxLiROh43vbHhcdUiV0vFuKrj9lI8OjpaUGDYKZmTWUE/cTE+rVJHZrSvac5f0MuxwVZ9fX1STLQCw57xlYPhhCpuBK0dN2xstN7iW92BqMq3vSdQQirVjtscgB9Mru8D8CPLq96i2XfOSEaj0Xxv4dSSDSnP7ZNVhezo6NALTcFFYBKwemVVxtvb25XeJoD3HT9MPB4Pc9fp9/uRy+UQi8VgF1I1P0DOzs6ws7MDn8+Huro6hMNhR/27uzu0tbVhft44cX+RTUXkj7yCFObROBXcKY/PSz5G3GR3d1caGhrUzlnEvij5YSJas8ErFovJ4uLifzLMYzcwMKCz5LYTaF0d0FiMDYMotmREdEq1kxOBmkwm7TghH5S52pHSX8fDANac+n+imoh3ASVZkPkuun7Rr2NdPB4PI0LS+gbA1w4q70xHWZd/ERFrA+Ai/wCSr7My+Wz9kAAAAABJRU5ErkJggg==" alt="jam" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Jam</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Inflict Jam on a random enemy Assault, preventing them from acting next turn. Cools down between activations.</p>
+      <ul><li>Only targets Assaults that will be able to act next turn.</li><li>Prevents attacks as well as activation skills.</li><li>Lasts until the end of the opponent's next turn.</li><li>Cooldown triggers only upon successful activation.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-passive" data-name="leech" data-cat="passive" data-avail="normal">
+    <div class="card-header" style="--accent:#ffb84d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADd0lEQVR4nMVXX2RbURj/takQu1NisU4ol1gId1Ih5OmSp1DyUOMS8jAhZC8llDzEHvq4hz1mWqV7SV5SmVHKWKVWIbFaqdWq1VKq1RBq0yqJO99xTt0kN3/aJtmP79577j3n+77znd/5vnOBZiwB0Pl90Oipe4k6WCwW6kQidVH2FIAPgAogyp9dXfo7W3R/ae2giA6hUEh0CgGIA/gA4BOAHwB+8W/dpMr7rgH4yHVo9E3TNN3pdIp+STI8wR14R5d4PI6bmxvh1Ean6UiSBLfbze7T09PY39/H1dUVjo6O6PMzLhSVJtAYTdMwNzdHzdc0uTEAfgBlUnZ4eMiUpdNpTE5OMuU0yG63Q1EU2Gw2eDyeLpEGqtUqTk9PcXJywp53d3dxcXGBs7MzZLNZpm9mZoa9B/CWLu8pJMlkUh8VstmsWIYCOVCiRqlUGpkDl5eXd3wZB7BNXuRyOYwKOzs7d49jALwAflJLVVXMzs7C6/WyNZ+amhqIQeLA3t4eW/fNzU1sbW0JsqfJAXAnsgCaGOZwOBjp/H4/AoEAk15OEdkqlcqdkGEiowloa78xvrAACNPaBINB3e12m+7zhYWFjmubyWRMx9jtdj2VSol2ypjkJgwONMQHmmU+n8fBwQGbQaPRENuGbc9OcDqdCAaDcLlcLHLUlmWZLefaGuUlhlcA/nbSESEvI5HIMLdeE9vH8Z8x0dKusEulgsXFRRY+CqVIu/cBsZyyKgml6O1tttsJ33uN/WpGJIfDoft8Pj2fz3cMc7FY1FVVNRacVvkNwNrPBDRRvQKBQJOSRCLR9y6QJEmPx+PG6teXcUKil7F+USgUhAOfYYJxDBkG7tyLRAp57fF4WOF4KG5vb/VwOCwiwM4crRjr4kSRygMlJUooApSWM5mM6YDl5WUmArVajZ0LKEPzBFS7TxSe83rdRCybzaZfX1+bzthwnDPKNwAv8Qi84Mcrcoaqir6+vt5mvF6vM9Zzo0U+RsaAsGGcVSwWa3OgXC4/eM/3As1Cl2W5L0JSJKiacieCGGQEVFVlzO6G+fn5gUdAEJL9E1Bm64TV1VXjErQdyx8LD4A6KaeUa8YBq9UqjMcwJETIABmiwiNwfn5uLEArGDJWRHU8Pj5mnDAUrLZ/vmEhTwYVRdGj0agwTidr+iUbCZ7wg4Uw/ueh2e4faJ8wk2lnTj0AAAAASUVORK5CYII=" alt="leech" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Leech</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ffb84d;color:#2a1a00">Passive</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">After dealing attack damage to an Assault, permanently gain health.</p>
+      <ul><li>Always gains X max health, as long as any amount of damage was dealt.</li><li>Increasing max health also increases current health.</li><li>Leech activates after Counter damage is dealt.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Disease</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="legion" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD7klEQVR4nL3WSUhbQRgH8H8VPIjWBcWiB5do3IOi4prairggnoo7pbV4ENzRqwqupZcKvQil9SDUU72VQqDgzbqBYIuoKEbUqCh1wa0KX/le38iLeYlJbPrB4+mbmW9+mTdvZoC/EQzgE4BjAATgN4DP8nOXRziALe7Yzc2NoqOjydPTkxF8GQFEuBrwjTvT6/W0tbVFHLu7u5Seni4QGwA0rgRQYGAgHR4ekjL4/4yMjP+CoKqqKlKLo6MjyszMVCIiAdQA+ALABOAcwASAinsB9Hq9KkAgsrKyBOJUvqtdw84CTJxgcHDQKuL4+PgGER4eTqOjo2Qymejs7IxGRkbIx8dHIN47A3gG4JITDAwMWEWcnJxQdnY2JSUl0f7+vlnZ1NSUEvHBGcQrgejv77eJyMnJIZ1OR3t7e2Zl09PTtxEPHEW8FIi+vj6bCJ4ziYmJqghfX1+B+AjAzVHECwAXnKCnp8cmIjc3l+Lj42lnZ8esbGZmhvz8/O6FeC5m9l2I1NRUiouLkyakMmZnZ5WIEUcRvdyQE/v7+1N3d7dVxPDwsNRJTEwMbW9vWyC4vQLhbi/AyI34fc7Pz0urZFdXlyqAR0iMFu8hYikXMTc3p0S8s6dzDVeOiIi4SbKwsEBBQUHU2dlplnxzc1N6Lidf5ntUVJT0/DbC29tb1Mu5C5DBFXkPUMbi4iIFBwdTXV0dTUxMSEPPIyMnlb4ccUVGRtLGxoZZ+97eXlH+9i6AF4BrLy8vafVTxtLSEoWEhKguw1qtloaGhmhsbIzS0tJIo9GQ0Wi8aWswGERdgz2v4StXrqiooOvrazPE6uoqhYaGimRLfOdPUYnl5TkvL09astfX16VnvHTLbUbtnQf73KCmpsYCsba2JiUXv358fNxicjIiPz+fwsLCpPoMkuvzOmNX6AAccKPq6moLBL9jnnBczpNMLRhRUFBAAQEBovNtAAH2AswQfF64jeDZzp9ebW0tWYvz83MqLCwUgF0AsXAwdOJ1VFZWWiB4BeQ50NHRYRNRVFSkRMQ5ikgUCLWJyedH3h3b29utIi4uLqi4uPjfIMrLyy0QfD5ITk6mtrY2q4jLy0sqKSn5N4iysjK6uroy6+Dg4EDaE1pbW20iSktLBWIPgNZpBA8p7xWnp6c0OTlJTU1N5O7uLiVvaWmxFzEFJyJBHkK1VfEKwC/+u7m52SqC0Yrt2qkIAfAGwA/5pPwdwGsAMQCeCkRjY6NVRGxs7L0Ad8UTgWhoaLDofGVlRbyuE7gwHgtEfX39zZezvLxMCQkJDp0RcI/QCwTvCykpKeTh4SE6XwHwyNUAjmQAPxUT9Uz+5Q+59A9TyIxgQXGHFwAAAABJRU5ErkJggg==" alt="legion" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Legion</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Deals additional attack damage for each other allied Assault of the same Faction.</p>
+      <ul><li>Counts even assaults that are inactive and/or non-adjacent.</li><li>Progenitors do not count as being the same faction as non-Progenitors.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="mark" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAACnklEQVR4nK2W32vNcRjHX8fYqCWUknFhRWEzrEyUUhTRLtTKuBBX3Cq1LRIhf8DSLtwhauZCw5Rc2VakLD8zUbT8arjwY7+ez9Fzer7r8fFxbPE+PZ3v93ye378+JydBABqArcA+/g/2A1+AS1OBncB5oAR4Dpz+R+X1QKs9ixqYAQQzcAp4A1wwhlIT2AGsApR/FBgBngBXgKv2rqgDLpouxaacpWgL0A6UG7OmayZw0ozngNvAgAlWABvteQpwGHgI9ABzgTxwpCCvBoxqJchbCZKXIEMSpF+CXJcg1Y4nJj3rlCDPJMgnJ7sr44kFKiXIoDF2F1EcU6/J/JAgG/yZ5tRjJfABeARsnkRhNaW9lkpN0TiyGmQFVcX9wLaEkgXAaivgHeBjgucmsAioGi+8C0fz1idBqqLwSyTIGQkilgalYQlyTIIUHHRUYzp2p2pwWYLcTeS31SmOqTnBf0+CdGTv2mIZqi10j/nAgSK5b7E58uixFBXgDejz64h5TcQTo9wrMwy4QftFOG+F9gj8HTrZMZIGxqxTPLqBoSLK31vneVR4x7yBp8DaiHnQ9lMKGvEhc8xjHdCXMqCLqyyR0xPAQVu/3vM9wLmIt8bS3FFs0HRlb094XAYsBb4DLxOeZ4NWCSzPBs1HMGJttwR4DMyOhIeBB+ZArHyxrW+tYbNb37+14DtgIbDMvJkouiy6ecB9f+ANNAK3gOnAZ2AWcC1REw8963QRzrFBq41r0GLFzNkS005YARy3lhu1ltXbDotyPTDNZI5aE9ywWn61e75L90Wb2y3fJEid2yultrh0t+il8kKCvLJv/U3PlCfj13f9qK4RCbJXf2yQIGNG9ZO4ZP5ETWZA9TVmKdJ/FprztgmXtTjOWpO0/wTUNla1O8ec1wAAAABJRU5ErkJggg==" alt="mark" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Mark</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">After attacking an Assault, permanently inflicts Mark, causing it to take extra damage from each attack.</p>
+      <ul><li>Permanent and stacks.</li><li>Mark is inflicted even if the attack deals 0 damage.</li><li>Extra damage is added to all attacks against Marked card, even from cards without Mark.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="mend" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABk0lEQVR4nMVXO47CMBAdR664h2noUiORrVPTpOAcNJFWSgpOQpNDwF6AEgn7Kkizmmhhye7YSQZMnuQmjmfmPc8nAQgAEVfIIPA+hxVIgYiHzWZDDu+rL4DHd+ks2ZA6X1lrUWstDoDOOudkKiDDfmwAYhXQw16yRCqghz2tPM89uYbtHndmlArYw14SQEiFhInhs65ruF6v8CqQraqqWttPsQehAiEVktjsB6uAAzNfqoBPheQd7EMq6Bt751y23+/bh+v12mskTVPv3nK5hNls5t1vmgbIR1mWGflUSn2xdR8LbF9A5u5jB9DJBfRMvJgBPKqQwNRAxOxyubz9Csgn+Z48CdVNBWvtYbFYtLXaV4bb7Zbd2+12cDqdgmWotYbz+QzGmA+l1HHQCH5VJwyOZmRyIUYrppK/3z08tGKSYz6fH4uigFgg28aYY0f6sSo8M47/sid0+kBMFXrZD1VB+knGsSf864QxVBjMfmxFDFkh9kFM+mMSUmFMAGL28Gtwup/TH4P06cQNFW8ADILsvwER2V+M9rqnJgAAAABJRU5ErkJggg==" alt="mend" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Mend</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Heals adjacent Assaults.</p>
+      <ul><li>Heals each adjacent assault.</li><li>Only available on Assaults.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-special" data-name="mimic" data-cat="special" data-avail="normal">
+    <div class="card-header" style="--accent:#cc88ff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAB5UlEQVR4nO2XPWsiURSGX0YRBMFgNU1sFgJZUlgFtLQVbG1dNtjEVrD1B/gDhARJQPAHCP6AaYWAla2yhU3AIAiK4V3OZK4MOpO5jiMWuw9c5uOee547H5yZC3xxB8ACQJ9mOTEHkPRqdyQtevNBckDyWuX4TqzaG4AfGvJbku8MZiDjryRHOp32jcrn82oCk/0J7Il/klzImH6/73kRLs+Hlny1WrFYLKoEfwDceMjvSW4lvtfrMRaLRSNXEyiXyyrJO4Bbl7xoB5HsdDq+4tByYb1es1KpqEQrADmSZbuTZLvdDnpvwsuF7XbLarW6S6ZotVqB4pPlinq9vpM3Gg0tcWRyodlsslaraYsjlQvHiPflBjSYz+c4FtM0A2MMnUSFQgGz2UxbnMvlMBjYBSyQq6DbLv3ZbJaTycSzz92kGi4WC06n02ieOZyBpmlyPB77yqUKLpdL+3zkcgDMZDIcjUYHfaVSya6CinPI+7JNpVK0rK8vphxL1ZPq59A9l1x4lf1kMsnhcGhXO6l6Dk8ks+eUC105TiQS7rCO85HRlscRjl8APjebzW8AL87PyPOxSeIIzwOARwDrsAkMnEZocRTykzD+yy+BcREr/nW5Qme5JDEH+KzV/NZpbnZ/GxdZKP4FaLQI/hgh1eUAAAAASUVORK5CYII=" alt="mimic" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Mimic</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#cc88ff;color:#1a0a2a">Special</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Use a random enemy Assault's activation skill at Mimic's power. Ignores Faction restrictions and cooldown.</p>
+      <ul><li>Enhance, Evolve, Rush, Mend (for non-Assault Activator) and Mimic will not be Mimiced.</li><li>Overloaded status and N can be Mimiced.</li><li>Can target skills with "On Attacked" triggers, using them without that trigger.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="mortar" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAfCAYAAACGVs+MAAACLklEQVR4nLVXPW4iMRQ2dIg/iQo4QqRcIEVCsweAhiPw026zDX0ukCK5wI5WAiRuAByDNmwYISQEtDvf6rPMiJDM+NmTPOlJlp9538/gsScHQHlGRSn1y4wflVIHry4AfPIBwN/VagUmx2bOuZdy/EEOwAsRJ5MJrdPJsYkXs+ZbCDxQ6fF4RLvdjsHPyTnWXN1QrqpLpdIH8HOy5uqGEqh+S1KdlBduvNncUFlVZ3VDZVE9Go10ZnFD+ahuNBpYLBZndVgul3rOxw1lBncAQonqfr+PpGBN6EZoMBXBfwKIxuMxisViqmoqtYWDGxGxSSDY7/eoVqteqn3cIBYxiZ1KQKra1Q0RgcFggK8K9rISqFQquthsNsWqwzDUKQn2ZG9iEOsdge12i3w+j263K1bFbVgoFHRebklbEINYxIwJbDYbzOdzUYMoij79g3GONUkQi5gxASl7Kk3bYtcvKEEEIgJU1uv1xOcA1wrdCKwEbKozuhEkEpCo5vYaDodZ3Ag+JUDm9Xo99XU6nU659B+T47TDi70S3AhI4LeL6k6ng9PpxOWvAG5NvnKONUc3gpgAt4ZQNeP56oKRM3OQuHGx5QP9CA6HA2q1mkS17cKpL642N4hFTOthVC6X01SnXediN9jD6zDqvFd97/HRcZ/kRiqBsp9qJzc+ENjtdrrQarWyqra6QQxiEfNM4Gm9XmM2m32VaqsbxCImsVm4AfDHqP7xDcDXSQxiEfPmPzYbNUGVm8AlAAAAAElFTkSuQmCC" alt="besiege" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Mortar</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Deals damage to an enemy Structure or half damage to an enemy Assault if no Structures.</p>
+      <ul><li>Half Damage is rounded up.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="overload" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEEElEQVR4nK1XTUhrRxg9STQ2hSf+RGkFa0mbrhrtqy5cuVAwoV0JimYvZKFuBTfiQlCTjTslTwQXQhFcWhSxSxMFkcRuxL9anqavqSCaKKaRKecyCfcmuT99vAMT7p073zkz833zzRcbrOMNgJ8A9AH4HsDXAL6Q3/4C8AeA3wHsAfgVwCM+Eb4B8A5AFoCw2LLShrYfDReAMIAcSaurq4Xf7xfLy8tif39f3NzciHA4rBF2OBxKs9vthb6c5CDX/8K3AJIkIVkoFBJnZ2dCjWw2K5qbm3V3wWazqd+TktMSfgDwgYZer1ccHR2JSohEIoZucLlcYn19XeGQfR8ktyG+BPCeBsPDw+Lh4aGieCaTMVw92+rqqjL28fFR4ZL976VGRXwGIM6BfX19Ip/PCz2U+r60jY6OasaTi5zye1xqlSHMAW1tbSKVSumKc/VNTU264p2dneL5+bnMjpzkluOopYEXwL+MYD2fF7CwsKAr3tDQIK6urnRtyU0NaknNInhmxdjYmKE4/am3ep6Wra0tYQZqSBtqFjNcluf8/Pzc0Hh+fl539dPT08IKqEEtmaze2AAMA/jF7/dje3sbeshkMvB4PEin02XfGhsbMTs7C7vdXuyrr6/H0NBQRa5AIICdnR0+BvkT5QqWlpYMZz43N2c1DQun0yn29vZ0uaglx0Y5gRhfYrGYoe/dbrflCaysrBguJh6Pq48k/uFLOp3+JKufnJwUZqCWHJ9mDOQBOPL5PBwOR0WfzczMIJVKafpisRhOTk40fQMDA9jc3ITNRlp95HI51NTUKI+QEzDMfKU4PT0VtbW1mpV3dXUpScoKXl5eCnYvllygxtPTk+jo6NCIt7a2KtezVahdUAXgnCfp4uICbrcbZpiYmEAikdD0hUIhXF9fF93k8/ngdDp1OaglcVk8hiw0zLC2tmYahIODg6bupJb6GAb5EggETLetp6dHtLe3i5aWFqUx96vF+/v7Ff+agVrSJsgJ1AJ4YvIwS8WlmJqaKop3d3dbCkJqUIuaUlvBipXLqDQ51dXVKeI+n0/c3d1ZslNdRtTUXsdVVVUikUhYIlpcXFSIPB6PuL29tWRDbmpUuo6JSKEO5OqMwCCjMOPg8vLSkjg5VfUhtcrweaESHhkZEa+vr7pkGxsbSgAmk0lL4uQip6pCplZFfFeoiIPBoO5O9Pb2Gl5epSsnl6oypoYh3gL4u+CO4+NjDeHh4aHY3d21JE5b1baT80dYhLfgDtZw4+PjRV/f39+bCnMsbWT9V9j2sqAzg0sGCyNWObtMINFoVBwcHGgqZz6zj984Rp7zQrRHPuavGVSgz1Zl4rBaF3AsbUz9bXxxa8Gs9TOAXgDtAL4q+Xv+p9zq3wBsAXiwwvoftDaRFVHTIsEAAAAASUVORK5CYII=" alt="overload" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Overload</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Give Overload to an ally Assault, causing its skills to become unavoidable and irreducible.</p>
+      <ul><li>Lasts until end of player's turn.</li><li>Unavoidable means skills cannot be avoided by Evade or Inhibit.</li><li>Irreducible means damage from skills cannot be reduced by Protect, Barrier, or Stasis.</li><li>Application of Overload can be blocked by Inhibit if the caster is not Overloaded.</li><li>Only targets Assaults with valid skills - Enfeeble, Jam, Siege, Mortar, Strike or Weaken.</li><li>If any allied units are Inhibited, then Heal, Protect, Enrage, and Rally are also considered valid skills.</li><li>Only targets active Assaults that have not acted yet this turn and do not already have Overload.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Evade</span><span class="chip chip-counters">Inhibit</span><span class="chip chip-counters">Protect</span><span class="chip chip-counters">Barrier</span><span class="chip chip-counters">Stasis</span></div></div><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Inhibit</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="payback" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAEDElEQVR4nK1WQWRjQRj+s1mtshqNxpZSoiUaQgnZS/ZSllBKCSW2VUoIpSun0FPp6h5DK5RSSiKnUlrV0lP2UlIquYR2t1o5ZEsrtNtDtWZ9k5nXyct7Ly+7+zGSefP/3/e/NzPfDBFRiIiY0o6IKEo2wBiz1QTfkU4nhIEkOslkkg0ODqqDB0T06V/ERf6B5AQ/dEQ/+UYlOz8/p3Q6TW63G92IqDZLfwGHw5EV+RHwgRf8evDP7na72ePjIwPu7+/Z8vIyc7lcssp8J28u4nk+eMAHgB866mcnOR/b29tMRbFYVINbCrASRh7yVYBfrisRyxHHw3A43BTcroBOhAHwC564Kg6UMFAqlWwX0IkweEV+ScnRkMFgKBTS5t6igEMiChLRZ/F7aCUMPvCK3IyROFBEwOTkJHt+fm5XQEsbGxtjtVqtKQc84BMxRd3XasIwEVURGIvFWsRlAQMDA5wsGAxqLRAI8GdTU1NN8eARwuAdthIHRomojoRUKmVYwNXVFRsaGmLxONZNAzc3N1ykv79fe4Z8IQy+UYMFaoiw/JRra2umBXi9Xq2A29tbHt/X18f7yFOmBNvIaHeYYlomZ7NZwwKq1apWgFxQmF/EK8LTFmZkiYSdAuQixNyvr6+rwok23m+vAKfTyXZ3d1vEt7a2+JvLAhwOhy1hZlO8ALJMJsN6enrY8fGxJpzP59nCwoLZNiz8D3HWMDPGVldX+WEBoZ2dHRaNRpv8QF+AXfFu4VRR4fPzROSTlinF5faBAHzahhPmBc+84I0KnW4pvmnmWGqTWFpa0i4GWGxGaOeE1GibDvzp6uqiQCBAXq+XXyReXl4ol8vxPsbOzs4M58Pn81GhUCCPx9Mydnp6SrOzs3R5eUmxWIycTifd3d3xfrlcpqenp8ac+v1+rWrM4dzcHPdpuFa5XFaPQv5/f3+f9fb28j72d71eN/wCyAcP+NS14ff7Jd/rOS6FsV/hWEbAPI+Pj8vk3/hF32j+AfCATy0g/PoyxCYmJvjAzMyMpbDuhKoQ0Qfxa3oSqgWAHzHQ08QjkQgfGBkZMf2EAGL0J5R6EmLcDOAFP2KgJ8V/yvmEi8GxjLC4uMhNRroXr/p1v3IXxDjijABe8CurHbr0TlyTN8wKWFlZ4VtLOTByOnH0+TjiEG8hvCH0oNuElgJgqx6Ph9/B1HuYTly7/6EhHnlGwu3sVSsgkUhwOz05OeFEdsQBxCMP+WbCzMLbeQH6g6RSqagrXSXhKx7jEshT1kiLMGOM3pqIf4UXw7lcLhd3K6BWq8nxH7p49H0XFxf08PDAHyAP+dfX15KvI+xZ+HJK9+bom8XumZ1q8HYrpMV9TuKXON+/GcSigI9E9F559p2Ivpix/wHXRA9WydDN+QAAAABJRU5ErkJggg==" alt="payback" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Payback</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Enemy Assault skills that target this also target the user of that skill.</p>
+      <ul><li>X is the amount of activations per turn.</li><li>Only Assault Activation skills are affected.</li><li>Only available on Assaults.</li><li>Paybacked skill cannot be Evaded or Paybacked.</li><li>Triggers before wielder's death.</li><li>Evade triggers first, therefore subsequent Payback will not activate.</li><li>Can affect Mimiced skills, but not Mimic's skill selection.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="pierce" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD2UlEQVR4nL1Xf0TkaRj/tKUVufbajRiGXBzrIiKGiBiGiCGGiIgYIpaIiCGG2L8iYlmWOZOjExGN6Mw5Yog4onOJiCglIspzPq/v8/V8v3t9d75jdx+emfG+z4/P+7zPj3cgIojLAKYASDqdlmQyyQVyqhFbL9AYZfmRy+Uce+T/iEUS//QdVGttbZWrqyup1WoagVpD0ZR4zjsB5OlwdHRUlHp7exXEGIC2rw4AwACALc+J41Kp5ANYXFz01wGcAPgIIPlVAAD4oMbb2tpkbGxM1tfX5f7+3gfAq1hZWXFJaYDcAJhvGACANwC29b7n5uacoy/RycmJTExMWCCfGgWwSwMsMyZaXNra2pL29nYFUYoFAECJikyui4uLgOHDw0MXbkuMTKFQkLOzs89kOzo6FMR6XQAATFCBikdHR74x3vn09LRoVCzRsebI0tJSYG97e1uam5sVxNt6AOxTeG1tzTdyc3Mj/f39/r0+B0A5m83K4+Ojvz8zM6N75UgAADIU7OnpCRjIZDJq4C+NjnVoTsiru+DvhYUFX//8/NxFx5NJRgFYo9Dy8nIghJ7ivwBmNT/+h7n+A4BlrRxWhJKpjHzIJ1IA3gM4UGP27oeHh8OOCOJVyEiL9+2cK8/Ozvp22LjM3p8AigD63Tiwd8sksuFnJrMMy+Wyym1ElO4flNnf33c6x8fHgUqZn5+XRCIRPFAikXAbBwcHEkWMiqd0FAHgljJM2iiqVqsuOl1dXdKSzWaRyWQwODiI70WpVAq3t7eOSe5k3d3drt0S3beKwM7OjuslnZ2d9hpQAFC192K73/j4uAwMDDhmZnsyL0OOXwJ4zT0aV3lbiru7u+FkZr9ZCI/c38KjtlgshhV1OtYM63rZyvLESvl8XteXAPz8XB/IU2hkZMRXvLu7s+++j6HG49hEpqjvBpav0sPDg83+vqhG1ArgmIJ7e3u+AVaI6WSuE7LMlJk3pr6dM3uNq6urur9XzywoULivry/w6CAIJqoCsMSkU3DUs1ORbdgkXa7ecVylQi6X+8wRxy6dhNe5xgHGcCvxAEzG5wZRFICfAFxRcXJyMhCJeolXYNo42/yPcV9EvwC4owGO4i91Skubm5s2cf/mgWK9iCQYCTeC9SlO46yMMF1eXrrHaiqVshXCN+WbSB8SsWmAcFqePVfjJsuVDwG8q8u21CFk/hG9A7BDJ1NTUz6AoaEhdbwJYLJem7EAGCC92nKZnCw505jcuyAOt7hxFINE5J+mpqbK9fV1ulKp4PT0FE9PT9z6VUQe49qLDcCjCoD0xsaGA+DR741Y+g88xcSKXRUQ+AAAAABJRU5ErkJggg==" alt="pierce" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Pierce</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Bypass damage protection for attack damage.</p>
+      <ul><li>Effective against Armor, Protect, Barrier, and Stasis.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Armor</span><span class="chip chip-counters">Protect</span><span class="chip chip-counters">Barrier</span><span class="chip chip-counters">Stasis</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="poison" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAEjklEQVR4nL1XYUR0WRh+vm++HWYNy6yx8xk7u2NjbEwmMcQwdoghYoh+TUpEDP1YZfoTUfq1KSWilKH+lD6lVTayaZXYlDIZan+UqC0RtaWUu57jnuve251m2j77cO49995zzvue97zv8773HYpDEEAEQDkAL4BvAIQA2ADsAfgLwC6APwAs4zMhAmANgPKKxvGtxSz+7oVvTQBGxbaDQUQiEYRCIXi9Xng8HtG32WzY29vD4eGhuM/MzIi7ik8AWgD8/dodN8mdpNNp5fHxUSkW09PTitvtllbIAfjhNYIDAO45eXx8XPkvOD8/V2KxmF6B74sVPstJTU1Nyltwe3urV2CxGMFfcbDD4RDavxXX19eK1+uVCtB5DXhvehYDYrEY3G433gqn04lkMmlY+yXhFeJSIW6fBT6fT3a/KyT8Iy8Mpf8DH4oZdHFxgePjY9EPBALCnGbs7+/j7u4OUnnywWsxRucYHR3VHKaqqsrAYHa7XZmbmzM4VjweN4yx2WxKZ2en+Nbb2yvf9xYy+524qDsYGxvD8rKRqh8eHjAxMWGwytLSkmHM09MTenp6tHXy4b3p+ZqXm5sb8WBlXkm3XHhnZwcul8vSxJzrcDheJdyARCLxTIHS0lK0tbWhvr4e5eXlGBoaQiaTeTZOhhj5X4XWyedwBrNzV7lcDgMDAyJ5hMNhpFIprK6uiiRCtLe3Y3d3V7SpqSnhmDU1NaiurtbWUPE1CiBG5yAr0dnyobW1VTiRdMbJyUnLcUxIOodteEnwLwA2AWxzcCqVyiv86upK2dzcFP319fW8WY8eb5HrI2bB61aFgTmk7u/vlWw2K/qXl5fifnBwIN7zrsfi4qIIuTwFR0QKruOLUCgkdrO9vS3i3OPxKC6XSzk6OhKLra2tKQ0NDYrf7xdjw+Gw0tzcLJ7r6uqUiooKTVnOYU6vrKzUlCVYG6jCf5fCh/hicHDwWUpMJBJCEPvMcjzb4eFh8b2/v18I4TseA+efnp4KK1AxnjX7Zh9gxlQV+JLCf+XDwsKCpcNwd7W1tc/MLs0szS6Pgb5Ci52cnFj6QSAQkMJZtAgn0xzICi0tLUpXV5dSCLQC18pkMnnH8DhV4R8Z5//oWU1S5vz8PEpKSgR5pNNpdHR0CGLJx1pMJn19fYL9WFxubW1p32QyIl+cnZ1BLbFPP6ju/xMXj8fj2NjYwMrKiuBnPex2u6BREhArWTIXiYdg4RGNRpHNZtHY2IiysrJnynG8bs0Bfen8pywk/H6/xkosKrh7NmpPapXJRSYULkjFSMVkN1qAu5ZNpmLmAVX4zwD69IpFeQ7RaLTgudI3GFoyZnmGIyMjIiJewuzsrJzzyWwVZgElmUzmncxooHI6oriUlS4b47q7u1vzejPIH+rYbbNwv9wFY9YcbsFgUC80q1KxV6f4b/K70+m0DFsdwQxaOeyCNH0ulzPsWMfLaavUqCIOYE4mHMn3TFAkIB3VRqwmf6vuSiuXdDU3GwUXAuPwQJZSPp/PzOkjL03+Qv055C+OecfF4keVu+V8Vkf8Y2EOMeBffClasu4ETV4AAAAASUVORK5CYII=" alt="poison" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Poison</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">When attacked, Poison the attacker. Poison deals damage at the end of turn, then halves.</p>
+      <ul><li>Stackable.</li><li>Poison damage cannot be reduced by any form of protection.</li></ul>
+      
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="protect" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAADWUlEQVR4nLVXXWRjQRT+7E/Zp7Kv+7IPsWwJebqEEJZQylKWpU8hXMISQghhKSWEEEorLHlKhZDVfckqWanGRgjhUkqfSlef+lAl1QqzzjVznTu59+am2/2YJDcz53wz35kzcy6wHNIARgCE1joAUvgPSABoKqJ0Oi1Go5FotVoimUzyCdQAvHkKwtcAKsqxYRii0WgIHdVqVVfg67+QFrmz7e1tEYTr62tRKBQ4+RhAZhnCzwD6ykE+nxeXl5cuEsuyRDabFZVKRdze3rr6xuOxyGQyfAJNGSpfxADUlcHm5qY4OjpyOZ3NZqJUKumy2lLroJBQaNi4igydg1cAympALBYT9Xp9ztHu7q5OWJabyX5OpVKi0+nM2ZXLZd2uqIj31J+0Gh20alo9M6TxUTbxlEwnu59CQKHgoFBRyJiPLNTD+fm5a/DFxYXI5XJ8cA/Ap4BQfeEro0VQaDh6vZ7qtxxiDtrBmjx56XwNwA6AYwBTAH8A/ABQkP3PZb9jSyHim9KXmHaltiFWpVOSZ+Zxaqk2AfBejo3yEF5dXS0mbjabPA3ASO3/TdMU/X5fTKdTO3aHh4ciHo8rG1LhHbMjAifm1pLEa2ql1OcFiiUdo2wvhCfGfFPEe2qlQbi/vxeRSETZbnBij2YTO7HwOW1csw4Cy9kyC5FObql0WgRbZj01vNDtdpXzn4ucPgtB/GB/PNhfgbi7u3N+hiHeWyD1gD6Ojyl1gzEcDtXP32GkFgs2V4meE4lEoNynp6diZWVF2cbDbC4RIo9tB1tbW3PXIOHs7ExEo1Fl9y1MOr1A+Dt6eHBwsEpymqYJwzBwc3ODwWCA/f19FV8KixnSJ1wrptOISdIF8FGOeyuf/ULTAPBSjjXlEWr30Smnr3iOmEDH4Pr6OndK925EOt2QefoLwHd5gRiy7wOANj9eJ5OJ49fyIg55+dPN4wWqLKtqHFWeVIEGHDAWeDrR5jk5OXENJpmKxaJ+C5l+RSE51+FRBmc9C3WqFqhq5CDJSDpm3OY2VGGGsGkBSHpJtvTsH6nS4+PVbrfttwkdtVot7L7wRVJKYzugWpmqEz8syIRHwZWTJKHKSwIViVpRyHP/SbDDJSRJPYr73FMScpB0ThHPGh0o9GIQGn8B7IsmeJl8RYQAAAAASUVORK5CYII=" alt="protect" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Protect</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Give Protect to an allied Assault, causing it to take less damage from each instance of damage.</p>
+      <ul><li>Stacks with itself and other incoming damage modifying effects.</li><li>Lasts until the end of the opponent's next turn.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="rally" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADSElEQVR4nL2WXWRbYRjH/yeJWqcTSqNkQnuxWCzsYo5lToXaRQhht6W9KSOETq9yUbsqofQ2FzVWnVDK2CRKallnucysEiZVU8llo9UoKZV65jk779nJ11k0OfnznvOe9/N3nvfjeQBABvARQA0AaekLEWEUSdImVCXLMur1Oo6Pj/nzDYBnAB4DeArArjX7AeA3gJ8A8kSUx4Ci1dVVOjs7I9be3p6wQr+pDOAdgJDZnwIIA0jwu60cFI/HSajZbJLP56PFxUXa2dmhQqGglgnx9+7urtpnZmamHaYCIAUgAsANwAUgBqDQ1i7cAuD3++muKpfLtL6+TrIsm1qK6xOJhPhOGAEqXFipVGhQ8RgME4lEyO1209TUFM3Pz6sWYx0eHgqAb0aAFBcmk0myWsViUQAUBYANQIYpMhn1Zancbt4Wqh4ay51MNT4+To1Gw3Ir8DyaFe6rFiCiOoCD6+tr5HI5y63g9XpF9hE/eAlYuVEtgwHAawQY2T7w+Xx6VgcgohKAUrVaRanEWesUCARE9oUOoCk/Ciuwv7HbVbfyUpIkhxFAndnqjeh0Oo3L8NwI8JUf+XwefCKsVDgc1rM2kSOiRq/jeHR0hKWlJbhcLkiSpKbZ2Vmsra2hVqsNAjDX7jLjzBKNRlsuD3ZWvZwMXyzsGS8vL/u+jNi7Tk9P/x2DWgH8XOjxeFo6rKysiAnjhrZBLZJS6yYnJ2ljY4Ourq76guCf7ADQBi5yBTsOoXQ6LQAyXdorANIChD3g5uam6bV+cnLyL5agzgGTXMG+W+j8/JzsdruAcPSIeDgI2TeCxGIxFZ6DGE4c4CwvL9PY2JgYa79X6ESKorRQBwIB0Un5T+j1CkC2j1DuPYB73QZwcAP+Y/5zId5oWse3/US7WiAb1+6XgpY+AHjNfkBvR907f+LJUqmUDpDNZgXAwTDDcvQAiPJkCwsLOgBvqnZfbiWARxwto4LBYEdUO2iydbupiKjK3vHi4qLFO4ZCIZHlozcU2UzqOryjoujzzg0LACa7uOM48hU6MTEhluGBZXuATI6jYR8EhwHgMLFMU5Kkz7e3t5GtrS3c3Nxge3sbp6enXP1LLJFlS2Bchrb0HcCTYR3DP+xejwOMiMlzAAAAAElFTkSuQmCC" alt="rally" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Rally</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Increase attack of an allied Assault.</p>
+      <ul><li>Targets only Assaults that can act this turn.</li><li>Lasts until the end of the turn.</li><li>Stackable.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="refresh" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAdCAYAAADLnm6HAAADGklEQVR4nL2WTUgbQRTH/xuaTZWoJzWUtAhKhVZKJIGcE3IwWOzFRhEKXtTSerC2h4Khh1JKjgqWlF4qHuJFpAehIVChH7SgVg+CLdWs6EUvHhQJWDCvvGUndZpodmPSP8yw8+ZN5jdvPl5ARDBbANwA8BFAFgAVKJ8A3IQVkTWAr2dMfLp8rwgAgCi7ezweOjk5oX+VzWbJ7/cLiOdlBQCgAvjJ7slkks7SwsKCANAAOMsJEGfXYDBIxdTR0SEgXpcFAMAVdlMUhZaWlooCrK6uks1mExDXygHwlt0ikQiZVV9fnwCYuhAAgFvsYrfbaWNjwzTA5uYmqaoqIDznzX+pCN8zrgYGBtDS0pIzJpNJ7OzsSI6qqqK/v1//bm5uxuDgICYnJ8Xt6bYcAQBB7nY6nbS3tyetsLOzM+/+19XVST48hsca/fxbBWU7Z/VPuBodHUVjYyOsisfwWEOPLUUAQIS7Ghoa6PDwMG+PzUSAdXBwQPX19cKn20oEhriKRqOoqalBqaqtrcXY2Jho3i/koxgr/mtQlAcAXvFBWl9fx+LiInZ3dyWfWCyGlZUVyVZdXY2pKfnW2e12hMNhtLa2Ynt7WyzsjeRE+eH/xuZEInFmuM0WsS3T09Ons6Uskifna0ft7e16cikXACevtrY2YX9aEADAZQC/2JRKpc49cFYBWPPz88L+g3enEECcm6FQqOiJLwWAFQgERF9cAgDgFglneXm5YgCczHgOo/8qTyye4hdc9fT0wOv1Sls0PDyMrq4uycZP7NrammSrqqrC+Ph43vN8Wj6fD729vZiZmeHmSwD3YCQLPeFwEjEjsw9RIW1tbZHD4RDj/PwQPdIv6NCQnkQqraamJj2qhh7C+PtE6XTa1AouGgGWpmm5v242AJ+ZYm5uDv9LiURCfH5RANwB8M7lckHTNP0wFdPs7CzS6bRkczgcGBkZKTr26OhI34b9/X1uhsU1THFIJiYmqNKKxWIi/O91IgPgLn+63W46Pj6u2OSZTEZP8QbA7RyAAfGh1AenhMIRz9N1A+J3BSfOGJPn7vsfwax5nEnzhJMAAAAASUVORK5CYII=" alt="refresh" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Refresh</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">At end of your turn, heals self.</p>
+      <ul><li>Triggers before Poison.</li><li>Unaffected by Flurry.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="revenge" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAElElEQVR4nJ1XS0hdVxTdfvKMiiU6iEaC4VFEbAZFJxatIyUKtkhGDiQglkILQgYS1KIDSbBBeQMHohM/FMkkoI7qr0GtlCJFBxKpOKlOasX4QZFofd5V1uk5l+N99z4/Czacd/baa+97z9373StyezwREUdELvT6RgCgLAYAEgDkSHzQ/w/p2riOG0NNal+ngOcAVgDcDdBKFJFZUisqKlBZWWmKmNU+P80Urfk8bgEAigGc4X/0BRTwA6nZ2dnY3t5WxrUuoi2ggD6tSe1i3wIAZADYwGU89Wh9KSLRhIQETE9PuySuExMTqRbVHFv3qUeTOT7xK+ANvSsrK2hubjbkfQCPNCVLRLZIbW1t9WgCbW1t5i5saS41H2kNpUltjTeXCgDwDXePj4+dgoIC8AonJiYM+fe1tbWQiEyQWlpaivPz85gCuEefLmKCMQB+o49a1KQ2c+gQ5hQm/wzACXfq6+uNALKysrC1taWYU1NTv3AvMzMTm5ubCAJ95JDLGO5Rg1pGlzk0mPMxC3jPX8PDwy7JWFlZmboyx3FQXV2NsbExXIXx8XFUVVWpGM9dcY25NN6zAKyvrzvp6ekxRBrPljg6OsJ1YbjWc3HJmIs5yVEFsJVycnJ8yXy6Z2dncVMwRndGjJkWNgW8u0nAdeCZDTEXNDMzY6jvWMADADvxbhmNE+/i4uJSopGREfs8FcixpmPgkeqcD0wbPgHg8KHhgxcU3NXV5Sba2NhQZ0nj2oCcoHirhXn+Vd5B9NqvbWxLTk7G4uKiSjQ/P696m8Y1QR85frHUtFr4td8kvLOzs7NhDw4/oby8POzt7SmVjo6Onfb2dnV83KPPL8YebDrHHb8/o0/D4fDR/r6anGhqagq8lbW1tarPHcf5V5vaC+JTi6A2czCXt4CQiPxBcnd3tyKfnZ2huLg4ULS3t9c9d66DeEVFRTg9PVU8aut95grZBUToCIfDODg4uPSgZWRk+AqHQiEsLy8r49qPw1j7AT08PFQ5tD9iCviKr1YUWVpaiunp0dHRwKvLz89XFuRnrBfMoQvm69zXLOCDfev90NjYGJgkyBoaGgL1rKP4oBqgpKREPVRBODk5QWFh4bWTk8uYIDCX9Scl7nl6EY1G+beq1qurq0hNTb0yOTnkEpOTk0rDC+ZKSUlxC+gz5+n9x+vs7DSTTo2vgYGBKwvo7+9XsYxhLDVsMIf13PSxgBQRWfG8LGBubg5JSUkkRVtaWr4F8JH7dXV1gcnp0/jIGMZSY2FhwdW1XnqY865pwwIROaZjaGgIu7u7yM3NNcRXelJ+79NKrnGPPo3vtO5L+qhFzcHBQcNnrgLvJHxGZ1paGsrLyw3xVxFJssb1W08ruTPBauG3liZjF8ihJrV1zLOgD5Nh66rYIg89r9j3APzFLJFIxC2gp6fHJKfvnkfzoWl1bT9pLd8C0kXkT3tIeAHgCwBq/tfU1CjTLcyPjhK/GK3laO30uJ9mIvK5iHQFCJkiXjAjz5Wm8SJejIj8qLXlqgLkKugP2J+t7uLa/fC8psbtC9AC9wH8re3+LeJVAf8BxMOSJr6jshwAAAAASUVORK5CYII=" alt="revenge" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Revenge</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Enemy Assault skills that target this also target the user of that skill and adjacent Assaults.</p>
+      <ul><li>Behaves like Payback.</li><li>Targeting all available targets spends only 1 charge.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="rupture" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEcElEQVR4nL1XS0hrRxj+Eo0aMW5ylZTWUsGNKxEKufhYWBOjiG98BRG0FGobigs3BcUHKirWXNy0tAtLWxWlj+tWEAXBTUDwXaj1Lb5SG8WFLsyUf3rm9OTkJEfk9n4wyTkz/z//c/75D/B8zABg0vgBbxmFJNhqtbKkpCShRPZzNjI+UwEP//F40NLSIuY+xRtCNQCv9G/QWC8ni+Pj49nV1RXb2tpiBoNBeIE8o0YqgBoAIxKvrnCmGBsA+gEkAfgRwIFYa25uZgIul0vJ8zuA7wC8B+Ab1X5MTwkvEY2NjbH8/Hwl04l4zsjIYCMjI8zv98sKnJ6esu7ubmaz2dTCmNFoZNXV1ZxHmiNPREQ9EdXX1/ONl5aWWGFhIWd0OBxsf3+fRUMwGGQ7OzssKyuLC25oaGAbGxt8TWFQVA+8K7Te3t6WNz4+Po4qWEuRs7Mz+Z0MUYQ0JK8MGkp8C+ATt9uNyclJTS339vbg8/kQCAT4u9Vqhd1uR1pamia9w+HAwsICPQ4A6IQO3idtY2Ji2PX1dZh1TU1NYXEWo7OzM4x+d3dXrP8JIB5PwC/EUFNTo+neQCDA7HZ7mPCysjL28PCgGQ7KCYmOToUuLon44uIiYox7enq4h4Rwk8nEszwSNjc3Be2WnvDPiDAnJyfEAo/HI1vX398fMQSjo6Oc5ubmhrW3t4fskZqaKugKtAR/KBUaTjQ1NSUz0zGiuaqqKtbX1xdRuBgDAwMsNzeXP1N9EOjq6lLS/QTgpRAuC6bjR7FUJt/4+LjMGBsbq6uAMjRzc3PyPicnJ6y8vDxkXVIEzGKxcJdpFRqKt57QSGNiYiJsv4ODA9bR0cGSk5P/NRoAzGYzUlJSYLFYwmLDGNG9OSQkJCAxMREmk0me+1lobDabWWtrK08irRDExcXpWq0MkzIE5+fnrLGxUb3HjFCiBMBrsTA9PS0z+nw+PldcXMx6e3t1FaBTIpLw6OhI3md4eFhJR0Z/pOWhz4mgoKBAZnx8fGRut5vd39/z92gnYWhoiNPc3t6ytra2kNinp6cLurJoITIB+IsIldetVmIqs5ncPjg4GJFeVY518ZqIqeZr4e7uTt0r8FFaWqpZigl5eXmC7vunKPCBqAlU99WoqKiIGAKqmGrQ+ZfWTwEkqoUZNBT4mhrMuro6zMzISSojGAxidXUVi4uL8Pv9MBqNsNlscDqdyMzMhMEQvqXL5cL8/Dw9DgH4Mpr1L0hbajLX1tZkK6LlQyRQwyqwvLwsvLAj5VlE1BBhZWUlZ1xZWWElJSWcmc7w5eWlrmDqnoqKingIa2tr2fr6Op+nkyUpURlNgVdE5PV6mdPpVMb3b/FMCTg7OxuSH+QhKrvZ2dlheUHepIuMbkpp7itdD+C/8YfUxVKv9SuAK622XJWY1EFPA3hHyie1UlE9IJR4Jf2bEQrKsC+UHyaHh4fK8vsxwpECoEqyXFf4U/EbCaSqSDebJFy7g/2fUERC6eNUXKvKBuNtQfl5zhuL5+AfU7op0gNBk8IAAAAASUVORK5CYII=" alt="rupture" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Rupture</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Deals additional attack damage and reduces the effect of damage prevention on attack damage.</p>
+      <ul><li>Obtained by Evolving from Pierce.</li><li>First updates opponent's damage prevention stats, then deals additional damage.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Armor</span><span class="chip chip-counters">Protect</span><span class="chip chip-counters">Barrier</span><span class="chip chip-counters">Stasis</span></div></div><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="sabotage" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAfCAYAAACGVs+MAAAD5ElEQVR4nK2Xa4hVVRTHf3MdH1nWWGYPxdIyozQr81lUSlBUNCRRED0gqA/1ITCpwEgqLCiCCIIgiuhBfZDCmihMoigJYdDCxEHoZkoPx5qo7DaT995fbFrXjodz597RWbDZ59z9X3uvvc5/PW6HyghkHDAd2ANUGQUpjRB/CrAUGDsahx+JAUuAk4GDo2VA5wiw44HrgE/C/VOAX4bBzwRWAx3AN8BWYAvgkRowEVgQOlcBvcDzw+BXAPfG8yZgR/7wkRqwGJgNzI33j3PrJwBrgx9fAPcAHwBrgrS/Fe6qtjvWqXv8T75Wz1avVhfF+mz1Tw+XJa32pc3DO9WZ6sXqfvUH9XO1ql4bmBtzh3+lHt9q705gElADKsO4P5HuO2BOuDq5+fSIhoWxx/2Bexf4O8j6R8sPq96qPhguzN+6M/fbyw4vO9RpI/ispDxQBi4IUl0Udk0FngOezBA1hdOFLe6TSPoocFzLm+dIeK76s9qvPqNuz9zqrsAkL7Urr4bOLHVyuyRck9kgsX0onveqG9V/Gov1ej1NPUG869VX1AMZ/Zq6Vv1QfSRzxlR1ejMDpqivq7epE9QNRVer1WrJgNcK+JH0KjkjkvylLgvMw+HdE5uF4Xi1FM+XZG+dkc3q5U1cmjxRJB+pc9Vt8f5YQ6ejRTlOWWw+MA1YVqvV9vX09FwKfNsAdHd3Z/E3ABsK9qlGaKZwPaQKvNcqFa+L+dlkwODgYK2vry9tRBMDDuT0U35JkdbIN28Cm4GngJeA7a3i9CT1DnVL8tvQ0JC9vb2ryuUylUrlEK5arVKv19Pz6ozbE1NXqevjfbd6aiY6XlTvLjp0jHqG2hHf6jDp7+/fXS6XZxUYMEfty0A3xvqZ6i718YKzZhAHjYmR3heqP6r7YvykHgxCVlMUDAwM9FYqlWsaxK1Wq7fUarWtudvfnAu/Y5vVAoHTgJUxp2w3GZgArAdWRf5PrdjTpVKpq6ura4H6BrAr1YVSqTQnR7C9wDHADGA/0N+UZf5vzcq48UPqJPV29bxYS156x9YyGJ4ajEQ2GCW77XI8VR1XAJynvqXuDCOLJJXnB+LzHaKMOn80+gFinKV+ljv4d/WFyG7zMhnQXBo+agMui/ScmhBjfjt+b2AWRbfUqCOfqneqV+RrwEgNWB5dUEO+V7sLcGMjhK+M2rAtUw/uOxoDzonW64kMyd5Xb8rUjqKxIvBpLG0Whu3IrhjnZ/4VpTZ9N1AfRi+l3V9j/rIQYXseGBOESglpk7q4Tb2JUeKXHw0JO1POjgYkuXQkxE26qUdM3CjEtCrHSVL3m7LjzuiMR1X+BfAh2KHKG6qpAAAAAElFTkSuQmCC" alt="sabotage" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Sabotage</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">At turn start, inflicts Sabotage on opposing Assault, reducing the power of its Activation skills.</p>
+      <ul><li>Only affects X parameter.</li><li>A skill with 0 magnitude will fail to activate at all.</li><li>Enhance can counteract this effect by increasing the X value.</li><li>Lasts until the end of the opponent's next turn.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Enhance</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-passive" data-name="scavenge" data-cat="passive" data-avail="normal">
+    <div class="card-header" style="--accent:#ffb84d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAE4UlEQVR4nJVXW0icRxT+djcqRlEaXKU2WKH1hgiWtPRF0RKT0qaYrDeIiVVX1LTxxYdCLCQgXvChPpQUtD6U5qnQ3bJqjRcQY0hrYm0kFhJjq8k2ah9cXdfVuFEzM2Um/7/Mrv9ecmT8Z86Zc765nMusjlCCMOgYABOAYgAnAFwD8IMk1wHoAvA3gEEAjpAWCSXhtD8JJUxqdkJJpCSvk2R7hJIfCSXHgtnUh7NdAB6/8dsAGpR+MoBvJFkkgGoA8cEM6sI86mEAn2jwmbKoo378fYUX0Ljeb8xX+yuAGwDSFV4SgNRAC9cA5fRPMFCtHXPAz5X+S8VRCrlzLS4u4ubQTdz57Q5m/pjB2tqamJSQkIDc93KRn5cPU4kJaWlpnL0DwAzAojhjDYAjAL7wIkkXXuXnQKLt7e8xc52ZH2lYrdZcyzwvPFyX/y342atT8WTgb/1Bt9xbrPCjQmEwMjKSVddUM4vFwuz/2tmuZ1e0Z8vP2ODgIKuprRFz+NyCwgK26do8tAlCiVP1dhmYh8eUPLHyQqUwlJmZyR4+eqhlyKfNP55nWVlZQud85flA8770B+btLUKJg0+4NXlLGIiLi2NLT5ZCgqrtqf0pi4+PF7pjY2P+8p8JJQatOH4BIIZ3rFarYFxuuozU1EBOfZhSUlLQ3Nws+rZ+myyyAbjg9XZlp7GEkg/ke87NzRWrvj97P+zdqu3B3AOhm5OTI/PN8unyf8OKB/ooq47CHeh1gfcP9oWuwWCQ+f1ymuVH/b6SCHzIaDSKr8PhgNPpDPuoNzY2hI4a4xKd5WIA/QDqObCPVCX1Xu12O6Z+nwobePretNCRbUgUqyygTx8oteXl54nv8PAwoqOjwwaOiYkROrINLdIraWxASXNecrlc4js7O4uTRSfR2NiIiooKLCwsHDIyPz+P8vJyNDU1oaCwADMzMz42NMghx/ARxQGEM2RnZwsHmftrjrm2XN6UyOO6s7PT6zQdHR0sNjZWyPR6vXAsnmz4OCMjQ8v5KHdoOY55URjyLklxEO5k/PjS018VK7fbjV3PruhTShEREYGdnVeHxQuEwWBAYmKiGKuFRKHrAD5U6vSn8o55RrGoKztnOidWbbVaxdix7mB9fX1sZGREjOsb6ll5Rbnoj46Osp6eHra+sS7GAwMDQvfMZ2fUXXoIJW/4x7EK+pN8JN3d3UI5KSmJXWm5wnp7e9nBywMhu3vvrohRnU7HJiYmBI/L+JyWr1tYcnKy0O3q6lLtbRJKjmsBN2glAlOJyafk2Ww2wV9eWWYXqy6ysvIytri0KHhDQ0M+c4vPFvvbm5YTiAqcoKzqEPjk7UnW3t7uLXeBstXpj0+LOW1tbaLABJj3nVY9rveb9FhNpfwxoJa70rJSNj4+zp7vPmfOTae4X75zfuxc7t52B0unZi1g3r4nlFwnlJxQxiWEkm2uxMPKaDQGfX00XmqUC/4vhJIDCdSidcfB2pyqvPrfKrt67ap4lURFRYmYLjpVxFpbW9nK6ooK8IhQ8qai+y6h5AahZJxQclS2G+p5y4vHjsZLkgdytFZxATAO4BRCkD6E/LgG6DaADEX3koaO1nMXrwvMQfhvpD2J9xWAFaXPZU/8dHgFCknh/pLgObAUwDsKMHcmlaoAtPF6AmCUv5oAhCzg/wMQoQfwJ3wDsQAAAABJRU5ErkJggg==" alt="scavenge" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Scavenge</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ffb84d;color:#2a1a00">Passive</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">When another card dies, permanently gain max health.</p>
+      <ul><li>Triggers from both allied and enemy card deaths, including structures, assaults, and summons.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Disease</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="siege" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAAFKklEQVR4nK1Wb0gUaRj/7bTOMI1Dsqysi7K2bPXB/SBa2R+JxcI4spaK8lAMiuqg4j704aIIhK6W1MsrUpLbgrNAMQIPqoPl4AyKiMNOYSwyD1oDiw6CWi09qp3neGZnlkzbncwHfrvzPu/veX7v+8z7Do8jFArhK0wFMDHXYIGIMAdUE9EfRDRu/m+bSx4n/3yhXQKwlx9kWcbU1FQ1AEYngAMA/rO9c13XYRNhXdfv67q+d8GCBdizZw+uX7+OgwcPIicnh+d367r+t67r9XZzOtasWZNtgTkAogB286CkpATHjh1DIBBIE8bGxnD69GkMDg5arm6zCuOZEjtWr16daf5bAI2sKUkS9u/fj7q6OgiCMCu5t7cX7e3t/Cp4GAfwE4COz4pXVFTM5s8FcAHALh6Ul5fj6NGjKC4uRjZ78eIFmpqacO/ePcv1m1mFf2eIr1ix4lMfH6bjAPwLFy7EoUOHUFtbiy+1WCyG5uZmvHnzxliTWYWfp4nzrkzLB9Bmlhpr1641dltYWIi52qtXrxCJRHDr1i3L9TuA781XAkdpaSn/1wNoBVCQm5uLI0eOIBwOY76sr68PJ0+eNBYDgEvxI1dCMK9Gl67rBVVVVcahsSP87Nkzo6yjo6NZuevXr8eNGzdQU1PDVyxX1/UWXdd/QDAY7AgGg9TT00N2rauri1auXEkcV15eThcvXqRkMmkrtq+vz4gLBoM3hWQyWZlMJlFWVpZ1B/F4HA0NDUYJJyYmwHGTk5NobW01DuXIyEjWHHzAOS6ZTK5Lf+EyGZOj0Si2bt2K/v5+g19fX4+7d+9i3759cDgcGBoawvbt23Hu3Dm8f/8+Yz7d0gwEAlogEKDh4eFZy8T+zZs3E3MY1dXV1N/fP40zNDREmzZtmsYZGBiYNd/4+LjFS8Dv92t+v3+G+Lt37+jMmTO0bNky4vklS5ZQc3MzTU1NzZqU+e3t7Wk+49SpU/T27dsZ4v7UfAI+n0/z+Xz06NGjNGFwcJA2bNhA7Gds3LiRNE2zdaBGRkYoHA6nYysrK+n27dvTxH2puQSKioq0oqIiQ5x3deLECeIxg1d49uxZY1dfatFo1KiWlevw4cOGMMP0JeD1ei94vV7juqxatYr4mcHv8PHjx/Q19vTpU9q5c2c6Z1lZmXGlvanxTXg8nh0ej4csFBcXU0dHB3348IHmy/i7sHTp0rSGJ4W9cLvdYbfbTQx+V0+ePLGV8OXLlxSJROj58+e2+MxraGgwdNwpfAeXy3XB5XLR+fPnbe/k2rVrxqnmuMWLF1NnZ6ft2KtXrxpxLpfrJvLy8rS8vDx6+PChrdXX1dUR8030Ws9ctdHR0aw5EomEFZuAqqqaqqr04MGDjEGXL1+mwsJCYq6qqmOqqh5QVZXjd6mqOsz+goICamtryyqupnIkoCiKpijKZ8Xj8Tht2bKFmGOiR1EUl6Io+AhsVyxOKBQy7vvnxJUUL8HtrybL8qzi/MXKz88nnpdl+R9Zlndzu5wB22RZvs/8RYsWUVNT04xbw+JmvgQkSdIkSTK+z5bx/a6qqiL2m7giSZLCTaQN5EiSdMmKXb58+bTcr1+/tnImIIqiJoqiQeBVtrS0GKtmnzm3QxRFzAHfiKJ4h/PwThsbG2lyctIQF1O5E3A6nd1Op5O6u7upoqKC+NnEr06nM8fpdOIr8YuVs6SkhGKxmJU/xj34AUEQ6CP8JQhCDffm84iQIAh/fqJz3MGNgNlXrwNwJ1OTPw/GLbmlE/kfFBxYyRCXTXEAAAAASUVORK5CYII=" alt="siege" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Siege</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Deal damage to an enemy Structure.</p>
+      
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="stasis" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAENElEQVR4nLWXT0xjVRjFj0P4qwEEKRsIXcAAM4GmTYCwAtmCuJvECbBREmNIwBI37qorRG0iC0cnkSHRlVYsllVpwh/DsnbiAgQS3IyJgiwKnUXD9Jpz/e7k9g9tYepJXtL3vnN+383re+/eC1xP5QCCABSAcev6m3ItKJ7/RRUAvpdGpwBuW7VOAP9I7QcAlaVuXgngW2nA40cAL1v1VwCsWvXvAFSVsvkjC87Dm8PnzfA8KsWdKAfwkECXy6VGRkYM/PUcXl7THnrF9/BFn4kvCerr61PhcFj19/cTGgPQksPLa7GBgQF6U8zIIMi4kb4gwOl0qtPTU7W9vW2AD/JkvqKHXmaYlQxZ19Iigy0tLSoWiylqYWHBwN7Jk2NNeylmyZAcmUXpIwaamprU7u6uBsXjcTU2NkbICYC+PFnWTuhlhiKDLBnEx4Waf0hjbW2t2traUkZ7e3uqvr6egHCBh4q1ML3MGJFFpgyCPXLqfRqqq6v1A2drdXXVhD8peP/+8+iMLTLJvuo1fo+Fqqoqtb6+nha8vLxUc3NzJjhdxADoUbOzszpri2z2EBZ74haAVwHc50lXVxfcbncaraysDM3NzeaUt+9OnuZ3zC1mhllbHo8H3d3d5vQt6a31GoANjqyzs1MdHByoTFl34TcAbTmat0lNezNFJtnC2JCeaaoGEKChtbVVRaPRNEAqlVITExMG8AsAh5V1yDXtodcWWWRKNiC9rtQ3NDocDv1BsZVMJtXo6KgB/SwzZIX81jV6bJFBlmTILko/MdDQ0JD1RhwdHan29nYD/FQO1dHRoWu2NjY2VGNjo/GSWZQ+MzPa5OSkOjs7S4NOT08b4O/yv7fJb12zxezU1JQ9Q5J9pW4D+JXGmpoatby8nPUgzczMGNAfAO5a2btyTXsyRRaZko1lLGa03gbwlAa3260ODw+zIPPz8wbwBIAL2XJJTXm93qw8mR6PxzCeSk8tJ4BjFoaHh1UikcgK+3w+E/yTrzOulkc8OpMpstlDWOzpvCW37h7XeZubm/D7/WnEVCqF8/Nzc+oDEM0zgKh4EI/HddaW3+9X7CHrx3vS+7mGASQ4uqWlpbSRr62tmVF/jiIf4mAwmMYgUxgJ6ZVTbwBI0riysvI8vL+/b16nSIHFJteAEXqZMSJLmielR17dB3BZUVGhAoGABlxcXKjx8XGzHO/Pk2XthF5mqEAgkCKLTDPnFKN3ATyrq6tTkUhEgxYXF4uZEfVMSC/FLBlkCfNa+oBBfkaPj4/Vzs6OGcDXeTKsaS8z8gl+JqwbyUdgb2+vCoVCanBwkMDHAFpzeHntMT2hUCjFjAyYS7wb6yXzVPf09KihoaGC+wK+5/Ran14yXkjlshS/7s7oQSk3qpWy37PndHtvyN96LWHtDUu+QeUiYk0a/J0xoXQA+Etq9NQUS/0XeZ6rV7AYoPsAAAAASUVORK5CYII=" alt="stasis" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Stasis</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">When this or another Assault of the same faction is played, it gains Protect until it activates.</p>
+      <ul><li>For Assaults only.</li><li>Stackable.</li><li>Affects each instance of damage.</li><li>Overloaded will ignore damage reduction effect.</li><li>Cannot be Inhibited.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="strike" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAC7UlEQVR4nLWWX2RbURzHv1mqU0YIsVqtxMosdikhT4kSRih9CiOEMkIIJU95LZ3uMZQwRgmJPIUwRsjT9hLSlzylaouQh66RCCVPqd/8jnuyk/Te9N78+XI0Pffnfs65v3O+vx+ICMsMi4oCqAIgZQSwZvgHAD8kcGdnh9LptISnn2F9Kui7jbjdbmSzWdzc3ExH0Hp2XuJXu1wuOj09pfv7e2KNRiNyu91r/ewCzJBGo0Gq8vm8BFfXsXNTMCsYDEp4YtXwueBmsynBzYVzDkAD4FfGk2DOdSAQkPCcbTiAlwB+ztxVHvV54PF4TEdHRzK2sdBpB1DmcE3TyO/3TwbPbW9vG4JZsVhMgrsA3iwK73H43d3d5MWJRIJ2d3ep0+kYgjOZjAQPAbx7dC/IOnzA4f1+fwL2er2m4IuLCzU1QUM3IOvwCofzwZHgbrdrCC4UCir4oyHYJvyVfmDE4bIITmKeyDp8cp1455eXl4/AlUqFnE6nNTDLLlie6lQqRaVSaQKu1Wq0tbVFuVxOwvlazhctAJb3NxqNUrlcFvNcRM7Pz8Uz5bM/DQfwXHerqO67nwC8teJc7Nf8nK+VlFX4hsPh+KbDDMW1uFqtwu+XTvpfg8EA7XZb/HU6nbArB69wc3MTmqbB6/UK2MPDA4rFovg/n88bgnu9HkKhEK6vr83e/QtA6KkFkM/nm8rl8fEx7e/vT7mZquFwqBaKGoCDGd/n3++t7J44byqYPVs6mVGew+GwWii44CwsOjw8FOB4PD4XPFOhWgBeLwNmUSQSEeC9vT3xSc3EMWqFMuhkbOuPzBW7k5FzsU5OToSJSPcyaaNs6wW3twC+mi3g7OxM9NyKbxdXAqdpN3u0ALZLj8cjejC1D1s5nGYWkEwmhW3W63WxkLXDSVkA55gLhlSr1Zqc9FXAN0zmP7PHezweuFwuXF1dicnb21v5/DdWITKvZt8NOlU5uIosvXP29nnKzvRff3Xr/LIUVdc/Oxb9F9mkKj4AAAAASUVORK5CYII=" alt="strike" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Strike</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Deals damage to an enemy Assault.</p>
+      
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="subdue" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAdCAYAAACqhkzFAAABUUlEQVR4nO2Vu0rEUBCGv8QbNrKFpe02XloLOxErX8DWytYX0MeQfY0UWmy9haWFuIUsy4KdprARUeGXkYmcDdls4gZRcGA4kzkzHyeZORMkUaDHkh5ULheSNvK5MQ1L/A+cWeYn+K+Bc6AFPANRsGf2ssc85hMjK/VPnHAVWAOWgPf8IYA5IAXugZex3V/f2FHT3zBulMZk4AGQAFdAN/B33Zd4TOUqW4V3vNqh7Ptq/Xf5N69eJOkMWPfXf/PGbQObwGIW52vWEq/ADXDnvgW/ALfWjFuS+lOaOGvcMukbKwvclTScATh0xtjVO5I0+gZw5LnkgbGkU0lpDWDqOXER0LQlqVMD2PGcL0bRpGlLSioAE49lGtB0W1KvBNjzGKoCTfckDQqAA9+jLjCSdCjpKfCZbb7PsVcXaLoi6SR4Ntt8E3OqDFibONnfLbQL5QMaPlnum9LzIgAAAABJRU5ErkJggg==" alt="subdue" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Subdue</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Before being attacked, permanently inflict Subdue, negating permanent attack and max HP gains.</p>
+      <ul><li>Stackable.</li><li>Reduces total values - not the value of each increase.</li><li>Affects both current and future bonuses.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Avenge</span><span class="chip chip-counters">Allegiance</span><span class="chip chip-counters">Berserk</span><span class="chip chip-counters">Bravery</span><span class="chip chip-counters">Valor</span><span class="chip chip-counters">Leech</span><span class="chip chip-counters">Scavenge</span><span class="chip chip-counters">Fortify</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-special" data-name="summon" data-cat="special" data-avail="normal">
+    <div class="card-header" style="--accent:#cc88ff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAeCAYAAADD0FVVAAADCUlEQVR4nK1WTUhUURg9Myhuc9W7U9Pivf6MUEPKKCj8IwOpRUkq+bOIoLQWIxi00UyTFmJoUYs2Uk5Zm2oRNo26FKlQK0oCNQ10Y7kwsXEmb5znG31vmnkzWgce933fPefMvfPe993nkFIiHjThSgFwH8C5sZnpQDy+E4mhGcBZADcSITvirVQTrhwAfmMBywDyx2am+ze8Uk24NgHoJG/3nrQwv1MTrtQNmwK4A8C9LysLz3p6wJExgNu2Kill1EtVRKmqCLlX2y6/jk9IgiNj5jkfS4sYhm5VET8ofvywS5rR3eUNm3LenZCpqginqog+Cs9XVspoYN4wJs+ZiKmHguz0DPl9djaqKfOcN4w9tqaqItJVRfzShEv2+nzSDpwnj3zqzD7OiKp5ACClrKICuQUFtg+Y86Xl5bzVdYZ+BaZVtnI7eYcOy4WFBcuqlpaWZO2ly/poBnnkG39Dq2X7qiJyVEUs73RvkyNDQ39t9WZTky7kGAnyqVMV8Zs+kqaqIlJVRUxR1N7KH7PizeCg3LFlq27KkXEkqDNWO0U/mnqZOFVUJEOhkIX8c35eHs0+GBboF2PmzaCOeoPjddqValN9Pb5NTlpyjJsbGmADBw0vkDv09h3udXSszvhf+fDE+yiqqrvLi17f69X4bns7qKcPgIt669OEK5c+ScnJjqcvniM9MxPHc3LxZXQ05nJ2paXhZV8v3g8Po/jESYSCQWm0xT5967wB0BYKBuGprsHi4iI8V+rstghPXd0Kr7qGhky1GT4w/59XAXycGB9Hy7VGFBQW4nTJmaiGxaUlyC88pvPIB/DB0K8gVpn2+/36Uz6y/4Dl6TNmnvOxyhRRGkqtuaEMDgxY3lPGEQ2ldn2tr6pKfw9bGq/rBhwJ5tfV+uRak56jkE05EAhIT3WNPpqa9FzCTVquGZdFHieTE5bjpGxdx4lcM14tYXYocyna6Rx2575xFI/wBOURPfrpc7hqMsZmpuf+18eEBJD3Tx8ThGFwywhZNbaGRFI8ggFWy2ZL1djgD837wnDNGRK8AAAAAElFTkSuQmCC" alt="summon" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Summon</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#cc88ff;color:#1a0a2a">Special</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Summons a card to the right of your rightmost card.</p>
+      <ul><li>Cannot be Mimiced.</li><li>By default, Activates when the user finishes its delay.</li><li>On Attacked Summon is not on any obtainable cards. Thus, all obtainable Summon can only activate once.</li><li>Does not trigger Allegiance.</li><li>Summoned cards can receive Stasis.</li></ul>
+      
+    </div>
+  </div>
+  <div class="card cat-support" data-name="sunder" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAdCAYAAADLnm6HAAAC80lEQVR4nO1X30vTURT/HAncpt9p2nfi8kXYHIjChC0Si9lL9pZ7srdVUIL4B/ji/zBD6q0hvTTwoceIsZcSwoGDwlh+63FLTWyILoUvnDi373fNX7lky5cdOF+493zv53M493wu9xIzg4h0ADcAvGPm76iTEdEVADcBFAG8ZWZT5oX8GwC2/IUkVWsHIOSFCp5PAC5J4JlMRKNR1jTNDrrrkEBUsMfHx3l0dNTmeSIBJiJOp9Pc3NxsBxx1SOCaYIfDYV5ZWbF5sk0S6e/vRy6Xw8HBgQyfM/N+rfefmZcBGJlMBi0tLfD5fDIdVAmEQiEEg0FpEhk+JKIEEQVrRU5Et4joFQB/Z2cnenp6MDIyomJN8unu7sbw8DDi8TicTqdM3ZfyEFGGiOJE9IiIIkTkIyLtL0Ru6x8hfExET4noA4A0gLsejwfJZBIul0txlqsTi8XYNsMweHp6mjs6Oux9Os1/HPFT//V6vTw7O8tbW1tlHuFU/Scft9uNtbU1dHV1lbMyTRPZbBZLS0tYXV1V8Xw+j42NDezu7p5YAU3TFIaUuK+vD4ODg4hEIhgYGLC3V5lgSHxnZ0eNv0oSoVCI19fXuVrb3t4+5NWacAiXVZ0vagts13Wd5+fneW9vj2ttginYwlHB+VElEAgEeGhoqBxoa2vjiYkJTiQSnMvl2DTNfyaUNbJWMARLMG38sbEx7u3t/dMDsVgMk5OTShrWoXHIHA4H/H4/vF4vpJPb29tVJ9v7KmtKpRKKxSI2NzdRKBRgGAb2948fJ62traoHpqamsLCw8Hv9zMyMynpubo6dTudZ3X9u93g8nEqlFJdwWvPnlmHV3pBhpTVkiIYMUw0Z4pgMFy9Qhov2tXz5AmQonLrd9bpdif8hQ4tLV4+iStkR0T0ADwDcrpMM3wBIMPPLMiefoHsiugrgjvWMug4gcGLXnW2fAbyXZxiA18ycP8ZVJZBcleUiL4nJdl0G4DryT8m6nMrbUojknP95FvIveiBakRqhcyUAAAAASUVORK5CYII=" alt="sunder" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Sunder</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Reduce attack of an enemy Assault and it can't gain attack or deal extra damage.</p>
+      <ul><li>Targets only Assaults who will be able to attack during next turn.</li><li>Lasts until the end of next turn.</li><li>Does not affect already applied Attack bonuses.</li><li>Does not prevent Flurry or Swipe.</li><li>Affects Valor, Bravery, Allegiance, Legion, Coalition, and Berserk.</li><li>Prevents targeting by Rally.</li><li>Rupture and Venom will not do additional damage.</li><li>Enrage will fail to apply Berserk.</li><li>Will not deal additional attack damage to Enfeebled or Marked enemies.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Berserk</span><span class="chip chip-counters">Valor</span><span class="chip chip-counters">Bravery</span><span class="chip chip-counters">Allegiance</span><span class="chip chip-counters">Legion</span><span class="chip chip-counters">Coalition</span><span class="chip chip-counters">Rally</span><span class="chip chip-counters">Enrage</span><span class="chip chip-counters">Rupture</span><span class="chip chip-counters">Venom</span><span class="chip chip-counters">Mark</span><span class="chip chip-counters">Enfeeble</span><span class="chip chip-counters">Avenge</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="swipe" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAE40lEQVR4nKVXbUhlRRh+9nr9Wr8NtjCQSMnUqxtCv2xXMnY2Ia1QBBFE8Ud4C4V+iiRC9Wf3T/6o1k3TZXcNRLTccp2sFc1NQxRJQvzGUFDD1dSbn9x4pjuX6/EcvW4PzDnvmTkz7zvv5wxwPnwDwH1G+wOA3d8FL5yD+TMA/oqNjUV1dTUODw9P/PDw4UP09fWRzAbwCE+JIgCfAygH8JJPfzx3GB8f77aC0+nUWnjfZ95lAB8AaAXgPMFNSqkagCwA3xvUuUshPONp7HM4HJYCVFVV6XlVnjmXTUz0E4B3NF+7ECIWwBcACjkjKioKJSUlmJqaQk9PTzCATwEUaIEvXLC2WmhoqJf0vOv4yMvLQ2pqKhobG7G6ukrzZAshHgCosHskeiU4OBj5+fkoLCzExYsX8eTJEwwMDMDlcuULId4EsHQeOwoh3gXwdnh4uNpQZGQkrly5gs7OTrS2tmJra+stAC/YyDwlJQXNzc0oLS1VzImYmBgljAcf4vxQflBcXKyYE3a7HQUFBWhpaYHD4WCXgwJgaWnJV31eUCOXLl0ieQ1AiTaRH8gE8EZcXJxSvxFutxvz8/OKtgH4YXNzE21tbSd+pFnKysr0J1XmL17lo7y8HIGBgScG79+/j52dHZLfUYCbpNrb25XdjcjOzkZSUhLJl5XENqU0UwQFBWny2bS0NGVzI1ZWVtDV1aU/P7FJKZkw2nd3d3H37t0TE+j1TqfT6/0RERGWAmgz6jlmuHPnDvb390nek1L+ZvMNl+7ubuUPRiQnJyM9Pd24S0skJCSoZgTt3tvbqz9r+VACSCl/B/A10ysl9MX29jZDBlevXj22y9NA9ZuBkUYHBHBLSjlLwrdoUKIy5vKioiKEhYWhvr4ew8PDxxbRYWoGPTY9Pc08oGiGW2VlJfb29jA0NKR/rdaEXRNSyj+FELfcbvd71MLBwYFiHh0drWzKBVwul6lXa+ixiYkJbx9pbiQkJETv/ksp5boetxnW+IiPwcFBjI+Pq46FhQWsr6/j5k0VLN6kYgZtnoqKCsWMjXmDQoyMjHBozpP2cUIAIQRTk+LKidSAGU4zgR8O+iJ5CCG+OiaAEIKidwB4LjMzE1lZWTg6Ojo2UwtEk1iBatYp14icnBzk5ubqsXIhhPrZ7hl/DUBiRkYGamtrsbGxgf7+fm0zBdr/LAFYeAg6sBGsCUzrDPPR0VF2MUv9qE3wCx9jY2OYnJxUTMx2cZYApyUpmo6MPcynAQyQ0HngH3ond9zQ0KAmWHn70wrAtW/fvq0/mQV3jVHA3DlBj338+LHlQqcJcFqE0KSzsyr3/CqlVJn3mABSShq8hXRTU5PO117H0uA5wQpmpZr5Q1dAD5p9x22+H1JKBnvf4uKi99TLkuzvLrUT+oJFjlhbW+OrV0rZYCmAB94YNYOZh2sEBATgDHxm7LAZO6SU93jEt1rBKkER2mwW+FZK+eBMATz4L++agNXxacYAfGzWaTPrlFLypKy2ylMSG+uBjy1Nsby8bFmypZQjfgvgwc988CrGduPGDdU5N8d6Yo6ZmRn1ZjZlBfW5Q1jH9Sl4nockahbA3zxAMp/U1dVZ3oxqamr07YdZzpdWZ/D/ezm9Rk0mJibi+vXrpiHX0dGhblQAXmc4n2Ntv8EL31nXc++hzx/8C4VkNpUtTT26AAAAAElFTkSuQmCC" alt="swipe" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Swipe</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">After attacking an enemy Assault, deal damage to the adjacent enemy Assaults.</p>
+      <ul><li>Avenge will trigger before Swipe, but after Attack.</li><li>Swipe will still trigger even if the attack deals 0 damage.</li><li>Damage from Swipe can be blocked by Protect, Barrier, and Stasis, but it does not target and is not an attack, so it is not affected by Evade or Armor.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Protect</span><span class="chip chip-countered">Barrier</span><span class="chip chip-countered">Stasis</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support" data-name="tribute" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAeCAYAAABNChwpAAADlUlEQVR4nLVXaYiOURR+ZnyDGOtkl2yNRiNRyD979vySpeSPJcpSRFnyx5IMJVlCJFt2fxDJkKQwtrH8QA1DY1+GIYZHh+fVceed+T7NOHV77znnueece865934fSCLJ6EryNMnPJB+RnEYyLQaXILmY5EOSpSR3kWyezD6SALJIvmBFWhCD3RiDu0UyozoBzJShIpL9SK4RXxLgGpD8Kt1cksNIvhU/qiof6aiaWul7GUA+gF3iswJcAwAZmm8HcBLAffEtq/TA35E0JDmSZH+S6S7CodrFN5KbSd4UfyHYSZpqH+l2av6DZE7QJwPlq35Ugm5KaUSXSDZyi7YEdX1NsntMOgeTLAuwS53ebF5xumLzbYrzEpwkeV3z5YHxPLfwGcl6MQG0CQKYE+hXSH5Tp8roHHS8SpVGy4bR2WDxjmBnC2MC2BZglgR6s0llrxbJj+bbFIVSWKpPaZ4XLL4h+SF935Fs6vQ56hOPORjY2OoyHQVbaIrhJL8E0a9yC+vK+Bc5fSnMaoc5IpmVMFvz+05vOz4c+PhkxzUCdJRBxtSwl6ud8bPFl6nufdXtRkPkzHTl6hUr7abAdp58wqeoDskPDmRGJ5GcKn6vcLXdkbOy5Wt+xtkqkKw3yZWB87LoCMbdhAcEitJc7uq/2OHGuyCNvpPs6fS7Jb/scJHNI1XdhMf0fQJgHYBaALpLdtfh9gO4BiBN/D4ABU5fqG8fu+sAzAJQLtnRuJsQ7rKI7nTb0QaXui4BdoDk1pztA91ot/MZJAeJN9uNkz1GpwVerwbaJieJGOwJkmtj5J2dc39HnErlNZwp8Cs1nHX1/Epes1w92aHc3pMprrmjl3FqKgG0dc01thLH/zLGuEZtkcpzXKwGM5qM6tM4fS8CeB4q0ytZdFzfIQDaVsO5/U4YFdv9orRfdahIuQBua74IwAoF21KjNoBM6X8AeA/gI4APAEp09IwmANgjvgOAolQDMHoAoBOAlwCeAugqx8nom8po69sB6ALgKoBeceBEJUZaAPiueTONVClDu7URUSMF8ziVDNQFcAlAj0BuqX4oI2+UctttRPXkKAdA55jA7DdibwClf0lZ8djMCx4ke99HkMz8h6PXWv8fokcpomWp3AP33IKJNXAPTHf2ipIF0MSB79SA82hcdXbbeF0iqJM/89mqdU1QZuDDTtUvSgRAayKva1JDAXiyJv9Dyf4Z/Q/y2cBPmKpAUuRn37IAAAAASUVORK5CYII=" alt="tribute" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Tribute</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Friendly Assault skills that target this unit also target the user of that skill.</p>
+      <ul><li>X indicates how many times Tribute can activate.</li><li>Discards targeting and faction modifiers from Tributed skill.</li><li>Inhibit can block Tributed skill and fail Tribute activation.</li><li>Tributed skills cannot be Tributed.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Inhibit</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-passive" data-name="valor" data-cat="passive" data-avail="normal">
+    <div class="card-header" style="--accent:#ffb84d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAdCAYAAADLnm6HAAADJUlEQVR4nLVXTUgbQRT+Bot4CAo5BQLpJQcJDeQUKqToPQePAaUQEBpSBKGn5NabghdBiaQXoUUbqHiQQE+lhxSKkqq0FAIRQkUQApaA0BKJfeWtO9vZ3UmySfWDgd2Z2fe+eb+zICI4B4BHACoA6I7GqSnTDXIrDwFo3aFyOX6ZsvsSKPH03NwcqWi1WhQKhQxh5XKZvGJ7e1slUepJAECCp3w+H52fn9sEpdNpQ0gymaRBkUgkVBKJXgTe81Qul7MJOD4+Nj4eHR2ler0+MIFqtaoS+KjqF6ZiCCGyAArBYBC1Wg0+n8+YX1lZQT6fN54XFxexvr5ufby6uorTU44vN6LRqLFfYn5+Hjs7O/L1OYBNmwUAfOVX9plEs9mksbExg7nf76fLy0tr7eDgoGfQjYyMUK1Ws/azS9m15nrD5gIARX5kX6nIZrOWwEKh0Muv2uGMl+XlZXW9aFlLMmZfq34XQhibY7EYdTqdbpHdc6gZ0263KRwOq+tRJvCOX/i0KuLxuLWxUqlY81dXVxQMBj0TYIWsWIIJKeu7hhfYNxcXF9amUqlkbUqlUjZinCGDFiE2vYrp6Wl1HS7zqwGmnp5PogSS5xEIBGwE9vb2bASKugCMRCKkq4h3YQEOTnPtsy0FmZlqBRmE9xQD1wAmJIEXus2ZTOY+s6DsLEQfdOaamprS1gE5P2Qd+OnqBQCSukYkT+ushOyWXsqdge2ohC9dvYAhhOB2mUqn09ja2oLE7Ows9vf3sbS0hLW1tf/tBWcAHnbrhmEde9nNhu2GspsC+APgcb8LSVHnPy5IunkvUPrGF5epyE1gAsAPZwQfHR1ZaTnkjei31lekv5TmdGk5MzMzcBFSxlvPBKhLWnIRGh8fH0b5d61yOLLAtiAEp2WZb0b1eh2BQMCYPzw8xMnJifabeDyOWCxmPDcaDUxOTuL6mgsengD4NJAF6JaYtlV7AfcQ8/Svu53eCwHtZaUflCLV0v4LKHjQh9w3IcSrm5ubZ5lMBgsLC/CCjY0N+bhJRGdDW4D+WaI6ROBxC+0rW3g60i2emsHkBfxf+cbLzr8yT5Uat02SMQAAAABJRU5ErkJggg==" alt="valor" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Valor</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ffb84d;color:#2a1a00">Passive</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">On first activation, if opposing Assault has more attack, permanently increases attack.</p>
+      <ul><li>For Assaults only.</li><li>Fails if there is no card opposing this Assault.</li><li>Counts current attack of both cards, including modifiers from skills.</li><li>Checks attack of valor unit at start of turn (before rally from friendly skills).</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack" data-name="venom" data-cat="attack" data-avail="normal">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAEpElEQVR4nLVXTSx0ZxR+ZvxMYpCakRl/wYgSYaF0QeWLRNKF31SCMBJEu7GqNKmNWNiopNqdoqMJTU0l2jSjwWg6Ej4WLPzMQoy/liHKoCkfYTHe5ryZd3rHzDD18ST33veec+55zvt3znuBh5EC4FsA7H9e3wP44BHfkPmRfwjgc9cTwcHByMjIQE5ODpKTkxEdHQ2lUgm5XI7b21ucnZ3h8PAQa2trWF1dxZs3b4SfeQDjAL5EAHgHwI+iBxEREayhoYEZjUa2ubnJHsPR0RGbnJxkbW1tLDk5WToScwAyHyJWAZgiY4VCwTo7O9n19TV7G5hMJpaYmCgCcADI8kduIiOdTsfsdjt7Ltzd3bHq6moRwAGAmPvEHaSMj49nh4eH7CVQUVEhAvhFShwJ4E9STE9Ps5eCw+FgMTExIoCPBPknJCgpKWEvjZ6eHkH+B4AIIjeSYGho6MXJqffFxcUiAL0cwCuKoKioiA/DxcUF7u7u8Jy4urriT8oP5eXlQvyKyMOoFRbGHxgcHMTx8fGzko+MjMBut/O2QqEQYgWRL1NreZk/YLFYpAbPAsp6lP0IZrNZiF/LXXsPBwcHMJlMiIuLg0qlgl6v56k0PT0dXV1dARMZjUaehpOSktxTmZWVhdnZWR7AwsKCMP2Nbs20ADIzM1lBQQG7vLzkW+5+scjNzWUWi8XvYrJaray8vNzru66uLq6vq6tjqampTKlUCl04XNWHCwYHB7nhwMCA34qVkJDAzs/PPYhramr82re0tHCbjY0NFhQUJORm0X1eSKgYCNhsNhYWFubTWWtrq1evZ2ZmWGhoqE/70dFRt53ZbGYpKSlCV8enm17u5/P19XU+jCqVihcaGnYqFAIdHR0sPz+f7ezs8Pe9vT1WVlbGgwgJCeG6qakpr0B7e3sF+TdE/hO9jI2N+ZxLqmxnZ2cesvHxcXfP6uvrPXQ0Jaenp3591dbWevT8U19O/GFubo7JZDKPoe3u7g7oW4PBIL45B5BA5EkA/iHh4uLiow5oUd6f18bGxke/u7m54TvK9U2j9Bj1FYDPoqKi0NTUhLy8PISHh0Or1SI3N9drL1utVkxMTMDhcKCwsBClpaX8qCUFZTTa106nEzabjWfOra0tuE41hfd9uo9P4qKtsbu7y56C7OxsX6v/dwDvCkJpuLQAvnYVmjxKAk6ns5jSrk6n84hye3sbR0dHvK3RaJCWlgaZ7L+z6NLSEk+p1ATwFwAbpVMAvwaWJ4EvpBmK0N7ezmJjY70WnFqt9tj/krpN0/kkVJKDyspK7tDpdDKtVislfe26Nuid8gEtKoJer3fX7KeSa8mBRqNx90hyEk2U2MWRjEbkETsvyB/QUVGfPzk5weTkJBeEhIQIXajELojfgvgD8/Pz2N/fpyaVr/2nkhM4a39/P39Rq9XSM76AWqrr6+sTcpqSt0IUbVkawoWFBdbc3CyG82OJTRXJqqqq2MrKinQxPjjkgfT8b9cBEwaDgf+fueBuAIjnt/h4DA8PgzHiRf9jQ44AkSp+oSSr/T2JnlIgPyhERkYK/fvPQSzwnWSL/exDT0ciof8hUK//AvIa+KfyLWw1AAAAAElFTkSuQmCC" alt="venom" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Venom</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Deal extra attack damage to Poisoned enemies. After dealing attack damage, inflict Poison.</p>
+      <ul><li>Extra attack damage and poison status inflicted are both equal to X.</li><li>Poison status works exactly like the Poison skill: it can't be reduced by protect, stacks, and decays by half after dealing damage.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-defense" data-name="wall" data-cat="defense" data-avail="normal">
+    <div class="card-header" style="--accent:#4d9fff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAAEsElEQVR4nK1XcUS7Wxh+/Ja5I8aIsv6J6K+yK5ZYIsaIErFEGSUiYpQRUaJr+WVE959lKaWUcq9SSin3ihJRbqIsSymllFJKOddz7s7ut6/Wb9Xv4bPv+/a973Pec973ec8BPg8LgAoAQQB7AIT2slgs2ucZAPbPEhkBuAD4AazpidLT04Xb7RahUEgcHx8LIhgMyvea70IAfkmGzAGgDcCCnshsNouysjLx/ft3sbe3JxLh+vpaeL1eYTQale0/AAx6IhsAL4A/AFxpiQwGgygpKRFdXV1ibW1NLCwsiNLSUtHR0SEeHx/Fj7C/vy+Ki4uVv1JFyJu/9FHl5+cLn88n5ubmxP39fZyj5+dnEQgERGpqqsjJyRFLS0s/JO/u7la+uxWpfJGdnS2amprE1NSUuLy8FMmA6+lyuaQ9B/IR4m4+8OVnMTMzIx1yzfU4PT0VfX19wul0ipqaGkVc8w0/EQcHB/L35OQEPT09KCoqQkZGBnp7e+FwOGCzMYUkfv3pxAUFBcjMzERnZyeys7OxsrKCcDiM9vZ2mEwm9akp5atkR0dHmJ6elvdPT0/SeSgUQmVlJVJTUxPapfB7ZZQszs7OMDo6ivHxcWxsbMBqtcqIPB4PsrKykvKRAuCBNw8P8ichrq6uMDk5KcmWl5dlZG63G36/H8XFxe/avry8YH5+XhvcU6ycKAZZWVmira1NrK+vy4y8vb0VY2Nj8j8KCPW3paVFmEwmkZub+26ms86Z7cxkqhxt+/v7VVb/jqhSSVmjttIhn61WqyTgvd1uF0NDQzGF4gATEVNs6urqJBF9UBeocoSeuIUPjESBH1IU6GBra+uVcyqalliRpaWlycFy1jY3N1/ZhUIhRTxI4kY+NDY2imTBQTEa2pCMU8nIVDtMhJGREUU8+qE6ZpIMDw9jd3dXigTLyOfzIRKJIBAIxJIwmQr5Rn/KaSKDm5sbqUQUhtraWpnRwWBQEnq9XpjNZhgMBlgslhi5smMlVFVVIS8v75VfN8NnE2enqaysFBMTEzKjI5GIaG5ulu9VkvG/RGCXUolKbWYlqAZkt9vjpprE1Xyorq4W4XBY+P1+acTGTUfsOHxXWFiYkJDZzgFxvbVtlQnY3t4utre3X61xHLEW2rbIMnA4HK8ImblMKu3+ioPmroSz9V5ypSRafLVeelxcXMgEGxwcxM7Ojlxvp9MpVczlciW0Iz7cJJh41Ofy8nLMzs5KB9RnggmWlpaWjBsYjcbYbZxkMrFY5Ofn57HpWVlZiU2lzWaT084NHPdafKd2lO+BucO1Zu1Hp9oXFzHb2eLiIlpbW3F3dyej4rRWVFSgoaEBdvv/W2PVVDgbb4H2LCUuyerqqvavPwH8FhexHmwWjO4tsGRox2i04Ax5PJ5YCUavMIAhACWK/d011kaoh4qYkVHFBgYGZHSHh4faz+YBTEa1OW5qSHynHHwETBQuRX19vdwMaPA3gNUo2X+bsATIUEcQJo42sd4CN/PsRKplRq8TAGMAnPggprSKw+7D3qxEhFtUbn+VJOrOQp8+jCEKKhgHcKE9trD36sh4YOPBLeerhHpwa+iJnp8U2RmACe2Z56v4F36idqoliMQhAAAAAElFTkSuQmCC" alt="wall" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Wall</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4d9fff;color:#0a1a2a">Defense</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Intercepts attack damage dealt to the Commander.</p>
+      <ul><li>For Structures only.</li><li>Incoming attack is entirely redirected from Commander onto the skill wielder.</li></ul>
+      
+    </div>
+  </div>
+  <div class="card cat-support" data-name="weaken" data-cat="support" data-avail="normal">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAgCAYAAADud3N8AAACKklEQVR4nMWXwaoSURiAv0QmBEGaiIYWQjQkSK6SQDBcXRAEQRBaSchEEN1t4AP0Bq6E2giCEAQtWgbC3RpB3vsA0oAmCC4EU5SJM3luXu+ozajTBx7OzJxzPs8v/v8Z+MM7wDrA5wvwih3cAG4CvxRFIZFI4JVOp8NsNpOXn5fyH5vGR8W3jEaj1j5Mp1Or0WjY6yx3fQHcO6pUMhqNrEwmI8WffJEKhsOhFYlEpPjJujDAEVBVFcMw5OWJL1LbdHLperr+LAj8FJ1+v08ymXS1cDwep1arEQqFrj3TdV12H2ya7/l/Wq/XHX/Xbrcrx3Sddip4AbwGHrnY6DPgjYiQW4Ir/Snw1cXcjGi8SAN4Z2I3k4mv0oXdLBa+Ssd2Mx77KvVMgP9A0OX4MFBaZpmHLua1gXPgDHgfdCn8DtxfvemUjRwKShR4DDwXN9xI00KYzWYplUrEYjG76Ivi74SmabTbYoN/i3y5XHbMxdu4LdKaqqqWaZquSt18PrdSqZRMi5fl519pion5fN6VtFqtSuE3PKAC5rZEv45pmlY4HJZSka898VKGudfr7ZTmcjkpFFHaiw9ioUKhsFXYbDZXy9utfaV3gJ5YUCy86ZykaZqUnnIgTmWYB4PBNalhGDtPhF75KBYuFotXhK1WSwqnQOzQUg0YrIZZHLp1XZfStxyJK2GuVCqr7zVHxQ5zOp22FEWR0vRxlXB3WQykUJwufUPsTrwFbuU30em3GxPWvnQAAAAASUVORK5CYII=" alt="weaken" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Weaken</span>
+        <span class="badges"></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Reduce attack of an enemy Assault.</p>
+      <ul><li>Targets only Assaults who will be able to attack during next turn.</li><li>Lasts until the end of next turn.</li><li>Stackable.</li></ul>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-special restricted" data-name="rush" data-cat="special" data-avail="restricted">
+    <div class="card-header" style="--accent:#cc88ff">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEsUlEQVR4nKVXXUxcRRT+hqW71N1UxYX6V2xrtCmCJhgjYjS11oQ0xSYlTXwwJGRN8MEHfSBaxAcfICb4QP2JJpb4QGKySjTGtin+RIhKNCigwQeVUmgbYiNxNyG2sEA/c27PkOnl3mWBkxzYnTvnfN+c+c6dWUMS6zADYDeABwDcASAOIAfgXwATAH4xxlwJiHsEwE8Arq56QrIQryH5DsnzzG85koMknyeZAPA4gBGBUX9vvQT2kjzNDVgqlbpigWtra2mMsSSKCiFgSB4jubAR8ObmZg9MQNva2jg+Pr4uAlGSn4XkFkJnSLaTfIbkAZJPy4JJvp3JZM42NjZ6QCUlJezt7fWCWlpaLPj7a21BNKTkGZKvkLzZT9ixnQC+k5Tl5eUcGhq6FpjJMJFIeATi8Xj1WgTeDQA/SfLWMJ04Kr8g6aqrqzk9Pb0S3NXV5YFHIpFTJEtke8MIHAkAP06yKJ9QATRbsTU0NHBubm4leHFxkRUVFd6z0tLSoyTj4kEESkie84GfUDHmAz9hwVtbW7m0tHRdgnQ6bVcvrZkguY3kTYLnJ/CyD/w3JRUGvBXAxxIejUbZ09MTqNi6ujqPQCwWe5HkjaqhpPq1rSAZIXnRF/tEHvAdAAYkNJlMcnBQFrfaRkZGrPLHFEdWX0ZyO8nbVraC5H5f7Ld5wPcCmJSwyspKTkxMMMyamposgbcURzrsdpJ3ktwhRCyB132xz4aA7wGwICH19fXMZrOh4DMzM97WKAE5OyyWENhJchfJ3SJwGfzKFx/YcgBekxypVGqV2PzW3t5uwUUnrt5kC+4heS/JPSS3yuCkE3sxT/m/lBz9/f15wefn5z1tKIF9PgIiwkqS95Gsku/FAMqcOZcQblnvT9b7F2rpdBqzs7Py8RsVq2vLAKJ6rIttKdaWsnZ5swS6u7tXuIRMEQJQEhE5mdyMpZshMDAwgNHRUfn4I4APQsDFt6hTCMw4E+4GIFUJMrn1IJPJBD6cmppCR0eH/fp1SA65pMTUBWe5WF8U9pSSBw/q9clvWT+ByclJ9PX1eT48PGyH/wKwwsRnZVqBqyrSy6LM53xCfjOkC4QYa2pq2NnZ6f13rlriUwB6dZWrjGSM5GH1BpJPybjRN9KMc1ORlVYAmPMnMcbI3j7sDJ3TO0AfgC9CVm0JVAGo0k6QCpw1xox5p50GH3LmvwHgWFAiY8xBAI8JsFxejLn+eA8BvwHAEV3ksnq/MSZjCdQB+N7pT3nlPgngh7WSF0jgoB5iSwp+wRgj7wnYsg8B+MjOl/7U7/L+35SR3Kd5bAsW61XdsyJn7ksAzjt7JIo9rdetjQAXi+AAPOr0vfiYlN7OM76LZS2AM06rSMnmARzXY/W/AvHlBBTwJIBFdcn1B4DPtcqBBMQOaPljWo0l9Uuq9pMAftcx17YBuF/1dJf+ZFt0/E8An+hn5CMg9hCADwFs95HIqc/pxWRW9SLgcRWvdQucU42d0lwohAC0fK8COOpsh5t0wSGU8wHbsX8AfArgV4SYKeDXsZT1Be19MZeEC+aC/633h0EdD7VCCFi7BcB+JSRtJa9cOcpFmKJq2RLZ55/1PFj9UzzA/gdN186DTgQC2wAAAABJRU5ErkJggg==" alt="rush" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Rush</span>
+        <span class="badges"><span class="avail-badge restrict-badge">Not Available for Players</span></span>
+      </div>
+      <span class="cat-badge" style="background:#cc88ff;color:#1a0a2a">Special</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Reduces an allied Assault's delay by 1.</p>
+      <ul><li>Unobtainable.</li><li>Only targets inactive Assaults.</li><li>Triggers only once unless wielded by Commander.</li><li>Can trigger target's Valor.</li></ul>
+      
+    </div>
+  </div>
+  <div class="card cat-attack unavailable" data-name="anti-air" data-cat="attack" data-avail="unavailable">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAC/klEQVR4nM1XTWgaQRT+rCFFkK4IUg/ptgfBS3NSchICBSGQU08BoYcgKDkZBMNCQkBIjhZBCFiE9CJ4CEKgp0JB2J5Ci1IvCQ0ai7nkILEJpqEJU97GWdZ1/anRtB/ojN/O7ntv5r33rcAdMgDYmD9pDIAJwGMAv6anpzE7O4txoFQq4fb2lqbvAIT7rRXJU1EU2biQTqeZ2WzmO7A7tPF6vc4ikQhbX19nFxcX6gMrlQpbWVlhW1tb7Pr6eiCfz+eZxWLhDmSHMh4IBNRzi8fj6sMWFxdVPplMDuQJhUKBCYLAr+cBPNEafqT3RBAEdW61Wg3nvdZoecL8/DxkWYbT6aSfrwHsAXjaM/Lz83O2ubnJEolExzaenZ0xSZJYKpViNzc3A3ktarUac7lcfAe+AHgxsYQzAjk5NzfHHfgO4NmDGSdQAvv9fu7Ahwc1zo8Vd8abXQlXrVYRDoextraGRqOh8kdHR1heXsbGxgaurq4G8sNC1Ea+tLRkWGoLCwuGJdWLHylyh8Ohzu12+8j8SJG3Wi2WyWRYLpfrKB1Klp2dHba/v98RSS9+mMjxXyXcQ8LUHmUAPrfbDY/Ho7bMZrOJ4+PjrptoTT9Qm43H47BYLF3X6Jk2m42mPzn3su2A0gaLxeK9tpaUMRQKscPDw77bDh0+0gWSQtLk+4CSlUo1m80ObRxt8VcWkLxqNX0UUBXEYjGlivTGTTDGGwApOj7KA5LGYUCvYdTlgsFgR81T19ze3oYkSUpfsOnO3Agke5/IS3ph0IIktFd50k5Fo1Emy3IHT/JMO0A9hAvLVB/jJwDeAniFvwBVSiKRwMzMDE5PT/st3etn/F4wm8166ne7ok7a4/uJGdfgOYAfRhemDLgkNZwxGqcXRy0+A1g1Mv6NklZ/d7lcVjSe4+DgQBlJ7zkvimKHwl1eXvKpvh162uOqttQoWtnn8yGZpOAnA6/XS8NXmmojF3hfHtS7xwAPff1TVYMGFHltAv9WjT5Ual1Q1W3ChskO/gCfCJE3SpV7dQAAAABJRU5ErkJggg==" alt="antiair" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Anti-Air</span>
+        <span class="badges"><span class="avail-badge unavail-badge">Not Available</span></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Deals increased damage against flying units.</p>
+      
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Flying</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack unavailable" data-name="crush" data-cat="attack" data-avail="unavailable">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAfCAYAAADwbH0HAAADq0lEQVR4nLVXbWRbURh+tlDL1gmZWqmF/FkshBBK2YSSCq0SQmn1V9mvVij5Ffa3lPZnK5SQCZkwSkl1Ssn+lFBaqZIqpaRKJ2RKaZ15jnvSk5t7s36kD1euez6e877v877vyQs8HikAXwA4AJQALAP4i2fERwB7AITpOQGQ6DaZD8CMsXGZRENDQ6JYLIqtrS0RjUb1A2QBvOkGaQzAtW7d4OCguL6+FjoKhYLo7e1Vc9YBvHoqqeAzMzMjEomE6OvrE6Ojo+Lq6kqYcXJyIgYGBhR54bGkHgB1brK0tNTcvNFoiGQyKSKRiCV5tVqVhzPIk4+NqZicnGzbXLk2HA7Lg5ixvr6uiIsPIU3r8dStNWNnZ0eMj4+3Wc7DGOsbAH4B+AbA2Yl0iAscDoeMKa31er3i8vLSlnx3d1fE4/EWsa2trZlTTQCoAvhkR5zjJMZQYWVlRcbz5ubGlpxEdDvFxRAMDw+LcrksD8x043qDvGIUnDaccsLp6WnLxlTz/Py86AS/3y83d7lc4uzsrGWMh+bBDPKvZtJ3HHC73ZYb0/WZTMaWOBQKyRDl83nL8Ww2q4i/WwqKiyuVii05FWuVQk6nU+RyOduDlUolRfxbz1dJSIXSZYFAQNTr9bbFdBkFxzgqUNEsKBsbG6IT9vf3FfG+Ip7U85WpQGLWXytBUb0Uz8TEhFhcXJQupjX/Q8nC4mVzvlKdrD6pVMpyE3pDiYmKNqNWq0lB6sjn84r4B0lfKnk7HHcq93q92N7exurqKjY3N9uk73K5UCgU4Ha7EY/HW8Zub28xNTWFcDjc8v34+Fi9VhVxjS/n5+ctEwOBAIrFIubm5vRFTfj9fgSDQYyMjODg4KC5+djYGKLRKGIx9pc7HB4eNl/Vy2e6gHG1iw3HLi4uWr4zV7U2KJ9gMCjLqBV8Pp+axz7QBK8uMteswO/swap08pcXAWbC9PS0SKfTsnR2Qu/dId/qxKwmMhf39vYsF87OzkrBMZdZZGgd8/e+iNyVzYw5bPwgm4LZrSrN+vv75WKmUKfGYYWjoyNpmEH+2kzO/indaFVAWCgeQ0osLCzYWky8VzdIkuuW82JHgVh54wGkAsAobPBBkbPTUDwej0f09PTIsvdcpLrlP/VU4QGem1SHF8C0apfmrqUavVUmPIVUR54b0N3sYLFYTLrffNdW6dUtUlVa1yzuUX+My5zUBNONzaFbpNDgBjBuXPTZxxX4r6FFE90kvQ9Cxv8r/nbEPwXFVJxc8MOvAAAAAElFTkSuQmCC" alt="crush" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Crush</span>
+        <span class="badges"><span class="avail-badge unavail-badge">Not Available</span></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Deals additional damage against Structures or armored units.</p>
+      
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support unavailable" data-name="fear" data-cat="support" data-avail="unavailable">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEdklEQVR4nK1Xb0SsaRT/PcWs3OyQjRjGLjErGxExKy6xLMsSERFDRESfIiIiIiKiNWvoiiEilmGIWaUMEVFa25fWEPWltFrZiGf9zn3P68zcmebt2sMz7zPnec6f9/x/4b1H7QLwHYBjAD5YpXr3Gi0AX9bQ7xFX966vz+CQhP39/T6VSimTsTcokFf67u5upc9HUgBALwl6e3s9YWNjQxn88gYFKqSpVCqyAvpKvbst+BTS8pOWB46OjhRPq0QFITo4OEAymZQFIOmck42FljrE3/InlUrJn8vLS8WHmwjwh6VVXtxGUSAuP3F54P7+XvHhJgLcW1rlpbybKRCTn5g8wqfiI0JkHi32j3PuCwA33N/e3goukUjocbiJAAlLa60YyKhWwDk34Zz7AOBfAB3Wf4ODg3o38wYFvreBfH5+rvgRynDO5Zxz44rMacGIxWKaMj6ZTEoaXl1d+dbWVsX3A/gBwDqA0wD3N4AygJUgyOaJ7+npEfqLiwulvaiVAUCUEOTm5qZfW1vTAylEpRILoPczMzOKp3v8K+tZ98ViUWjn5ub07Dc+WVey2azifv2kaJi39UNDQ8Lk+fnZDw8PC66trc0vLi7609NTOXt4ePDlctlPTEyEdOvr63J2d3fn29vbQzxpiTs7O1PcWVg2V1ZWhGhkZEQP/+RzZ2dH8C8vL358fNxvbW35RjA7O1t1bpSSt89kMoKfn59X/AYV+Jl/EomEf3x89NfX1z4ej4dad3R0iMZvBbrUuqWzs9Pf3NyIBcgzOHuvtbtIxPT0tBAfHh5WKUFiNXkUyOVyVbFBgcfHx3JGK6pVwmYEoI9I+n97e1su0hK8rD6k/8i4GYyNjYWC+RJ0A3nVKPYI4JuqbgggqxmxvLwcMqTvT05ORLG9vb2mCuTzeblLGstjYWHBBnimbjuGqQns40xLRvnnAv3N4GZNMS7JNpsHftI6wEUXpNNpPzk56Xd3d18VyDdlnvPuwMCAuM0I3gcwFHUiWrVBxAwZHR2N9NZPT09SP7q6uqzwJwBLTSciAF8BKCjh1NSUlNLPBWYOc98osls7G8IIZ2MqaR/QtPk/YH9/31qk0EiBLV7gEMqCoSWYlZA+pWmjApWn9RgzjAsCy7wJxlyVAvgYeBJwavIaravSqhkwjW38sFcQyMN0w0GrAOf2MP/ZyUzOlmyVjAJ9fX028kWoKmG7YyD74xjOckszsx9wrzmrVZLW4WzQDAqFgtKWbW2h+cm7pkMmeWFRI76mUxVr44NvRiaNgE3L9JA5Q1+0HdeU62ke/q7DBwPG+P29YfAumHrka0eD1AKtQ3/X+wrSjksrUAZLtWYE1EeMeHbB4OCoTnH6Wr/36CKdEwirq6vWrOLbOvT8WBEZLO9mnIMEGccuEyDLDZiwUO1ohLNE8xPOFBq66l0D2mXeWVpasoNKgQccNKv6t6bIK99+M2Yo5WLvGG5C82Od+THleOicoxKcv9sC84cfhK+Bc45z9z/e+3DubnKfSlDOX4Gcy/8AG5Or44yRmb4AAAAASUVORK5CYII=" alt="fear" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Fear</span>
+        <span class="badges"><span class="avail-badge unavail-badge">Not Available</span></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Forces a target enemy Assault to skip attacking for X activations.</p>
+      
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-support unavailable" data-name="immobilize" data-cat="support" data-avail="unavailable">
+    <div class="card-header" style="--accent:#4dff91">
+      <div class="icon-wrap"><img src="data:image/png;base64,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" alt="immobilize" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Immobilize</span>
+        <span class="badges"><span class="avail-badge unavail-badge">Not Available</span></span>
+      </div>
+      <span class="cat-badge" style="background:#4dff91;color:#0a2a15">Support</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Prevents the target card from moving or attacking.</p>
+      
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-passive unavailable" data-name="regeneration" data-cat="passive" data-avail="unavailable">
+    <div class="card-header" style="--accent:#ffb84d">
+      <div class="icon-wrap"><img src="data:image/png;base64,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" alt="regeneration" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Regeneration</span>
+        <span class="badges"><span class="avail-badge unavail-badge">Not Available</span></span>
+      </div>
+      <span class="cat-badge" style="background:#ffb84d;color:#2a1a00">Passive</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Continuously restores HP, even outside of the card's own turn.</p>
+      
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span></div></div></div>
+    </div>
+  </div>
+  <div class="card cat-attack unavailable" data-name="siphon" data-cat="attack" data-avail="unavailable">
+    <div class="card-header" style="--accent:#ff4d4d">
+      <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEUklEQVR4nK1Xz0vrRxAfkhIIBFIESyAQCEiFgDT0kF5SBEEQ+gcIngTBU6EgCJ4EQejVYi8PBE8WIQepKA/qoUjss6SV+hCsUsEaEEXB1iqKokz5zNvZznfzzXuP6sBmd37s7GdmZ3e/IWYmNCL6mog4n8/z/Pw8F4tFCNG+IqIUEfUR0TARdRFRgYiGnAy6QSL6Fr3zNUBE067nZDLJs7Oz3N/frz5f+nX5zQQ42YOyXq8zqFarqfEPqnPthoj+NrzVob0IeB4eHhafV1dXnMvlVN5nAXwJYV8fZG/o5uaG0+m0dwIdHCk/NDQkMowzmYxEiEg14unpab/YysqK9zs5Oak+ahbASwgXFxfZUqVSEWNsBwAhOxbo3Nyc8NgyULVaFX5iYkL40dFR4c/OzrzPk5MTD5SIMlj8A0WNFFlSB1NTU8Lf3d1xKpXihYUF4ff29iT6h4cH4cfHx8X+6OhIeABDTYU0MDCgAL5IENGnQFEulymTEUCeurpQb0Td3d3Sp1IpkZVKJa9HSyaTwvf09IhNoVDw84rFIoXU29urwyoAVAOhp3w+L/39/b2XdXR0+DEWtqCtDtTZ2el9WKpWZUnQ5wDwGUaVSqXFEA5A5+fnXnZ7e0sXFxeebzabER3Aolc+l8u1+EW2HX0CAB/bNFvKZrPSn56eehkWPz4+9pnB+PHx0essKPDqwxKy5uQZAPjIRmspnU5LrwtqNuwCWFwBaqYODw+9Xn2EpHWScJeQFE8cUuvw+vpa2v7+fgTYwcFBJFPKQx8Wdhhcgoh2MNjZkS5CWnztFtRMhPqQjyO1SRDRNgbb29JFCNFqKtHaLRgCsv3l5WWLX9g7+QEA/NYOgJ28u7sb2XsLCDq7sOXjAJi1Xr81AyEArQXdMuWhQ7ZsEeIIoo8DsLW1pcNfAeB36+RtADTVIY9ITQANnAwAxBbFAWg0Gn6YYOYHIvoRk4wiFoC9dGxGMHdtbU1VG/hZXl5u8aG2Zp1fkAFQXWZubLx3BmDr9N/hZ2lpSVWr8rO6GgsAmXKZ3sIngj7H8uWCV8rS2NiYvlrfmw+MGhG9cuNXbj4CwKDueNVzqVSK+JyZmVE/39jvgQ8hzGaz/mkFjYyMqPEI3ibcmuYTrqxjx/cEPC58LhQKEQCDg4PqUz7fErBkZnxi7SBdeoRApiivmfmYmc9UwMyRY8PM4U32Z9wWmG2WQcLofsbP5uZmXA20lvI7yAUVAYAidpdXEwGFAKQQ19fXnwWAo3+sHxP9TzpIGOP18CQ8A4BIFozvegsAZsYhbyJNet6fAcCl9WOyuxGXAa9QQwNAUvmULcDb4Qr8L1uwiWCC3wbcWO4UPMqF8cQMmOh9+kH4JI/NwDNEHwFgrt//qpyCDDAzctTAe2+u3T+eA4ApwPYA4h4TWzD/g45iXsvXEQs216e7QvEHgcvlsl6ZvaHN+zb3n8P6etFi02Zi5LF5SnuXr38B0nKA8YdHBqQAAAAASUVORK5CYII=" alt="siphon" class="skill-icon"></div>
+      <div class="name-wrap">
+        <span class="skill-name">Siphon</span>
+        <span class="badges"><span class="avail-badge unavail-badge">Not Available</span></span>
+      </div>
+      <span class="cat-badge" style="background:#ff4d4d;color:#2a0a0a">Attack</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">Drains HP from the enemy and transfers it to the wielder.</p>
+      
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+    </div>
+  </div>
+</div>
+<script>
+  const allCards = Array.from(document.querySelectorAll('.card'));
+  const search = document.getElementById('search');
+  const counter = document.getElementById('counter');
+  const grid = document.getElementById('grid');
+  let activeCat = 'all';
+  function makeDivider(cls, label) {
+    const d = document.createElement('div');
+    d.className = 'section-divider ' + cls;
+    d.innerHTML = '<span>' + label + '</span>';
+    return d;
+  }
+  const divRestrict = makeDivider('restrict-div', 'Not Available for Players');
+  const divUnavail  = makeDivider('unavail-div',  'Not Available');
+  const firstRestrict = grid.querySelector('[data-avail="restricted"]');
+  const firstUnavail  = grid.querySelector('[data-avail="unavailable"]');
+  if (firstRestrict) grid.insertBefore(divRestrict, firstRestrict);
+  if (firstUnavail)  grid.insertBefore(divUnavail,  firstUnavail);
+  function updateStats() {
+    ['attack','defense','support','passive','special'].forEach(cat => {
+      const n = allCards.filter(c => c.dataset.cat === cat && !c.classList.contains('hidden')).length;
+      document.getElementById('cnt-' + cat).textContent = n;
+    });
+  }
+  function applyFilter() {
+    const q = search.value.toLowerCase();
+    let vis = 0;
+    allCards.forEach(c => {
+      const matchCat = activeCat === 'all' || c.dataset.cat === activeCat;
+      const matchSearch = !q || c.dataset.name.includes(q) || c.textContent.toLowerCase().includes(q);
+      const hide = !matchCat || !matchSearch;
+      c.classList.toggle('hidden', hide);
+      if (!hide) vis++;
+    });
+    divRestrict.classList.toggle('hidden', !allCards.some(c => c.dataset.avail==='restricted' && !c.classList.contains('hidden')));
+    divUnavail.classList.toggle('hidden',  !allCards.some(c => c.dataset.avail==='unavailable' && !c.classList.contains('hidden')));
+    counter.textContent = vis + ' of 61 skills';
+    updateStats();
+  }
+  search.addEventListener('input', applyFilter);
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCat = btn.dataset.cat;
+      applyFilter();
+    });
+  });
+  applyFilter();
+</script>
+</body>
+</html>
