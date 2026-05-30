@@ -86,13 +86,19 @@
   .chip-counters{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.25);color:#7dffa8;}
   .chip-countered{background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.25);color:#ff9999;}
   .hidden{display:none!important;}
+
+  .type-bar{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
+  .type-chip{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;
+    padding:2px 8px;border-radius:4px;text-transform:uppercase;}
+  .type-assault{background:rgba(255,77,77,.15);border:1px solid rgba(255,77,77,.4);color:#ff9090;}
+  .type-summon{background:rgba(204,136,255,.15);border:1px solid rgba(204,136,255,.4);color:#dd99ff;}
+  .type-structure{background:rgba(255,184,77,.15);border:1px solid rgba(255,184,77,.4);color:#ffcc77;}
 </style>
 </head>
 <body>
 <header>
   <div class="title">Tyrant Unleashed</div>
   <div class="subtitle">Skills Reference · 61 Skills</div>
-  <div><span class="complete-badge">✓ All Icons Complete</span></div>
 </header>
 <div class="stat-bar">
   <div class="stat attack"><div class="stat-num" id="cnt-attack">0</div><div class="stat-lbl">Attack</div></div>
@@ -124,8 +130,11 @@
     <div class="card-body">
       <p class="desc">Absorbs damage dealt by enemy skills each turn.</p>
       <ul><li>Refreshes at the start of the card's turn, at the same time as Valor, before BGEs, commander skills, and On Play skills.</li><li>Refreshes back to its starting value.</li><li>Evade triggers first.</li><li>Can absorb damage from Overloaded skills.</li></ul>
-        </div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span><span class="type-chip type-structure">Structure</span></div>
+    </div>
   </div>
+
+
   <div class="card cat-passive" data-name="allegiance" data-cat="passive" data-avail="normal">
     <div class="card-header" style="--accent:#ffb84d">
       <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAfCAYAAAD0ma06AAAFVklEQVR4nKWXf0iVZxTHP141u3fltObFpZaz2Q+bJYpwbbHl+qFZZrpWf0RDHOyPmILSaDGDkSQUhEb9Z/iPSSsyJGK4WkhaMhgIadSQsVXq9oc07vWPm3mv9xnn8X3q3u59K9gX3vd97vOc93yfc95zznNuHC+xB/gEGAa6AUU03gMqgS+BZcDPQJf1zlwM+VygFvBbck/irIXPgSthgj8CnYAXcAHZ1mYqgHSHw0F8fDyBQACL6FfgJ2AEmLJ0FAHfAVnW70Gg1BDIglq1apXKzs4Wy+QKAUHrqecSExNVaWmpunTpkrp3755qampSGRkZRt5cQWsTKiEhQRUXF6uFCxfK/D/Au8bCD4Hf3G53Snd3N0NDQwwODuLz+XC5XGRnZ1NQUMDWrVvJy8tDLDTwer3cvn2bu3fv8vDhQ6ampvS6vHPw4EFu3LhBe3u7iMqtMdzf4mN16tQpJQiFQioQCOjnq5ienlYPHjxQsRAMBvUl8Hq9KjMzU6ybtVwcgXIh9Hg8L16ww/Hjx9WKFSvUxMTEa+UuXrxo3NwXI6BIBsadTqcaGxuzVTI0NKRcLpdWdODAgdcSHjp0yBB+iw10OnR1dcVU4PP5VFFRUUSQnD9/Pqbs7OyskZVQLrYjbBYlzc3NMZU0NDS8GpEqLS1N3b9/P0p2ampKpaSkKCtNUuwIvxIldXV1UQquXr0aRWYuSRUJsHCMjo6qpKQkWR8FkgzBy/ieh09u09PTEZOPHz+mqanJbpP09/fT2toaqcjnM4VBdAbsCGPi8OHDPHr0KGIuLs6k8DxOnDih8/FNcMSIVJKT9UPj3LlzXLkSXvUgKyuLLVu2RMzNzs7S0NDA06dP5xUlJ5OYmGh0JtoRZsht2TKpyzA8PMyxY8ciBERJeXk527ZtY/369RFrIyMjHD16FKPD6XTK8H3AaUeYr2/5+sGRI0d06QqHlLecnBxt0Y4dO0hLS4tY7+jooK+vj6VLl7J69WqZSgXyYhHKTj5dtGgRHo9HT2zatClC2bp16ygpKeH58+cEg0Httl27dpGQkPBCJicnhzVr1ujxxo0b5RFvVbEoQjnn3Js3b2b58uV6Qty5fft2PV6yZIm2SIJFqfmjUqzMzc1F3jE4c+aMLtyCnTt3mulq4J1wQvmw38hAKvyL3TgctLW1kZ6eromFVCwLh4S+eCIzM5P6+nptsYFsRDwCfCSqZSCxLf74HvhBFgcGBiJcJLh27Rp37tzRR1UsiMViuUSpbCocly9fZv/+/TL8C/hMLKwBmiT6WlpaosgEFRUVrFy5UrswFplYWV1dHUUm2LdvH1VVVTL8AKgXwo/FpfJ9Xs0tA9mEfI+kpCTm5iJbl5mZGQoLC9mwYQN2EMsteITwD2kLbt68SW9vr+1L8o3KyspMudKQseRbWHBEwe/36ziw8EQIO4DWZ8+eUVtbq3PIDpIukqNiVSgU0kFVWVlpEjwKMzMz1NXVcf36dfn5pwR++Lr0HGrx4sWqp6fH9lCVM/HkyZOqsbFR3bp1y1bO6/Wqqqoqc6JMAgWxNqVJFyxYoE6fPm2rTDq2zs5ONTc3F3N9bGxMlZSUGLJxoNDWbUCLOef27t2rxsfHoxSaBisWLly4oNxutyH7XQoUb4EvgAl5KT09XZ09e1b5/X5bi43Vu3fvDj+Yu6xy+dbIAXqNgrVr16r29nY1OTkZ0bf09/frZspqdhXwN/A1/wN7rFZeK0xNTVU1NTW6v8nPz1cOh8MQybHSJhn0f8gMpPxIAe4B/g1zm1QB+T8h31088kZE9glvhnRfcuaUWf+eBoBfgDGbf09R+A8SFNOQKaEGYgAAAABJRU5ErkJggg==" alt="allegiance" class="skill-icon"></div>
@@ -138,7 +147,12 @@
     <div class="card-body">
       <p class="desc">When you play another card of this Faction, permanently gain attack and max health.</p>
       <ul><li>For Assaults only.</li><li>Sundered cards will only gain health.</li><li>Increasing max health also increases current health.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Disease</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Disease</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-defense" data-name="armor" data-cat="defense" data-avail="normal">
@@ -153,7 +167,12 @@
     <div class="card-body">
       <p class="desc">Reduces damage taken from each attack.</p>
       <ul><li>For Assaults only.</li><li>Does not affect Swipe.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-passive" data-name="avenge" data-cat="passive" data-avail="normal">
@@ -168,7 +187,12 @@
     <div class="card-body">
       <p class="desc">When a friendly Assault dies, permanently increases attack and max health. Half effect for non-adjacents.</p>
       <ul><li>Only available on Assaults.</li><li>Triggers before Swipe.</li><li>Stacks with itself and other similar effects.</li><li>Increasing max health also increases current health.</li><li>Will not trigger if wielder killed during "all" attack.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Disease</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Disease</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-defense" data-name="barrier" data-cat="defense" data-avail="normal">
@@ -183,7 +207,12 @@
     <div class="card-body">
       <p class="desc">At turn start and after taking damage, Protect self.</p>
       <ul><li>Not triggered by Poison damage.</li><li>Counter and Paybacked Strike do trigger Barrier, and it lasts until the end of the opponent's next turn.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="berserk" data-cat="attack" data-avail="normal">
@@ -198,7 +227,11 @@
     <div class="card-body">
       <p class="desc">After dealing attack damage, permanently increase attack.</p>
       
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Corrosive</span></div></div></div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Corrosive</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-passive" data-name="bravery" data-cat="passive" data-avail="normal">
@@ -213,7 +246,12 @@
     <div class="card-body">
       <p class="desc">At turn start, if the opposing Assault has higher attack, permanently gain attack.</p>
       <ul><li>Triggers after "On Play" skills.</li><li>Compares only current attack value.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="coalition" data-cat="attack" data-avail="normal">
@@ -228,7 +266,12 @@
     <div class="card-body">
       <p class="desc">Deals extra attack damage for each different faction among allied Assaults.</p>
       <ul><li>User's faction is included.</li><li>Extra damage cannot increase attack from 0, but can help penetrate Armor and Protect.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-defense" data-name="corrosive" data-cat="defense" data-avail="normal">
@@ -243,7 +286,12 @@
     <div class="card-body">
       <p class="desc">When attacked, Corrode the attacker, removing attack after attacking and reducing protection from attacks. Removed after failure to attack.</p>
       <ul><li>After effect is gone attack is restored to its original amount along with permanent attack bonuses.</li><li>Protection reduction works the same as Pierce.</li><li>Berserk is applied before Corroded.</li><li>Does not stack, but can be overridden by a stronger effect.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Berserk</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span><span class="type-chip type-structure">Structure</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Berserk</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-defense" data-name="counter" data-cat="defense" data-avail="normal">
@@ -258,9 +306,11 @@
     <div class="card-body">
       <p class="desc">After being attacked, deal damage to attacker.</p>
       <ul><li>Deals damage even if no damage was taken from the attack.</li><li>Triggers before Leech.</li></ul>
-      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span><span class="type-chip type-structure">Structure</span></div>
     </div>
   </div>
+
+
   <div class="card cat-support" data-name="disease" data-cat="support" data-avail="normal">
     <div class="card-header" style="--accent:#4dff91">
       <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAeCAYAAAA/xX6fAAAD+UlEQVR4nJWWfcyXYxTHP/X0JkpRNImF2pI21GJGKMzEvKy1JtbMxtjY2Bg2syZjmuIfb/mjeU0SxrDmpazlNbX6R6MSPWWh0MsWvuex8/j+tsvdfT/P49w7u+/rOtd9nZfrnO+5einE/6QTgOOBo837gV+BTUB7dz/36YGCQcDVwJXAFGAY8CfQr2btFmAZ8DSwtW6z3l0oGgI8Amy0oiXAWcDQwpN7gNOA64HngCOBu+3tQmDgIbtmSGv4GoW+V+hehQZVZKMUnU+HQksqsv4K3aTQDsvXK3RcuaZO2YMKbVRoTIMxeNPFCp3s8RCFzldorMeDFXrZSjdZXqtwnkJflgsUGqnQdIUuqcy3eIZCv3vzUGihQr3MCzz/Zp3CqxT6UaFjPB6m0NIifMkHvUl/rxmq0P5C3mG+wvJU+qrnLi8VHqHQTnuR48MU2lCzUYuXe92UBvlDhSNDvPfnOW5l6c3AZ8AKj+8AJnSRwVkm0536USP/tvj+DXgYmAyMTwv6KbRdoTMKq77uwrsWL/baByphX1mEvIzgPoXuysK/APgZWFdYlUjSHY30ey7wHnAusANYCnQA11r+CrDP0ZucCqcBr1c22w4M70ZhCWNfmFs0E3jJ33/biDXArDzDScBK/ksJT93Ra35f5jO6FRjgucRXKt+bO2FRoW0KjVfoUYWmOeYDu8nSN7xufmV+nc8rZVPNrXNMYNiaH1sU+sA/HCgOPOtwWU0dPu41IxRSjTG3N6BT1uHaPMODBbLvBP7y9y/ADCfQ6Z7Pc9pj+YkN4D+q4QiOBbalwj+AW4AXgQ01dbXdXKXsIruBoyrzqxoUjgbWp4UHnEmrCuvTygXA237XlUn+N9tKk+TkeadBYZbNRxnbFca8VqzHKbS7ci67FDqp4WwywSYZ5GngxOd2hdrSw2+AsYUl89xkSxrueRo8/aqb68WNwPMZhd4O5dmFcGLDT1mvLUoDlwOfALcV84f7ZpBHMaK4oiRWP9E5ckd/oXB/TUPtfWx5H5dSKZtt2cxi7j7PPabQ3Nb+6eFeX4ryBobvIlXqcPIkneKMK2mq358aT7NDvA9cDFzkZPqXrHmiQvcXXs4xAqWlmxWaVciyV+6peHhnIW9TqK9CExT6TqFTm+40ixQaXcmuPg1Zd6EN2avQs25xpfzMhLEKtB2iMFP3LYUGdJHePeEb3F8PUVZ2/KRdwHz3r8yskvoa7RONmmic++Ic4JzOIq+hKhauBp4EPnSfLJOm3Y26pDbgUvfT1VaSCfRDk1WdCFNDY4BngMHeLAs7I5CeJgikN1m7aVRm+SLgqQLmGqlJYYvOA64zDia+ZoP9ySCfneNdYK0j0CP6B8z+Sk4k67sxAAAAAElFTkSuQmCC" alt="disease" class="skill-icon"></div>
@@ -273,7 +323,12 @@
     <div class="card-body">
       <p class="desc">At turn start, permanently inflict Disease on opposing Assault, negating healing and max health increases received.</p>
       <ul><li>Permanent and stacks.</li><li>Removes an equal amount of itself when negating a heal or max HP increase.</li><li>No effect on pre-existing max health increases.</li><li>Negation happens before Subdue's effect.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Heal</span><span class="chip chip-counters">Mend</span><span class="chip chip-counters">Refresh</span><span class="chip chip-counters">Drain</span><span class="chip chip-counters">Leech</span><span class="chip chip-counters">Scavenge</span><span class="chip chip-counters">Fortify</span><span class="chip chip-counters">Avenge</span><span class="chip chip-counters">Allegiance</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Heal</span><span class="chip chip-counters">Mend</span><span class="chip chip-counters">Refresh</span><span class="chip chip-counters">Drain</span><span class="chip chip-counters">Leech</span><span class="chip chip-counters">Scavenge</span><span class="chip chip-counters">Fortify</span><span class="chip chip-counters">Avenge</span><span class="chip chip-counters">Allegiance</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="drain" data-cat="attack" data-avail="normal">
@@ -288,7 +343,12 @@
     <div class="card-body">
       <p class="desc">After attacking, Swipe and then heal self for the total amount of damage dealt by Swipe plus Attack.</p>
       <ul><li>Heal amount is based on actual damage, so it is affected by everything from Weaken, Rally, Protect, Enfeeble, Armor, Berserk etc.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="enfeeble" data-cat="support" data-avail="normal">
@@ -303,7 +363,12 @@
     <div class="card-body">
       <p class="desc">Inflicts Enfeeble on an enemy Assault, causing it to take extra damage from each instance of damage.</p>
       <ul><li>Stacks with itself and Protected.</li><li>Lasts until the end of the player's turn.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="enhance" data-cat="support" data-avail="normal">
@@ -318,7 +383,12 @@
     <div class="card-body">
       <p class="desc">Increase power of skill on an allied Assault.</p>
       <ul><li>Lasts until the end of the opponent's next turn.</li><li>If the Enhanced skill is Evolved, the Enhanced effect will continue to apply to the Evolved skill.</li><li>Only targets cards with the relevant skill.</li><li>For active skills, only targets active cards.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Sabotage</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Sabotage</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="enrage" data-cat="support" data-avail="normal">
@@ -333,7 +403,12 @@
     <div class="card-body">
       <p class="desc">Give Berserk to another allied Assault.</p>
       <ul><li>Stacks with itself and other similar effects.</li><li>The Enraged status is removed at the end of the Assault's turn.</li><li>Targets only cards that are able to attack.</li><li>Will fail on Sundered target.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="entrap" data-cat="support" data-avail="normal">
@@ -348,7 +423,12 @@
     <div class="card-body">
       <p class="desc">Allied Assault gains Counter.</p>
       <ul><li>Lasts until the end of opponent's turn.</li><li>Stackable with itself and similar effects.</li><li>Assaults with Entrap can target themselves.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-defense" data-name="evade" data-cat="defense" data-avail="normal">
@@ -363,7 +443,12 @@
     <div class="card-body">
       <p class="desc">Avoids enemy skills each turn.</p>
       <ul><li>X is how many times the card can nullify enemy skills each player's turn.</li><li>Only evades Activation skills.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Payback</span><span class="chip chip-counters">Revenge</span><span class="chip chip-counters">Strike</span><span class="chip chip-counters">Jam</span><span class="chip chip-counters">Enfeeble</span><span class="chip chip-counters">Weaken</span><span class="chip chip-counters">Sunder</span><span class="chip chip-counters">Inhibit</span></div></div><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Payback</span><span class="chip chip-counters">Revenge</span><span class="chip chip-counters">Strike</span><span class="chip chip-counters">Jam</span><span class="chip chip-counters">Enfeeble</span><span class="chip chip-counters">Weaken</span><span class="chip chip-counters">Sunder</span><span class="chip chip-counters">Inhibit</span>
+    </div>
+  </div>
+<div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Overload</span></div></div></div>
     </div>
   </div>
   <div class="card cat-special" data-name="evolve" data-cat="special" data-avail="normal">
@@ -378,9 +463,11 @@
     <div class="card-body">
       <p class="desc">Friendly Assault with S changes that skill to S2 until next turn.</p>
       <ul><li>Lasts until the end of the opponent's next turn.</li><li>Targets only Assaults with S, but without S2.</li><li>Evolve can target inactive Assaults if S2 will trigger.</li><li>Enhance effect is carried over.</li><li>Only following Evolve combinations are available for player cards: Leech→Refresh, Weaken→Sunder, Siege→Mortar, Pierce→Rupture, Poison→Venom, Payback→Revenge, Swipe→Drain.</li></ul>
-      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
     </div>
   </div>
+
+
   <div class="card cat-attack" data-name="flurry" data-cat="attack" data-avail="normal">
     <div class="card-header" style="--accent:#ff4d4d">
       <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAErUlEQVR4nJ1XYUSsWRh+vp3diGFoRTZibO4wRAwxtH+GiIgYYhhiGaK/Ef2KiEu0Wl2TGErEEENkI2IydMWl3cgOESWiNfsnIs56zv3eue93+mam9uXcud/3vec8z3nP+z7vCcYYvHcASALYBWD8cfiGOSsATl1//A/wogB3dXWZeDwuJOIt/BcAfJE5yj/B79/hHeZ5XglAIRKJoFAooF6vIxqNyueo4zvleV7N3/lwOp1GtVpFJpMRl1H77zt2TnDT3d1tjo+PDa1arcpuTh3fvOx4eHjYHBwcWP9Go2Hn6wigDWAOwCcAv4eB03K5nCy2Ega+urpqtG1sbIj/QdscwFdwo4cLrhZrABhwwYvFonFtaGhI5uQ6EfhER4Ksr6/bxDk5OWkuVKlUTCQSCSwGYKYdeK1WE/9aAMuEE/iNzmtra2ZmZsacn583Fzo7O9PnWHwL+MvLixkfH5c5H99CoCRh397eDoBHo1F9NFUA8/K8tbVlwqxQKIj/NavlFQEAPwJI+QITSLj9/X1zdXVlLi4u7C4GBwcDudEJfGFhQXxeuH7IZrHXKeFWVlYsOMvo6ekpkAuxWMz+hhnzR6072iLaMD09PSaVSplkMmn6+voC4Le3tzYJGXqG8v7+PgB+eEhVfW27u7safLpNucPMzc3ZnTHhGG6xx8dHXTp2MBLlctmCHx0dhYJzA5Rpf85sCOiQX+oDlsD8/LwVlcvLy+YiJDQyMqKTLeknkX2no6SNkVFVsuUA/+qvpTUE9qG3t7dJ4Pn52eTzeb2Ln/zJ9nlsbMwmp2vUCgVeUsDsOfsyn1FVKoo0gLKQYLbzrFlyfPadmuClUsnWNQnq86dW8FhmZ2cDcqvBmV+cTxsdHf3qZ745WRJMNgnvwMBA4PxlskRpYmLC7rper1uyBGel+P7/AvhBg0uE+ev7XOrzSUiPZwQ4tOhocDGCMU/6+/ttSOWdIlBxwWnT09NNJYUPfhwmLu3ABUyqhLLtEDACritLCdMjgH6Cb/BFIpGwWsAdcfdUPJ7p3t5eKLhTJYFBMizhbDZrbm5uwjpoU5hoF3zB5NMiQnFiIoYZz181l3MAWV1e3MzU1FQAnD3F7aBC4IYvxZmO7cBZAaqEqAs/q8XKEvalpSXrS2PJuh1UE/iHHxgynjXBdft1TZVZw7+AbAJY1qXMhHt4eLA9hGrJklWJF5BlSKby3BgiXhxa2eLioj5DO08P0REx7pzvmJgqajmXQFYvMjk5ac/YNRJUYeRN15YfLyDLy8u2GnS2kwij6ZBsXt/c+0DWvwXd0pECo0kwKVkR+hbM33Q6bUPN8EqXpF1fX1tyooi+Jhy44K9uRAA+SFIyy0mCzYWCxKR0RMbumqWowUlIXVoqHa/75nWr/CBdL5PJ2J2LNDsEmmXHCDDj+Z3lRz3xv6XeTcB8I3HFRdj7tQmo6utUNJvpHAw/j9D3m+hE4HuEmDHmb8/z/mB/uLu7w+YmKy1gp77fn57n8U+szzs7O9FarYZ4PI5YLCZ+zf+0NNP6qhSoDmfkHd+PIT6vMj5seFKLYeZ5Hkn8AqBbva4aY3ZCfEmC0eD9ghHiVeyvThH4D9DeW8nrq8aJAAAAAElFTkSuQmCC" alt="flurry" class="skill-icon"></div>
@@ -393,7 +480,12 @@
     <div class="card-body">
       <p class="desc">After attacking, activate skills and attack again. Cools down between activations.</p>
       <ul><li>Also triggers effects that occur when wielder starts and ends action.</li><li>Inability to attack does not prevent skill activation.</li><li>Each attack triggers damage-dependent and on-hit abilities.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Jam</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Jam</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-special" data-name="flying" data-cat="special" data-avail="normal">
@@ -408,7 +500,12 @@
     <div class="card-body">
       <p class="desc">Attacks are dodged 50% of the time, but never when you want it to.</p>
       <ul><li>This is a joke skill, only available on April Fool's cards.</li><li>It is a reference to the Flying skill in the previous game, War Metal: Tyrant.</li><li>Gilian Shardkeeper has this skill and can be fused from [Vindicator Reactor, 2x Gil's Shard].</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Anti-Air</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Anti-Air</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="fortify" data-cat="support" data-avail="normal">
@@ -423,7 +520,12 @@
     <div class="card-body">
       <p class="desc">Permanently increases the maximum health of adjacent Assaults.</p>
       <ul><li>Stacks with itself and other maximum HP increases.</li><li>Only available on Assaults.</li><li>Can only be mimiced by Assaults.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span><span class="chip chip-countered">Subdue</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span><span class="chip chip-countered">Subdue</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="heal" data-cat="support" data-avail="normal">
@@ -438,7 +540,12 @@
     <div class="card-body">
       <p class="desc">Restores health to an injured allied Assault.</p>
       <ul><li>Targets only Assault units that are below their maximum health.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="hunt" data-cat="attack" data-avail="normal">
@@ -453,9 +560,11 @@
     <div class="card-body">
       <p class="desc">After attacking, deal damage to the leftmost enemy Assault.</p>
       <ul><li>Acts as a separate instance of damage.</li><li>Hunt is non-targeting skill damage and is not affected by Armor, Evade, or Revenge.</li><li>Activates only when attacking an Assault.</li><li>Activates after Swipe/Drain.</li></ul>
-      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
     </div>
   </div>
+
+
   <div class="card cat-support" data-name="inhibit" data-cat="support" data-avail="normal">
     <div class="card-header" style="--accent:#4dff91">
       <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACTUlEQVR4nMWXzYrCMBSFb9tBLAhFcVfoxqcQBFeCIOrGlSvBlYPgS8xqYEBmBmfrAyoIgkWpZjihlRiTpj8DcyHlmt6c82F+SIkxRkUaEX3NZjOGhrywDithHkURb2UgqIx5EmUgqKx5WQjKYf6tM1dAfP8pABG1Wq0Wu16vzBSoQS3GZNG2KVvsdrsd2ba5HDWoxZgswjb9c9hFB4ZheM8vl8vfAliW5ZkGjsdjDgHz6XRqNNJqsucF9+Z5HpI3oc9DnxgYOhgMeJPfxeO9NE3lLiCi9WQyYfv9nrXbbXS86wBc12WNRgMvB2kA0IAWNKENDyUAxebn85mLHI/HO4QKIDZvqN4lAIk5tBDQliFIZZ6ECKGaAt2/EwM8mCchQ2jNRYhOp8PyAqjMVRCUZi5CDIfDzAC9Xk9rLkPYvu9TpVKhtMB713Upa+A0dBzHqBkEAc83q9UqlVS11UxT0O122el00urCE94cBslyuVSaj0YjPlcFFuEHpkIFAa/YvJLsAkeGEM11B5EBANvwo9/vP6wxwdyRzwEOsVgsHszTTkIiahNR13AQrTGF0IS2aK68D2BAEASPh4UGAFsNc53hKF77vv90CmovJEQUSL+fAGB+OBz4HMtbVAaINfwyNyJPBhD3eRiGRoCyN6KnqNVq97xarVLRsOmfw85Y12w2m3S73YyFURRRvV5Hyh/GYDmv5aaYz+co/sysy/J9mGzSIGLzTS5NlqM4DSL+IMllXghABVHUHO0l4yKU182rZVlIF3hst9sf9BXR+gXzaAXo/RgKqQAAAABJRU5ErkJggg==" alt="inhibit" class="skill-icon"></div>
@@ -468,7 +577,12 @@
     <div class="card-body">
       <p class="desc">At turn start, inflicts Inhibit on opposing Assault, causing it to avoid allied skills.</p>
       <ul><li>X is the number of friendly skills avoided.</li><li>Lasts until the end of the opponent's next turn.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Tribute</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Tribute</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="jam" data-cat="support" data-avail="normal">
@@ -483,7 +597,12 @@
     <div class="card-body">
       <p class="desc">Inflict Jam on a random enemy Assault, preventing them from acting next turn. Cools down between activations.</p>
       <ul><li>Only targets Assaults that will be able to act next turn.</li><li>Prevents attacks as well as activation skills.</li><li>Lasts until the end of the opponent's next turn.</li><li>Cooldown triggers only upon successful activation.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-passive" data-name="leech" data-cat="passive" data-avail="normal">
@@ -498,7 +617,12 @@
     <div class="card-body">
       <p class="desc">After dealing attack damage to an Assault, permanently gain health.</p>
       <ul><li>Always gains X max health, as long as any amount of damage was dealt.</li><li>Increasing max health also increases current health.</li><li>Leech activates after Counter damage is dealt.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Disease</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Disease</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="legion" data-cat="attack" data-avail="normal">
@@ -513,7 +637,12 @@
     <div class="card-body">
       <p class="desc">Deals additional attack damage for each other allied Assault of the same Faction.</p>
       <ul><li>Counts even assaults that are inactive and/or non-adjacent.</li><li>Progenitors do not count as being the same faction as non-Progenitors.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="mark" data-cat="attack" data-avail="normal">
@@ -528,7 +657,12 @@
     <div class="card-body">
       <p class="desc">After attacking an Assault, permanently inflicts Mark, causing it to take extra damage from each attack.</p>
       <ul><li>Permanent and stacks.</li><li>Mark is inflicted even if the attack deals 0 damage.</li><li>Extra damage is added to all attacks against Marked card, even from cards without Mark.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="mend" data-cat="support" data-avail="normal">
@@ -543,7 +677,12 @@
     <div class="card-body">
       <p class="desc">Heals adjacent Assaults.</p>
       <ul><li>Heals each adjacent assault.</li><li>Only available on Assaults.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-special" data-name="mimic" data-cat="special" data-avail="normal">
@@ -558,7 +697,12 @@
     <div class="card-body">
       <p class="desc">Use a random enemy Assault's activation skill at Mimic's power. Ignores Faction restrictions and cooldown.</p>
       <ul><li>Enhance, Evolve, Rush, Mend (for non-Assault Activator) and Mimic will not be Mimiced.</li><li>Overloaded status and N can be Mimiced.</li><li>Can target skills with "On Attacked" triggers, using them without that trigger.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="mortar" data-cat="attack" data-avail="normal">
@@ -573,7 +717,12 @@
     <div class="card-body">
       <p class="desc">Deals damage to an enemy Structure or half damage to an enemy Assault if no Structures.</p>
       <ul><li>Half Damage is rounded up.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="overload" data-cat="support" data-avail="normal">
@@ -588,7 +737,12 @@
     <div class="card-body">
       <p class="desc">Give Overload to an ally Assault, causing its skills to become unavoidable and irreducible.</p>
       <ul><li>Lasts until end of player's turn.</li><li>Unavoidable means skills cannot be avoided by Evade or Inhibit.</li><li>Irreducible means damage from skills cannot be reduced by Protect, Barrier, or Stasis.</li><li>Application of Overload can be blocked by Inhibit if the caster is not Overloaded.</li><li>Only targets Assaults with valid skills - Enfeeble, Jam, Siege, Mortar, Strike or Weaken.</li><li>If any allied units are Inhibited, then Heal, Protect, Enrage, and Rally are also considered valid skills.</li><li>Only targets active Assaults that have not acted yet this turn and do not already have Overload.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Evade</span><span class="chip chip-counters">Inhibit</span><span class="chip chip-counters">Protect</span><span class="chip chip-counters">Barrier</span><span class="chip chip-counters">Stasis</span></div></div><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Inhibit</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Evade</span><span class="chip chip-counters">Inhibit</span><span class="chip chip-counters">Protect</span><span class="chip chip-counters">Barrier</span><span class="chip chip-counters">Stasis</span>
+    </div>
+  </div>
+<div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Inhibit</span></div></div></div>
     </div>
   </div>
   <div class="card cat-defense" data-name="payback" data-cat="defense" data-avail="normal">
@@ -603,7 +757,12 @@
     <div class="card-body">
       <p class="desc">Enemy Assault skills that target this also target the user of that skill.</p>
       <ul><li>X is the amount of activations per turn.</li><li>Only Assault Activation skills are affected.</li><li>Only available on Assaults.</li><li>Paybacked skill cannot be Evaded or Paybacked.</li><li>Triggers before wielder's death.</li><li>Evade triggers first, therefore subsequent Payback will not activate.</li><li>Can affect Mimiced skills, but not Mimic's skill selection.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="pierce" data-cat="attack" data-avail="normal">
@@ -618,7 +777,12 @@
     <div class="card-body">
       <p class="desc">Bypass damage protection for attack damage.</p>
       <ul><li>Effective against Armor, Protect, Barrier, and Stasis.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Armor</span><span class="chip chip-counters">Protect</span><span class="chip chip-counters">Barrier</span><span class="chip chip-counters">Stasis</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Armor</span><span class="chip chip-counters">Protect</span><span class="chip chip-counters">Barrier</span><span class="chip chip-counters">Stasis</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="poison" data-cat="attack" data-avail="normal">
@@ -633,9 +797,11 @@
     <div class="card-body">
       <p class="desc">When attacked, Poison the attacker. Poison deals damage at the end of turn, then halves.</p>
       <ul><li>Stackable.</li><li>Poison damage cannot be reduced by any form of protection.</li></ul>
-      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span><span class="type-chip type-structure">Structure</span></div>
     </div>
   </div>
+
+
   <div class="card cat-defense" data-name="protect" data-cat="defense" data-avail="normal">
     <div class="card-header" style="--accent:#4d9fff">
       <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAADWUlEQVR4nLVXXWRjQRT+7E/Zp7Kv+7IPsWwJebqEEJZQylKWpU8hXMISQghhKSWEEEorLHlKhZDVfckqWanGRgjhUkqfSlef+lAl1QqzzjVznTu59+am2/2YJDcz53wz35kzcy6wHNIARgCE1joAUvgPSABoKqJ0Oi1Go5FotVoimUzyCdQAvHkKwtcAKsqxYRii0WgIHdVqVVfg67+QFrmz7e1tEYTr62tRKBQ4+RhAZhnCzwD6ykE+nxeXl5cuEsuyRDabFZVKRdze3rr6xuOxyGQyfAJNGSpfxADUlcHm5qY4OjpyOZ3NZqJUKumy2lLroJBQaNi4igydg1cAympALBYT9Xp9ztHu7q5OWJabyX5OpVKi0+nM2ZXLZd2uqIj31J+0Gh20alo9M6TxUTbxlEwnu59CQKHgoFBRyJiPLNTD+fm5a/DFxYXI5XJ8cA/Ap4BQfeEro0VQaDh6vZ7qtxxiDtrBmjx56XwNwA6AYwBTAH8A/ABQkP3PZb9jSyHim9KXmHaltiFWpVOSZ+Zxaqk2AfBejo3yEF5dXS0mbjabPA3ASO3/TdMU/X5fTKdTO3aHh4ciHo8rG1LhHbMjAifm1pLEa2ql1OcFiiUdo2wvhCfGfFPEe2qlQbi/vxeRSETZbnBij2YTO7HwOW1csw4Cy9kyC5FObql0WgRbZj01vNDtdpXzn4ucPgtB/GB/PNhfgbi7u3N+hiHeWyD1gD6Ojyl1gzEcDtXP32GkFgs2V4meE4lEoNynp6diZWVF2cbDbC4RIo9tB1tbW3PXIOHs7ExEo1Fl9y1MOr1A+Dt6eHBwsEpymqYJwzBwc3ODwWCA/f19FV8KixnSJ1wrptOISdIF8FGOeyuf/ULTAPBSjjXlEWr30Smnr3iOmEDH4Pr6OndK925EOt2QefoLwHd5gRiy7wOANj9eJ5OJ49fyIg55+dPN4wWqLKtqHFWeVIEGHDAWeDrR5jk5OXENJpmKxaJ+C5l+RSE51+FRBmc9C3WqFqhq5CDJSDpm3OY2VGGGsGkBSHpJtvTsH6nS4+PVbrfttwkdtVot7L7wRVJKYzugWpmqEz8syIRHwZWTJKHKSwIViVpRyHP/SbDDJSRJPYr73FMScpB0ThHPGh0o9GIQGn8B7IsmeJl8RYQAAAAASUVORK5CYII=" alt="protect" class="skill-icon"></div>
@@ -648,7 +814,12 @@
     <div class="card-body">
       <p class="desc">Give Protect to an allied Assault, causing it to take less damage from each instance of damage.</p>
       <ul><li>Stacks with itself and other incoming damage modifying effects.</li><li>Lasts until the end of the opponent's next turn.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="rally" data-cat="support" data-avail="normal">
@@ -663,7 +834,12 @@
     <div class="card-body">
       <p class="desc">Increase attack of an allied Assault.</p>
       <ul><li>Targets only Assaults that can act this turn.</li><li>Lasts until the end of the turn.</li><li>Stackable.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="refresh" data-cat="support" data-avail="normal">
@@ -678,7 +854,12 @@
     <div class="card-body">
       <p class="desc">At end of your turn, heals self.</p>
       <ul><li>Triggers before Poison.</li><li>Unaffected by Flurry.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span><span class="type-chip type-structure">Structure</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-defense" data-name="revenge" data-cat="defense" data-avail="normal">
@@ -693,7 +874,12 @@
     <div class="card-body">
       <p class="desc">Enemy Assault skills that target this also target the user of that skill and adjacent Assaults.</p>
       <ul><li>Behaves like Payback.</li><li>Targeting all available targets spends only 1 charge.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="rupture" data-cat="attack" data-avail="normal">
@@ -708,7 +894,12 @@
     <div class="card-body">
       <p class="desc">Deals additional attack damage and reduces the effect of damage prevention on attack damage.</p>
       <ul><li>Obtained by Evolving from Pierce.</li><li>First updates opponent's damage prevention stats, then deals additional damage.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Armor</span><span class="chip chip-counters">Protect</span><span class="chip chip-counters">Barrier</span><span class="chip chip-counters">Stasis</span></div></div><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Armor</span><span class="chip chip-counters">Protect</span><span class="chip chip-counters">Barrier</span><span class="chip chip-counters">Stasis</span>
+    </div>
+  </div>
+<div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
     </div>
   </div>
   <div class="card cat-support" data-name="sabotage" data-cat="support" data-avail="normal">
@@ -723,7 +914,12 @@
     <div class="card-body">
       <p class="desc">At turn start, inflicts Sabotage on opposing Assault, reducing the power of its Activation skills.</p>
       <ul><li>Only affects X parameter.</li><li>A skill with 0 magnitude will fail to activate at all.</li><li>Enhance can counteract this effect by increasing the X value.</li><li>Lasts until the end of the opponent's next turn.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Enhance</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Enhance</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-passive" data-name="scavenge" data-cat="passive" data-avail="normal">
@@ -738,7 +934,12 @@
     <div class="card-body">
       <p class="desc">When another card dies, permanently gain max health.</p>
       <ul><li>Triggers from both allied and enemy card deaths, including structures, assaults, and summons.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Disease</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span><span class="type-chip type-structure">Structure</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Disease</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="siege" data-cat="attack" data-avail="normal">
@@ -753,7 +954,11 @@
     <div class="card-body">
       <p class="desc">Deal damage to an enemy Structure.</p>
       
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-defense" data-name="stasis" data-cat="defense" data-avail="normal">
@@ -768,7 +973,12 @@
     <div class="card-body">
       <p class="desc">When this or another Assault of the same faction is played, it gains Protect until it activates.</p>
       <ul><li>For Assaults only.</li><li>Stackable.</li><li>Affects each instance of damage.</li><li>Overloaded will ignore damage reduction effect.</li><li>Cannot be Inhibited.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Pierce</span><span class="chip chip-countered">Rupture</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="strike" data-cat="attack" data-avail="normal">
@@ -783,7 +993,11 @@
     <div class="card-body">
       <p class="desc">Deals damage to an enemy Assault.</p>
       
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="subdue" data-cat="support" data-avail="normal">
@@ -798,7 +1012,12 @@
     <div class="card-body">
       <p class="desc">Before being attacked, permanently inflict Subdue, negating permanent attack and max HP gains.</p>
       <ul><li>Stackable.</li><li>Reduces total values - not the value of each increase.</li><li>Affects both current and future bonuses.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Avenge</span><span class="chip chip-counters">Allegiance</span><span class="chip chip-counters">Berserk</span><span class="chip chip-counters">Bravery</span><span class="chip chip-counters">Valor</span><span class="chip chip-counters">Leech</span><span class="chip chip-counters">Scavenge</span><span class="chip chip-counters">Fortify</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Avenge</span><span class="chip chip-counters">Allegiance</span><span class="chip chip-counters">Berserk</span><span class="chip chip-counters">Bravery</span><span class="chip chip-counters">Valor</span><span class="chip chip-counters">Leech</span><span class="chip chip-counters">Scavenge</span><span class="chip chip-counters">Fortify</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-special" data-name="summon" data-cat="special" data-avail="normal">
@@ -813,9 +1032,11 @@
     <div class="card-body">
       <p class="desc">Summons a card to the right of your rightmost card.</p>
       <ul><li>Cannot be Mimiced.</li><li>By default, Activates when the user finishes its delay.</li><li>On Attacked Summon is not on any obtainable cards. Thus, all obtainable Summon can only activate once.</li><li>Does not trigger Allegiance.</li><li>Summoned cards can receive Stasis.</li></ul>
-      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-structure">Structure</span></div>
     </div>
   </div>
+
+
   <div class="card cat-support" data-name="sunder" data-cat="support" data-avail="normal">
     <div class="card-header" style="--accent:#4dff91">
       <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAdCAYAAADLnm6HAAAC80lEQVR4nO1X30vTURT/HAncpt9p2nfi8kXYHIjChC0Si9lL9pZ7srdVUIL4B/ji/zBD6q0hvTTwoceIsZcSwoGDwlh+63FLTWyILoUvnDi373fNX7lky5cdOF+493zv53M493wu9xIzg4h0ADcAvGPm76iTEdEVADcBFAG8ZWZT5oX8GwC2/IUkVWsHIOSFCp5PAC5J4JlMRKNR1jTNDrrrkEBUsMfHx3l0dNTmeSIBJiJOp9Pc3NxsBxx1SOCaYIfDYV5ZWbF5sk0S6e/vRy6Xw8HBgQyfM/N+rfefmZcBGJlMBi0tLfD5fDIdVAmEQiEEg0FpEhk+JKIEEQVrRU5Et4joFQB/Z2cnenp6MDIyomJN8unu7sbw8DDi8TicTqdM3ZfyEFGGiOJE9IiIIkTkIyLtL0Ru6x8hfExET4noA4A0gLsejwfJZBIul0txlqsTi8XYNsMweHp6mjs6Oux9Os1/HPFT//V6vTw7O8tbW1tlHuFU/Scft9uNtbU1dHV1lbMyTRPZbBZLS0tYXV1V8Xw+j42NDezu7p5YAU3TFIaUuK+vD4ODg4hEIhgYGLC3V5lgSHxnZ0eNv0oSoVCI19fXuVrb3t4+5NWacAiXVZ0vagts13Wd5+fneW9vj2ttginYwlHB+VElEAgEeGhoqBxoa2vjiYkJTiQSnMvl2DTNfyaUNbJWMARLMG38sbEx7u3t/dMDsVgMk5OTShrWoXHIHA4H/H4/vF4vpJPb29tVJ9v7KmtKpRKKxSI2NzdRKBRgGAb2948fJ62traoHpqamsLCw8Hv9zMyMynpubo6dTudZ3X9u93g8nEqlFJdwWvPnlmHV3pBhpTVkiIYMUw0Z4pgMFy9Qhov2tXz5AmQonLrd9bpdif8hQ4tLV4+iStkR0T0ADwDcrpMM3wBIMPPLMiefoHsiugrgjvWMug4gcGLXnW2fAbyXZxiA18ycP8ZVJZBcleUiL4nJdl0G4DryT8m6nMrbUojknP95FvIveiBakRqhcyUAAAAASUVORK5CYII=" alt="sunder" class="skill-icon"></div>
@@ -828,7 +1049,12 @@
     <div class="card-body">
       <p class="desc">Reduce attack of an enemy Assault and it can't gain attack or deal extra damage.</p>
       <ul><li>Targets only Assaults who will be able to attack during next turn.</li><li>Lasts until the end of next turn.</li><li>Does not affect already applied Attack bonuses.</li><li>Does not prevent Flurry or Swipe.</li><li>Affects Valor, Bravery, Allegiance, Legion, Coalition, and Berserk.</li><li>Prevents targeting by Rally.</li><li>Rupture and Venom will not do additional damage.</li><li>Enrage will fail to apply Berserk.</li><li>Will not deal additional attack damage to Enfeebled or Marked enemies.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Berserk</span><span class="chip chip-counters">Valor</span><span class="chip chip-counters">Bravery</span><span class="chip chip-counters">Allegiance</span><span class="chip chip-counters">Legion</span><span class="chip chip-counters">Coalition</span><span class="chip chip-counters">Rally</span><span class="chip chip-counters">Enrage</span><span class="chip chip-counters">Rupture</span><span class="chip chip-counters">Venom</span><span class="chip chip-counters">Mark</span><span class="chip chip-counters">Enfeeble</span><span class="chip chip-counters">Avenge</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Berserk</span><span class="chip chip-counters">Valor</span><span class="chip chip-counters">Bravery</span><span class="chip chip-counters">Allegiance</span><span class="chip chip-counters">Legion</span><span class="chip chip-counters">Coalition</span><span class="chip chip-counters">Rally</span><span class="chip chip-counters">Enrage</span><span class="chip chip-counters">Rupture</span><span class="chip chip-counters">Venom</span><span class="chip chip-counters">Mark</span><span class="chip chip-counters">Enfeeble</span><span class="chip chip-counters">Avenge</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="swipe" data-cat="attack" data-avail="normal">
@@ -843,7 +1069,12 @@
     <div class="card-body">
       <p class="desc">After attacking an enemy Assault, deal damage to the adjacent enemy Assaults.</p>
       <ul><li>Avenge will trigger before Swipe, but after Attack.</li><li>Swipe will still trigger even if the attack deals 0 damage.</li><li>Damage from Swipe can be blocked by Protect, Barrier, and Stasis, but it does not target and is not an attack, so it is not affected by Evade or Armor.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Protect</span><span class="chip chip-countered">Barrier</span><span class="chip chip-countered">Stasis</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Protect</span><span class="chip chip-countered">Barrier</span><span class="chip chip-countered">Stasis</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support" data-name="tribute" data-cat="support" data-avail="normal">
@@ -858,7 +1089,12 @@
     <div class="card-body">
       <p class="desc">Friendly Assault skills that target this unit also target the user of that skill.</p>
       <ul><li>X indicates how many times Tribute can activate.</li><li>Discards targeting and faction modifiers from Tributed skill.</li><li>Inhibit can block Tributed skill and fail Tribute activation.</li><li>Tributed skills cannot be Tributed.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Inhibit</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Inhibit</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-passive" data-name="valor" data-cat="passive" data-avail="normal">
@@ -873,7 +1109,12 @@
     <div class="card-body">
       <p class="desc">On first activation, if opposing Assault has more attack, permanently increases attack.</p>
       <ul><li>For Assaults only.</li><li>Fails if there is no card opposing this Assault.</li><li>Counts current attack of both cards, including modifiers from skills.</li><li>Checks attack of valor unit at start of turn (before rally from friendly skills).</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Subdue</span><span class="chip chip-countered">Sunder</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack" data-name="venom" data-cat="attack" data-avail="normal">
@@ -888,7 +1129,12 @@
     <div class="card-body">
       <p class="desc">Deal extra attack damage to Poisoned enemies. After dealing attack damage, inflict Poison.</p>
       <ul><li>Extra attack damage and poison status inflicted are both equal to X.</li><li>Poison status works exactly like the Poison skill: it can't be reduced by protect, stacks, and decays by half after dealing damage.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Sunder</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-defense" data-name="wall" data-cat="defense" data-avail="normal">
@@ -903,9 +1149,11 @@
     <div class="card-body">
       <p class="desc">Intercepts attack damage dealt to the Commander.</p>
       <ul><li>For Structures only.</li><li>Incoming attack is entirely redirected from Commander onto the skill wielder.</li></ul>
-      
+      <div class="type-bar"><span class="type-chip type-structure">Structure</span></div>
     </div>
   </div>
+
+
   <div class="card cat-support" data-name="weaken" data-cat="support" data-avail="normal">
     <div class="card-header" style="--accent:#4dff91">
       <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAgCAYAAADud3N8AAACKklEQVR4nMWXwaoSURiAv0QmBEGaiIYWQjQkSK6SQDBcXRAEQRBaSchEEN1t4AP0Bq6E2giCEAQtWgbC3RpB3vsA0oAmCC4EU5SJM3luXu+ozajTBx7OzJxzPs8v/v8Z+MM7wDrA5wvwih3cAG4CvxRFIZFI4JVOp8NsNpOXn5fyH5vGR8W3jEaj1j5Mp1Or0WjY6yx3fQHcO6pUMhqNrEwmI8WffJEKhsOhFYlEpPjJujDAEVBVFcMw5OWJL1LbdHLperr+LAj8FJ1+v08ymXS1cDwep1arEQqFrj3TdV12H2ya7/l/Wq/XHX/Xbrcrx3Sddip4AbwGHrnY6DPgjYiQW4Ir/Snw1cXcjGi8SAN4Z2I3k4mv0oXdLBa+Ssd2Mx77KvVMgP9A0OX4MFBaZpmHLua1gXPgDHgfdCn8DtxfvemUjRwKShR4DDwXN9xI00KYzWYplUrEYjG76Ivi74SmabTbYoN/i3y5XHbMxdu4LdKaqqqWaZquSt18PrdSqZRMi5fl519pion5fN6VtFqtSuE3PKAC5rZEv45pmlY4HJZSka898VKGudfr7ZTmcjkpFFHaiw9ioUKhsFXYbDZXy9utfaV3gJ5YUCy86ZykaZqUnnIgTmWYB4PBNalhGDtPhF75KBYuFotXhK1WSwqnQOzQUg0YrIZZHLp1XZfStxyJK2GuVCqr7zVHxQ5zOp22FEWR0vRxlXB3WQykUJwufUPsTrwFbuU30em3GxPWvnQAAAAASUVORK5CYII=" alt="weaken" class="skill-icon"></div>
@@ -918,7 +1166,12 @@
     <div class="card-body">
       <p class="desc">Reduce attack of an enemy Assault.</p>
       <ul><li>Targets only Assaults who will be able to attack during next turn.</li><li>Lasts until the end of next turn.</li><li>Stackable.</li></ul>
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-special restricted" data-name="rush" data-cat="special" data-avail="restricted">
@@ -933,9 +1186,11 @@
     <div class="card-body">
       <p class="desc">Reduces an allied Assault's delay by 1.</p>
       <ul><li>Unobtainable.</li><li>Only targets inactive Assaults.</li><li>Triggers only once unless wielded by Commander.</li><li>Can trigger target's Valor.</li></ul>
-      
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
     </div>
   </div>
+
+
   <div class="card cat-attack unavailable" data-name="anti-air" data-cat="attack" data-avail="unavailable">
     <div class="card-header" style="--accent:#ff4d4d">
       <div class="icon-wrap"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAC/klEQVR4nM1XTWgaQRT+rCFFkK4IUg/ptgfBS3NSchICBSGQU08BoYcgKDkZBMNCQkBIjhZBCFiE9CJ4CEKgp0JB2J5Ci1IvCQ0ai7nkILEJpqEJU97GWdZ1/anRtB/ojN/O7ntv5r33rcAdMgDYmD9pDIAJwGMAv6anpzE7O4txoFQq4fb2lqbvAIT7rRXJU1EU2biQTqeZ2WzmO7A7tPF6vc4ikQhbX19nFxcX6gMrlQpbWVlhW1tb7Pr6eiCfz+eZxWLhDmSHMh4IBNRzi8fj6sMWFxdVPplMDuQJhUKBCYLAr+cBPNEafqT3RBAEdW61Wg3nvdZoecL8/DxkWYbT6aSfrwHsAXjaM/Lz83O2ubnJEolExzaenZ0xSZJYKpViNzc3A3ktarUac7lcfAe+AHgxsYQzAjk5NzfHHfgO4NmDGSdQAvv9fu7Ahwc1zo8Vd8abXQlXrVYRDoextraGRqOh8kdHR1heXsbGxgaurq4G8sNC1Ea+tLRkWGoLCwuGJdWLHylyh8Ohzu12+8j8SJG3Wi2WyWRYLpfrKB1Klp2dHba/v98RSS9+mMjxXyXcQ8LUHmUAPrfbDY/Ho7bMZrOJ4+PjrptoTT9Qm43H47BYLF3X6Jk2m42mPzn3su2A0gaLxeK9tpaUMRQKscPDw77bDh0+0gWSQtLk+4CSlUo1m80ObRxt8VcWkLxqNX0UUBXEYjGlivTGTTDGGwApOj7KA5LGYUCvYdTlgsFgR81T19ze3oYkSUpfsOnO3Agke5/IS3ph0IIktFd50k5Fo1Emy3IHT/JMO0A9hAvLVB/jJwDeAniFvwBVSiKRwMzMDE5PT/st3etn/F4wm8166ne7ok7a4/uJGdfgOYAfRhemDLgkNZwxGqcXRy0+A1g1Mv6NklZ/d7lcVjSe4+DgQBlJ7zkvimKHwl1eXvKpvh162uOqttQoWtnn8yGZpOAnA6/XS8NXmmojF3hfHtS7xwAPff1TVYMGFHltAv9WjT5Ual1Q1W3ChskO/gCfCJE3SpV7dQAAAABJRU5ErkJggg==" alt="antiair" class="skill-icon"></div>
@@ -948,7 +1203,11 @@
     <div class="card-body">
       <p class="desc">Deals increased damage against flying units.</p>
       
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Flying</span></div></div></div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span><span class="type-chip type-structure">Structure</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Counters</span><div class="chips"><span class="chip chip-counters">Flying</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack unavailable" data-name="crush" data-cat="attack" data-avail="unavailable">
@@ -963,7 +1222,11 @@
     <div class="card-body">
       <p class="desc">Deals additional damage against Structures or armored units.</p>
       
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support unavailable" data-name="fear" data-cat="support" data-avail="unavailable">
@@ -978,7 +1241,11 @@
     <div class="card-body">
       <p class="desc">Forces a target enemy Assault to skip attacking for X activations.</p>
       
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-support unavailable" data-name="immobilize" data-cat="support" data-avail="unavailable">
@@ -993,7 +1260,11 @@
     <div class="card-body">
       <p class="desc">Prevents the target card from moving or attacking.</p>
       
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-passive unavailable" data-name="regeneration" data-cat="passive" data-avail="unavailable">
@@ -1008,7 +1279,11 @@
     <div class="card-body">
       <p class="desc">Continuously restores HP, even outside of the card's own turn.</p>
       
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span></div></div></div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span><span class="type-chip type-summon">Summon</span><span class="type-chip type-structure">Structure</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Disease</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
   <div class="card cat-attack unavailable" data-name="siphon" data-cat="attack" data-avail="unavailable">
@@ -1023,7 +1298,11 @@
     <div class="card-body">
       <p class="desc">Drains HP from the enemy and transfers it to the wielder.</p>
       
-      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span></div></div></div>
+      <div class="type-bar"><span class="type-chip type-assault">Assault</span></div>
+      <div class="counter-box"><div class="counter-row"><span class="counter-label">Countered by</span><div class="chips"><span class="chip chip-countered">Evade</span><span class="chip chip-countered">Inhibit</span><span class="chip chip-countered">Overload</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
 </div>
